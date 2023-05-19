@@ -1,0 +1,40 @@
+basePath: /api
+definitions:
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      status:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: Bulletin Board Service API in Go using Gin Frameworl
+  title: Bulletin Board API
+  version: "1.0"
+paths:
+  /create:
+    post:
+      description: Go to Service and then go to Dao and get data back to controller
+      produces:
+      - appication/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Find Create Single User
+  /findall:
+    get:
+      description: Go to Service and then go to Dao and get data back to controller
+      produces:
+      - appication/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Find All of Users
+swagger: "2.0"

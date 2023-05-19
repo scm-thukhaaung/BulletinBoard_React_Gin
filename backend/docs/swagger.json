@@ -1,0 +1,61 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Bulletin Board Service API in Go using Gin Frameworl",
+        "title": "Bulletin Board API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "paths": {
+        "/create": {
+            "post": {
+                "description": "Go to Service and then go to Dao and get data back to controller",
+                "produces": [
+                    "appication/json"
+                ],
+                "summary": "Find Create Single User",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/findall": {
+            "get": {
+                "description": "Go to Service and then go to Dao and get data back to controller",
+                "produces": [
+                    "appication/json"
+                ],
+                "summary": "Find All of Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

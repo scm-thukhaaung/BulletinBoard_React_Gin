@@ -1,0 +1,7 @@
+FrontEnd Dependencies List
+
+1. React (Typescript)
+
+Backend Dependencies List
+
+1. Gin
