@@ -1,4 +1,4 @@
-package services
+package userServices
 
 import (
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
@@ -6,6 +6,9 @@ import (
 )
 
 type UserServiceInterface interface {
+	FindOne(userId int) models.User
 	FindAll() []models.User
 	Create(user request.CreateUserRequest)
+	Update(user request.UpdateUserRequest)
+	Delete(userId int)
 }

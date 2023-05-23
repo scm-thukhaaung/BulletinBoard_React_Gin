@@ -20,5 +20,5 @@ type User struct {
 	Created_User_ID int       `gorm:"type:int"`
 	Updated_User_ID int       `gorm:"type:int"`
 	Deleted_User_ID int       `gorm:"type:int"`
-	Post            []Post    `gorm:"foreignkey:Id"`
+	Post            []Post    `gorm:"foreignkey:Created_User_ID"`
 }
