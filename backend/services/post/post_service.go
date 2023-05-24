@@ -33,7 +33,7 @@ func (service *PostService) Create(post request.CreatePostRequest, ctx *gin.Cont
 		Description:     post.Description,
 		Status:          post.Status,
 		Created_User_ID: post.Created_User_ID,
-		Updated_User_ID: post.Updated_User_ID,
+		Updated_User_ID: post.Created_User_ID,
 	}
 
 	service.PostDaoInterface.Create(postModel, ctx)

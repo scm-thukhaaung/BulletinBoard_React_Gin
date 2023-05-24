@@ -20,7 +20,7 @@ type User struct {
 	Created_User_ID uint      `gorm:"type:int;not null"`
 	Updated_User_ID uint      `gorm:"type:int;not null"`
 	Deleted_User_ID uint      `gorm:"type:int"`
-	Post            []Post    `gorm:"foreignkey:Created_User_ID"`
+	Posts           []Post    `gorm:"foreignkey:Created_User_ID"`
 }
 
 type LoginUser struct {

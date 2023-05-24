@@ -36,7 +36,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// check user role and allow only admin to delete user
+		// Extract JWT token
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			// Extract the userId from the claims
 			userId := claims["id"].(string)
@@ -45,8 +45,8 @@ func AuthMiddleware() gin.HandlerFunc {
 			user := userDao.FindOne(userId, ctx)
 			isSensRoute := isSensRoute(ctx)
 
-			// only admin is allowed to delete user and member is allowed self updating
-			if user.Type == "1" && isSensRoute {
+			// Only admin is allowed to delete user and member is allowed self updating
+			if user.Type != constants.ADMIN_TYPE_VAL && isSensRoute {
 				userId := ctx.Param("id")
 				method := ctx.Request.Method
 				if method == "DELETE" ||

@@ -1,6 +1,10 @@
 package main
 
 import (
+	"os"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	_ "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/docs"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +21,7 @@ func init() {
 //	@version		1.0
 //	@description	Bulletin Board Service API in Go using Gin Frameworl
 
-//	@host		localhost:3000
+//	@host		localhost:8080
 //	@BasePath	/
 //
 // @securityDefinitions.apikey ApiKeyAuth
@@ -28,15 +32,20 @@ func main() {
 	// docs.SwaggerInfo.Title = "BulletinBoard API"
 	// docs.SwaggerInfo.Description = "BulletinBoard."
 	// docs.SwaggerInfo.Version = "1.0"
-	// docs.SwaggerInfo.Host = "localhost:3000"
+	// docs.SwaggerInfo.Host = "localhost:8080"
 	// docs.SwaggerInfo.BasePath = "/api"
 	// docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	gin.ForceConsoleColor()
 	router := gin.Default()
 
+	// Initialize session
+	store := cookie.NewStore([]byte(os.Getenv("SESSION_SECRET_KEY")))
+	router.Use(sessions.Sessions("mysession", store))
+
 	routes.ApiRouter(router)
 	// routes.WebRouter(router)
 
-	router.Run(":3000")
+	port := os.Getenv("PORT")
+	router.Run(":" + port)
 }

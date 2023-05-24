@@ -13,11 +13,7 @@ type CreateUserRequest struct {
 	Address         string `json:"address"`
 	Date_Of_Birth   string `json:"date_of_birth"`
 	Created_User_ID uint   `json:"created_user_id"`
-	// Updated_User_ID int    `json:"updated_user_id"`
-	// Deleted_User_ID int    `json:"deleted_user_id"`
-}
-
-type FindOneUserRequest struct {
+	Updated_User_ID int    `json:"updated_user_id"`
 }
 
 type UpdateUserRequest struct {

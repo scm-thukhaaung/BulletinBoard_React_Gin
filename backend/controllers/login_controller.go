@@ -14,7 +14,7 @@ type LoginController struct {
 	LoginServiceInterface loginServices.LoginServiceInterface
 }
 
-// Login ...
+// Login
 // @Summary User Login
 // @Description Authenticates user login
 // @Tags LOGIN

@@ -40,6 +40,7 @@ func (service *UserService) Create(user request.CreateUserRequest, ctx *gin.Cont
 		Address:         user.Address,
 		Date_Of_Birth:   dob,
 		Created_User_ID: uint(user.Created_User_ID),
+		Updated_User_ID: uint(user.Created_User_ID),
 	}
 
 	service.UserDaoInterface.Create(userModel, ctx)
