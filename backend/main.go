@@ -6,8 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/routes"
-	swaggerFiles "github.com/swaggo/files"     // swagger embed files
-	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 func init() {
@@ -20,7 +18,11 @@ func init() {
 //	@description	Bulletin Board Service API in Go using Gin Frameworl
 
 //	@host		localhost:3000
-//	@BasePath	/api
+//	@BasePath	/
+//
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	// programmatically set swagger info
 	// docs.SwaggerInfo.Title = "BulletinBoard API"
@@ -36,7 +38,5 @@ func main() {
 	routes.ApiRouter(router)
 	// routes.WebRouter(router)
 
-	//	Adding Swagger
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":3000")
 }
