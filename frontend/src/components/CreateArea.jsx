@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 
 import { Zoom, Fab } from '@mui/material';
@@ -39,6 +40,10 @@ const CreateArea = (props) => {
         setExpanded(true);
     };
 
+    const closeExpand = () => {
+        setExpanded(false);
+    }
+
     return (
         <div>
             <form className="create-post">
@@ -67,6 +72,9 @@ const CreateArea = (props) => {
                         </Fab>
                         <Fab >
                             <EditIcon />
+                        </Fab>
+                        <Fab onClick={closeExpand}>
+                            <CloseIcon />
                         </Fab>
                     </Box>
 

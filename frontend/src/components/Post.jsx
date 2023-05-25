@@ -10,7 +10,7 @@ const Post = props => {
 
     return (
         <div className="post">
-            <h2>{props.id + 1}. " {props.title} "</h2>
+            <h2>" {props.title} "</h2>
             <p>{props.description}</p>
 
             <p className="post-created-by">created by သုခ</p>
