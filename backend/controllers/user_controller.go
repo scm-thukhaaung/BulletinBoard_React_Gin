@@ -115,6 +115,15 @@ func (controller *UserController) Update(ctx *gin.Context) {
 	updateUserRequest.Id = uint(id)
 
 	controller.UserServiceInterface.Update(updateUserRequest, userId, ctx)
+
+	response := response.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   nil,
+	}
+
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, response)
 }
 
 // Delete a user
