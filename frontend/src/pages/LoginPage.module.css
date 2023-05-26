@@ -26,4 +26,58 @@
     font-size: 1.2em;
     resize: none;
     font-family: UMoe;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #000000;
+}
+
+.UMoe {
+    font-size: 1.2em;
+    font-family: UMoe;
+}
+
+.login-btn {
+    display: block;
+    width: 100%;
+    background: #f5ba13;
+    border: none;
+    padding: 10px;
+    border-radius: 7px;
+    box-shadow: 0 1px 5px #8a8989;
+    font-size: 1.2em;
+    font-family: UMoe;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.login-btn:hover {
+    color: #fff;
+    box-shadow: 0 3px 6px #8a8989;
+}
+
+.forgot-pwd{
+    font-size: 1.2em;
+    font-family: UMoe;
+    color: #000000;
+    text-decoration: underline;
+}
+.forgot-pwd:hover{
+    font-size: 1.3em;
+    color: #f5ba13;
+}
+
+.create-account {
+    font-size: 1.2em;
+    font-family: UMoe;
+    color: #000000;
+    text-decoration: underline;
+}
+.create-account:hover {
+    color: #f5ba13;
+}
+
+.mini-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -45,7 +45,7 @@ const CreateArea = (props) => {
     }
 
     return (
-        <div>
+        <div className="create-post-component">
             <form className="create-post">
                 {isExpanded && (
                     <input

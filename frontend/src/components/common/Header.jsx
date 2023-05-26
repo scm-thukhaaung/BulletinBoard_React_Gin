@@ -5,8 +5,10 @@ import { Box, AppBar, Toolbar, Tooltip, IconButton, Avatar, Menu, MenuItem, Typo
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { useState } from "react";
+import DraftsIcon from '@mui/icons-material/Drafts';
+import classes from "./Header.module.css";
 
-const settings = ['Profile ထဲ ဝင်မည်', 'Logout ထွက်မည်'];
+const settings = ['Profile ထဲ ဝင်မည်','User List ကြည့်မည်', 'Logout ထွက်မည်'];
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -71,11 +73,11 @@ const Header = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1 }} >
-            <AppBar position="static">
-                <Toolbar display>
+        <Box sx={{ flexGrow: 1}} >
+            <AppBar position="fixed" sx={{borderBottom: "5px solid #000000; "}}>
+                <Toolbar display="large">
                     <h1 className="h1-txt-1">
-                        " {text} "
+                        "&nbsp; <DraftsIcon fontSize='large' /> &nbsp; {text} "
                     </h1>
                     <div className="search-bar-menu-div">
                         <Search>
@@ -91,7 +93,7 @@ const Header = () => {
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="setting ကို ဖွင့်ပါ..." >
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="သုခ" src="/static/images/avatar/2.jpg" />
+                                    <Avatar sx={{ bgcolor: "#000" }} alt="သုခ" src="/static/images/avatar/2.jpg" />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -111,8 +113,16 @@ const Header = () => {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu} sx={{ hover: "#f5ba13" }}>
-                                        <Typography textAlign="center" sx={{ fontFamily: "UMoe" }}>{setting}</Typography>
+                                    <MenuItem key={setting}
+                                        onClick={handleCloseUserMenu}
+                                        sx={{
+                                            '&:hover': {
+                                                color: '#fff',
+                                                backgroundColor: '#f5ba13',
+                                            },
+                                        }}
+                                    >
+                                        <Typography textAlign="center" sx={{ fontFamily: "UMoe"}}>{setting}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>

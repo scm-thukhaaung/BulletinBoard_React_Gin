@@ -1,5 +1,17 @@
+import { alpha, FormControlLabel, styled, Switch, Typography } from '@mui/material';
 import { useTypewriter } from 'react-simple-typewriter';
 import classes from './LoginPage.module.css';
+const GoldenSwitch = styled(Switch)(({ theme }) => ({
+    '& .MuiSwitch-switchBase.Mui-checked': {
+        color: '#f5ba13',
+        '&:hover': {
+            backgroundColor: alpha('#f5ba13', theme.palette.action.hoverOpacity),
+        },
+    },
+    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+        backgroundColor: '#f5ba13',
+    },
+}));
 
 const LoginPage = (props: any) => {
 
@@ -16,6 +28,18 @@ const LoginPage = (props: any) => {
                 <input name="email" placeholder="အီးမေးလ်" />
 
                 <input type="password" placeholder="စကားဝှက်" />
+
+                <div className={classes["mini-div"]}>
+                    <FormControlLabel control={<GoldenSwitch />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မှတ်မိပေးပါ...</Typography>} />
+
+                    <a className={classes["forgot-pwd"]} href='/'>စကားဝှက်မေ့သွားပြီလား...?</a>
+                </div>
+                <button className={classes["login-btn"]} type="button">
+                    လော့အင်ဝင်မည်...
+                </button>
+                <a className={classes["create-account"]} href='/signup'>
+                    အကောင့်အသစ် ဖွင့်မလား...?
+                </a>
             </form>
         </div>
     );
