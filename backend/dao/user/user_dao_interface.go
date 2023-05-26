@@ -6,9 +6,10 @@ import (
 )
 
 type UserDaoInterface interface {
+	Create(user models.User, ctx *gin.Context)
+	AddCsvUsers(users []models.User, ctx *gin.Context) []models.User
 	FindOne(userId string, ctx *gin.Context) models.User
 	FindAll(ctx *gin.Context) []models.User
-	Create(user models.User, ctx *gin.Context)
 	Update(user models.User, userId string, ctx *gin.Context) models.User
 	Delete(userId string, ctx *gin.Context)
 }

@@ -26,20 +26,45 @@ func NewPostController(PostServiceInterface services.PostServiceInterface) *Post
 // @Tags POST
 // @Accept json
 // @Produce json
-// @Param CreatePostRequest body request.CreatePostRequest true "Post Request Body"
+// @Param PostRequest body request.PostRequest true "Post Request Body"
 // @Success 200 {object} response.Response{}
 // @Router /api/posts [post]
 // @Security ApiKeyAuth
 func (controller *PostController) Create(ctx *gin.Context) {
-	createPostRequest := request.CreatePostRequest{}
-	err := ctx.ShouldBindJSON(&createPostRequest)
+	postRequest := request.PostRequest{}
+	err := ctx.ShouldBindJSON(&postRequest)
 	helper.ErrorPanic(err, ctx)
 
-	controller.PostServiceInterface.Create(createPostRequest, ctx)
+	controller.PostServiceInterface.Create(postRequest, ctx)
 	response := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   nil,
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, response)
+}
+
+// Create csv posts
+// @Summary Create new csv posts
+// @Description Create new csv posts
+// @Tags POST
+// @Accept json
+// @Produce json
+// @Param CsvPostRequest body request.CsvPostRequest true "Post List Request Body"
+// @Success 200 {object} response.Response{}
+// @Router /api/posts/csv-posts [post]
+// @Security ApiKeyAuth
+func (controller *PostController) HandleCsvPosts(ctx *gin.Context) {
+	csvPostRequest := request.CsvPostRequest{}
+	err := ctx.BindJSON(&csvPostRequest)
+	helper.ErrorPanic(err, ctx)
+
+	retData := controller.PostServiceInterface.CreateCsvPosts(csvPostRequest, ctx)
+	response := response.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   retData,
 	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, response)
@@ -95,23 +120,23 @@ func (controller *PostController) FindOne(ctx *gin.Context) {
 // @Tags POST
 // @Accept json
 // @Produce json
-// @Param CreatePostRequest body request.CreatePostRequest true "Post Request Body"
+// @Param PostRequest body request.PostRequest true "Post Request Body"
 // @Param id  path string  true  "Update post by id"
 // @Success 200 {object} response.Response{}
 // @Router /api/posts/{id} [put]
 // @Security ApiKeyAuth
 func (controller *PostController) Update(ctx *gin.Context) {
-	updatePostRequest := request.UpdatePostRequest{}
-	err := ctx.ShouldBindJSON(&updatePostRequest)
+	PostRequest := request.PostRequest{}
+	err := ctx.ShouldBindJSON(&PostRequest)
 	helper.ErrorPanic(err, ctx)
 
 	postId := ctx.Param("postId")
 	// id, err := strconv.Atoi(postId)
 	// helper.ErrorPanic(err, ctx)
 
-	// updatePostRequest.Id = id
+	// PostRequest.Id = id
 
-	retData := controller.PostServiceInterface.Update(updatePostRequest, postId, ctx)
+	retData := controller.PostServiceInterface.Update(PostRequest, postId, ctx)
 
 	response := response.Response{
 		Code:   http.StatusOK,

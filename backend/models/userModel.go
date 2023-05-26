@@ -16,7 +16,7 @@ type User struct {
 	Type            string    `gorm:"type:varchar(1);not null;"`
 	Phone           string    `gorm:"type:varchar(20)"`
 	Address         string    `gorm:"type:varchar(20)"`
-	Date_Of_Birth   time.Time `gorm:"autoCreateTime:false"`
+	Date_Of_Birth   *time.Time `gorm:"autoCreateTime:false"`
 	Created_User_ID uint      `gorm:"type:int;not null"`
 	Updated_User_ID uint      `gorm:"type:int;not null"`
 	Deleted_User_ID uint      `gorm:"type:int"`

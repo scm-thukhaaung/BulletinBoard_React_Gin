@@ -12,3 +12,8 @@ type Password_resets struct {
 	Token      string    `gorm:"type:varchar"`
 	Created_at time.Time `gorm:"type:date"`
 }
+
+type Forgot_passwordstruct struct{
+	gorm.Model
+	Email string `gorm:"type:varchar"`
+}

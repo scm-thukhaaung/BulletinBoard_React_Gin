@@ -14,6 +14,25 @@ type UserDao struct {
 	DB *gorm.DB
 }
 
+// Create implements UserDaoInterface.
+func (userDao *UserDao) Create(user models.User, ctx *gin.Context) {
+	result := userDao.DB.Create(&user)
+	helper.ErrorPanic(result.Error, ctx)
+}
+
+// AddCsvUsers implements UserDaoInterface.
+func (userDao *UserDao) AddCsvUsers(users []models.User, ctx *gin.Context) []models.User {
+	var ErrUsers []models.User
+
+	for _, eachUser := range users {
+		result := initializers.DB.Create(&eachUser)
+		if result.Error != nil {
+			ErrUsers = append(ErrUsers, eachUser)
+		}
+	}
+	return ErrUsers
+}
+
 // FindAll implements UserDaoInterface.
 func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 	var users []models.User
@@ -45,11 +64,6 @@ func (userDao *UserDao) FindOne(userId string, ctx *gin.Context) models.User {
 	return user
 }
 
-// Create implements UserDaoInterface.
-func (userDao *UserDao) Create(user models.User, ctx *gin.Context) {
-	result := userDao.DB.Create(&user)
-	helper.ErrorPanic(result.Error, ctx)
-}
 
 // Update implements UserDaoInterface.
 func (userDao *UserDao) Update(user models.User, userId string, ctx *gin.Context) models.User {

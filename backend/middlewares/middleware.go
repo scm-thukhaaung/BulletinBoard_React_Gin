@@ -1,8 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -12,6 +10,7 @@ import (
 	userDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/user"
 	helper "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/helpers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
+	utilSvc "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/utils"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -23,18 +22,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			// Verify the signing method and return the secret key
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("INVALID SIGNNIG")
-			}
-			return []byte(os.Getenv("SECRET_KEY")), nil
-		})
-
-		if err != nil {
-			helper.ErrorPanic(err, ctx)
-			return
-		}
+		token := utilSvc.ParseToken(tokenString, ctx)
 
 		// Extract JWT token
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
@@ -58,11 +46,6 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		} else {
 			helper.ErrorPanic(constants.NotValidToken, ctx)
-			return
-		}
-
-		if !token.Valid {
-			helper.ErrorPanic(err, ctx)
 			return
 		}
 

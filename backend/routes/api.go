@@ -5,10 +5,12 @@ import (
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/controllers"
 	loginDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/login"
 	postDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/post"
+	resetPwdDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/pwd-reset"
 	userDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/user"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
 	loginServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/login"
 	postServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/post"
+	resetPwdServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/pwd-reset"
 	userServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/user"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -23,17 +25,19 @@ func ApiRouter(router *gin.Engine) *gin.RouterGroup {
 	loginService := loginServices.NewLoginService(loginDao)
 	loginController := controllers.NewLoginController(loginService)
 
-	// login
+	// Login
 	apiRouter.POST("/login", loginController.Login)
 
 	userDao := userDao.NewUserDao(initializers.DB)
 	userService := userServices.NewUserService(userDao)
 	userController := controllers.NewUserController(userService)
 
+	// User
 	userRouter := apiRouter.Group("/users")
 	{
-		userRouter.GET("", userController.FindAll)
 		userRouter.POST("", userController.Create)
+		userRouter.POST("/csv-users", userController.HandleCsvUsers)
+		userRouter.GET("", userController.FindAll)
 		userRouter.GET("/:userId", userController.FindOne)
 		userRouter.PUT("/:userId", userController.Update)
 		userRouter.DELETE("/:userId", userController.Delete)
@@ -43,14 +47,24 @@ func ApiRouter(router *gin.Engine) *gin.RouterGroup {
 	postService := postServices.NewPostService(postDao)
 	postController := controllers.NewPostController(postService)
 
+	// Post
 	postRouter := apiRouter.Group("/posts")
 	{
-		postRouter.GET("", postController.FindAll)
 		postRouter.POST("", postController.Create)
+		postRouter.POST("/csv-posts", postController.HandleCsvPosts)
+		postRouter.GET("", postController.FindAll)
 		postRouter.GET("/:postId", postController.FindOne)
 		postRouter.PUT("/:postId", postController.Update)
 		postRouter.DELETE("/:postId", postController.Delete)
 	}
+
+	resetPwdDao := resetPwdDao.NewResetPwdDao(initializers.DB)
+	resetPwdService := resetPwdServices.NewResetService(resetPwdDao)
+	resetPwdController := controllers.NewResetPwdController(resetPwdService)
+
+	// Reset password
+	apiRouter.POST("/forget-password", resetPwdController.RequestEmail)
+	apiRouter.POST("/reset-password", resetPwdController.HandleResetPwd)
 
 	return &router.RouterGroup
 }
