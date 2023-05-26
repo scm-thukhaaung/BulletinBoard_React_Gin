@@ -13,3 +13,17 @@
     font-family: UMoe;
     src: url('../font/UMoe.ttf')
 }
+
+@font-face {
+    font-family: NotoSansMyanmar-Medium;
+    src: url('../font/NotoSansMyanmar-Medium.ttf')
+}
+@font-face {
+    font-family: NotoSansMyanmar-SemiBold;
+    src: url('../font/NotoSansMyanmar-SemiBold.ttf')
+}
+
+body {
+    background: #eee;
+    background-image: url("https://www.transparenttextures.com/patterns/food.png");
+}
