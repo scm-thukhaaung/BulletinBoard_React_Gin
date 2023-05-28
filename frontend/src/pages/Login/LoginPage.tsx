@@ -1,17 +1,7 @@
-import { alpha, FormControlLabel, styled, Switch, Typography } from '@mui/material';
+import { FormControlLabel, Typography } from '@mui/material';
 import { useTypewriter } from 'react-simple-typewriter';
+import { GoldenSwitch } from '../../components/common/custom_mui/CustomMUI';
 import classes from './LoginPage.module.css';
-const GoldenSwitch = styled(Switch)(({ theme }) => ({
-    '& .MuiSwitch-switchBase.Mui-checked': {
-        color: '#f5ba13',
-        '&:hover': {
-            backgroundColor: alpha('#f5ba13', theme.palette.action.hoverOpacity),
-        },
-    },
-    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-        backgroundColor: '#f5ba13',
-    },
-}));
 
 const LoginPage = (props: any) => {
 

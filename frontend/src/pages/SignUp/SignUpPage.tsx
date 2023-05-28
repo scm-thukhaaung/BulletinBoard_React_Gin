@@ -1,5 +1,5 @@
 import { useTypewriter } from 'react-simple-typewriter';
-import classes from './LoginPage.module.css';
+import classes from './SignUpPage.module.css';
 
 const SignUpPage = (props: any) => {
     const [text] = useTypewriter({
@@ -12,7 +12,7 @@ const SignUpPage = (props: any) => {
             <h1 className={classes["hdr"]}>
                 " {text} "
             </h1>
-            <form className={classes["login-form"]}>
+            <form className={classes["signup-form"]}>
                 <input name="name" placeholder="အမည်" />
 
                 <input name="email" placeholder="အီးမေးလ်" />

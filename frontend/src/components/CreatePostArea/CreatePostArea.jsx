@@ -5,8 +5,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 
 import { Zoom, Fab } from '@mui/material';
+import classes from "./CreatePostArea.module.css";
 
-const CreateArea = (props) => {
+const CreatePostArea = (props) => {
     const [isExpanded, setExpanded] = useState(false);
 
     const [post, setPost] = useState({
@@ -45,8 +46,8 @@ const CreateArea = (props) => {
     }
 
     return (
-        <div className="create-post-component">
-            <form className="create-post">
+        <div className={classes["create-post-component"]}>
+            <form className={classes["create-post"]}>
                 {isExpanded && (
                     <input
                         name="title"
@@ -77,12 +78,10 @@ const CreateArea = (props) => {
                             <CloseIcon />
                         </Fab>
                     </Box>
-
                 </Zoom>
-
             </form>
         </div>
     );
 };
 
-export default CreateArea;
+export default CreatePostArea;

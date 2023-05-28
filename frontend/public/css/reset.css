@@ -134,7 +134,7 @@ embed {
 
 /* force a vertical scrollbar to prevent a jumpy page */
 html {
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 /* we use a lot of ULs that aren't bulleted.

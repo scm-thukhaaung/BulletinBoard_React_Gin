@@ -1,0 +1,16 @@
+/* Footer  */
+
+.ftr {
+    /* position: absolute; */
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+    font-family: UMoe;
+}
+
+.ftr p {
+    /* color: #ccc; */
+    color: #0000004d;
+    font-size: 1.3em;
+}

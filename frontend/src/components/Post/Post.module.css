@@ -1,0 +1,46 @@
+/* Post  */
+.post {
+    background: #fff;
+    border-radius: 7px;
+    box-shadow: 0 2px 5px #ccc;
+    padding: 10px;
+    width: 250px;
+    margin: 16px;
+    float: left;
+}
+
+.post h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    font-family: UMoe;
+}
+
+.post p {
+    /* font-size: 1.1em; */
+    font-size: 15px;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: NotoSansMyanmar-SemiBold;
+    /* font-weight: 550; */
+}
+
+.post button {
+    position: relative;
+    float: right;
+    margin-right: 10px;
+    color: #f5ba13;
+    border: none;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    outline: none;
+}
+
+.post .post-created-by {
+    color: #1205054d;
+    font-size: 15px;
+    text-align: right;
+    display: inline;
+    font-family: UMoe;
+}
