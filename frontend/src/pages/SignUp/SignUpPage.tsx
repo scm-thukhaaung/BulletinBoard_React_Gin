@@ -21,7 +21,7 @@ const SignUpPage = (props: any) => {
 
                 <input type="password" placeholder="စကားဝှက်ပြန် ရိုက်ထည့်ပါ..." />
 
-                <button className={classes["login-btn"]} type="button">
+                <button className={classes["signup-btn"]} type="button">
                     အကောင့်အသစ် ဖွင့်မည်...
                 </button>
             </form>

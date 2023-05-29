@@ -68,8 +68,19 @@ const ToolBarStyle = styled(Toolbar)(({ theme }) => ({
 
 const FontTheme = createTheme({
     typography: {
-      fontFamily: 'UMoe',
+        fontFamily: 'UMoe',
     },
-  });
+});
 
-export { Search, SearchIconWrapper, StyledInputBase, ToolBarStyle, GoldenSwitch, FontTheme };
+const myDefaultTheme = createTheme({
+    palette: {
+        primary: {
+            main: '#f5ba13',
+        },
+    },
+    typography: {
+        fontFamily: 'UMoe',
+    },
+});
+
+export { Search, SearchIconWrapper, StyledInputBase, ToolBarStyle, GoldenSwitch, FontTheme, myDefaultTheme };

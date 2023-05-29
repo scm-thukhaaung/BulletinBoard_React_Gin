@@ -1,25 +1,29 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/Login/LoginPage";
-import App from "./App"
+import App from "./App";
 import SignUpPage from "./pages/SignUp/SignUpPage";
-import CardProfile from "./pages/Demo/UploadImagePage";
-import ProfilePhotoUpload from "./pages/Demo/UploadImagePage";
+import UserListPage from "./pages/UserList/UserListPage";
+import UserCreatePage from "./pages/UserCreate/UserCreatePage";
 const router = createBrowserRouter([
     {
         path: "/login",
-        element: <LoginPage/>
+        element: <LoginPage />
     },
     {
         path: "/signup",
-        element: <SignUpPage/>
+        element: <SignUpPage />
     },
     {
         path: "/",
         element: <App />
     },
     {
-        path: "/demo",
-        element: <ProfilePhotoUpload />
+        path: "/userlist",
+        element: <UserListPage />
+    },
+    {
+        path: "/create-user",
+        element: <UserCreatePage />
     }
 ]);
 
