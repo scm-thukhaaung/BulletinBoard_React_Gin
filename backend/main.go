@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	_ "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/docs"
 
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,12 @@ func main() {
 
 	gin.ForceConsoleColor()
 	router := gin.Default()
+
+	// Config for CORS
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AddAllowHeaders("authorization")
+	router.Use(cors.New(config))
 
 	routes.ApiRouter(router)
 	// routes.WebRouter(router)

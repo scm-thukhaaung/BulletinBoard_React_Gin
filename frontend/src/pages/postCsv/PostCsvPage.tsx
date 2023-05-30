@@ -1,10 +1,14 @@
 import classes from './PostCsvPage.module.css';
-import { ChangeEvent, useRef, useState } from "react";
-import { Box, Collapse, TextField, Zoom } from "@mui/material";
+import { ChangeEvent, useRef, useState, useEffect } from "react";
+import { Box, Collapse, Zoom } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { parse } from "csv-parse/browser/esm/sync";
 import { orange } from '@mui/material/colors';
 import ClearIcon from '@mui/icons-material/Clear';
+import CsvPostList from '../../components/csvPostList/CsvPostList';
+import { useSelector, useDispatch } from "react-redux";
+import { addCsvList } from '../../reducers/csvPostSlice';
+import CsvPostSvc from '../../services/CsvPostSvc';
 
 type cvsItem = {
     id: string;
@@ -17,9 +21,23 @@ type cvsItem = {
 const PostCsvPage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [csvData, setCsvData] = useState<cvsItem[]>([]);
+    const storedData = useSelector((state: any) => state.csvPost.csvPosts);
     const [filename, setFilename] = useState("");
-    const [isEditMode, setEditMode] = useState(false)
-    const [editIndex, setEditIndex] = useState(0)
+    const dispatch = useDispatch();
+
+    const handleSubmit = async() => {
+        console.log("submitted data-=-> ", storedData)
+        // const fetchData = async () => {
+            try{
+                const result = await CsvPostSvc();
+                console.log('result', result);
+            } catch (error) {
+                console.error('Error at postCsv page: ', error);
+            }
+        // }
+    }
+
+    handleSubmit();
 
     // Read csv and set csvData 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +69,7 @@ const PostCsvPage = () => {
             checkRowsDuplicate(dataRecords);
             checkEmptyColumn(dataRecords);
             checkStatusCol(dataRecords);
+            dispatch(addCsvList(dataRecords));
             setCsvData(dataRecords);
         };
         reader.readAsBinaryString(file);
@@ -66,47 +85,7 @@ const PostCsvPage = () => {
         fileInputRef.current?.click();
     };
 
-    const handleBlur = () => {
-        setEditMode(false);
-        setEditIndex(0);
-    }
-
-    const handleDoubleClick = (index: number) => {
-        setEditMode(true);
-        setEditIndex(index);
-    }
-
-    const updateErrorFlg = (index: number) => {
-        const isNotDuplicate = checkDupWithIndex(csvData, index);
-        const isNotEmpty = checkEmptyWithIndex(csvData, index);
-        const isNotStsCode = checkStatusWithIndex(csvData, index)
-
-        if (isNotDuplicate && isNotEmpty && isNotStsCode) {
-            csvData[index].hasError = false;
-            setCsvData(csvData)
-        } else {
-            csvData[index].hasError = true;
-        }
-    }
-
-    const handleTitleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
-        csvData[i].title = event.target.value;
-        updateErrorFlg(i);
-    }
-
-    const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
-        csvData[i].description = event.target.value;
-        updateErrorFlg(i);
-    }
-
-    const handleStatusChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
-        csvData[i].status = event.target.value;
-        updateErrorFlg(i);
-    }
-
-    const handleSubmit = () => {
-        console.log("submitted data-=-> ", csvData)
-    }
+    
 
     // Check all the rows duplicate
     const checkRowsDuplicate = (postList: any) => {
@@ -116,16 +95,6 @@ const PostCsvPage = () => {
                     postList[i].hasError = true;
                     return false;
                 }
-            }
-        }
-        return true;
-    }
-
-    // Check with index duplicate
-    const checkDupWithIndex = (postList: any, index: number) => {
-        for (let i = 0; i < postList.length; i++) {
-            if (i !== index && postList[i].title === postList[index].title) {
-                return false
             }
         }
         return true;
@@ -143,121 +112,34 @@ const PostCsvPage = () => {
         return isEmpty;
     }
 
-    // Check empty column with index
-    const checkEmptyWithIndex = (postList: any, index: number) => {
-        if (postList[index].title && postList[index].description && postList[index].status) {
-            return true;
-        }
-        return false;
-    }
-
     // Check status colum
     const checkStatusCol = (postList: any) => {
         let isCorrect = true;
         postList.forEach((eachPost: any) => {
             if (eachPost.status !== "1" && eachPost.status !== "0") {
+                eachPost.hasError = true;
                 isCorrect = false;
             }
         })
         return isCorrect;
     }
 
-    // Check status code with index
-    const checkStatusWithIndex = (postList: any, index: number) => {
-        if (postList[index].status !== "1" && postList[index].status !== "0") {
-            postList[index].hasError = true;
+    //Check disabled
+    const checkDisabled = () => {
+        console.log('stroed data-=> ', storedData)
+        const searchIndex = storedData.findIndex((eachPost: any) => eachPost.hasError)
+        if (searchIndex === -1) {
+            // Not found the error
             return false;
         }
+        // Found the error
         return true;
     }
-
-    // Post list component
-    const postListCom = (
-        csvData.map((eachPost, i) => {
-            return (
-                <li id={i + eachPost.title} className={!eachPost.hasError ?
-                    classes["li-con"] :
-                    [classes["li-con"], classes["err-data"]].join(' ')}>
-                    <span className={classes["id-span"]}>{i + 1}</span>
-
-                    {
-                        <>
-                            {
-                                !isEditMode ? (
-                                    <>
-                                        <span onDoubleClick={() => handleDoubleClick(i)}>{eachPost.title}</span>
-                                        <span onDoubleClick={() => handleDoubleClick(i)}>{eachPost.description}</span>
-                                        <span onDoubleClick={() => handleDoubleClick(i)}>{eachPost.status}</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        {editIndex === i ? (
-                                            <>
-                                                <span className={classes["title-width"]}>
-                                                    <TextField id="standard-basic"
-                                                        variant="standard"
-                                                        defaultValue={eachPost.title}
-                                                        onChange={(event) => handleTitleChange(event, i)}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </span>
-                                                <span className={classes["title-width"]}>
-                                                    <TextField id="standard-basic"
-                                                        style={{ width: '100%' }}
-                                                        variant="standard"
-                                                        defaultValue={eachPost.description}
-                                                        onChange={(event) => handleDescriptionChange(event, i)}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </span>
-                                                <span className={classes["title-width"]}>
-                                                    <TextField id="standard-basic"
-                                                        variant="standard"
-                                                        defaultValue={eachPost.status}
-                                                        onChange={(event) => handleStatusChange(event, i)}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span onDoubleClick={() => handleDoubleClick(i)}>{eachPost.title}</span>
-                                                <span onDoubleClick={() => handleDoubleClick(i)}>{eachPost.description}</span>
-                                                <span onDoubleClick={() => handleDoubleClick(i)}>{eachPost.status}</span>
-                                            </>
-                                        )}
-                                    </>
-                                )
-                            }
-                        </>
-                    }
-                </li>
-            )
-        })
-    )
-
-    const postCom = (
-        <>
-            < div className={classes["error-msg"]}>
-                <p> * Double click on the data to edit. </p>
-            </div>
-            <ul className={classes["list-con"]}>
-                <li className={[classes["li-con"], classes["list-title"]].join(' ')} id="title">
-                    <span className={classes["id-span"]}>ID</span>
-                    <span>Title</span>
-                    <span>Description</span>
-                    <span>Status</span>
-                </li>
-                {
-                    postListCom
-                }
-            </ul >
-        </>
-    )
 
     return (
         <div className={!csvData.length ? classes["wrapper-csv"] : ''}>
             {
+                
                 !csvData.length ?
 
                     // Csv upload bottom section
@@ -307,11 +189,11 @@ const PostCsvPage = () => {
                                     <Zoom in={csvData.length !== 0}
                                         style={{ transformOrigin: '0 0 0' }}
                                         {...(csvData.length !== 0 ? { timeout: 500 } : {})}>
-                                        <Collapse in={csvData.length !== 0}>{postCom}</Collapse>
+                                        <Collapse in={csvData.length !== 0}><CsvPostList /></Collapse>
                                     </Zoom >
 
                                 </Box>
-                                <button className={classes["submit-btn"]} onClick={handleSubmit}>Submit</button>
+                                <button className={classes["submit-btn"]} disabled={checkDisabled()} onClick={handleSubmit}>Submit</button>
                             </div>
                         </Zoom>
                     </div>
