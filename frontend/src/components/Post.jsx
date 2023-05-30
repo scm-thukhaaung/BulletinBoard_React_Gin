@@ -1,12 +1,27 @@
 import "../css/style.css";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from '@mui/icons-material/Edit';
 
-const Post = () => {
-    return(
+const Post = props => {
+
+    const handleClick = (props) => {
+        props.onDelete(props.id);
+    };
+
+    return (
         <div className="post">
-            <h2>" 1. အရမ်းချစ်တဲ့အကြောင်း "</h2>
-            <p>Meeting မှာ "သူမ" ကို အရမ်းချစ်တဲ့အကြောင်းတွေပြောချင်တယ်...</p>
+            <h2>" {props.title} "</h2>
+            <p>{props.description}</p>
+
+            <p className="post-created-by">created by သုခ</p>
+            <button className="post-delete-btn" onClick={handleClick}>
+                <DeleteIcon />
+            </button>
+            <button className="post-update-btn" onClick={handleClick}>
+                <EditIcon />
+            </button>
         </div>
-    )
-}
+    );
+};
 
 export default Post;

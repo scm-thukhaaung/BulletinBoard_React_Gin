@@ -1,0 +1,104 @@
+.wrapper-csv {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  align-content: space-between;
+  justify-content: center;
+  height: 90vh;
+}
+
+.upload-div {
+  margin: 0 auto;
+  width: 30%;
+  border-radius: 30px;
+  border: dotted 3px #f5ba13;
+  height: 300px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  align-content: space-between;
+  justify-content: center;
+  color: #f5ba13;
+  box-shadow: 5px 8px 5px 0 #0000004d;
+}
+
+.bounce-icon {
+  animation: bounce 1s infinite;
+}
+
+.bounce-icon:hover {
+  opacity: 0.8;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(2px);
+  }
+
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.read-data-con {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 50px 0;
+  width: 800px;
+  border-radius: 10px;
+  z-index: -2;
+  box-shadow: 0 0 10px 0 #0000004d;
+}
+
+.table-top {
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-radius: 1.5rem;
+  background: peachpuff;
+  width: 700px;
+
+}
+
+.table-top span {
+  padding: 1.5rem;
+}
+
+.table-top span:last-child {
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+  background-color: #f5ba13;
+  cursor: pointer;
+}
+
+.table-top span:last-child:hover {
+  opacity: 0.8;
+}
+
+.submit-btn {
+  background: #f5ba13;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.submit-btn:hover {
+  opacity: 0.8;
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

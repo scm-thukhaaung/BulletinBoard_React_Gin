@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/cors"
 	_ "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/docs"
 
 	"github.com/gin-gonic/gin"
@@ -38,6 +39,12 @@ func main() {
 
 	gin.ForceConsoleColor()
 	router := gin.Default()
+
+	// Config for CORS
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AddAllowHeaders("authorization")
+	router.Use(cors.New(config))
 
 	// Initialize session
 	store := cookie.NewStore([]byte(os.Getenv("SESSION_SECRET_KEY")))

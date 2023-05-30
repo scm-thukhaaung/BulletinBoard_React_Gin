@@ -1,0 +1,109 @@
+.list-con {
+  padding: 0;
+  margin: 0;
+  max-width: 700px;
+  position: relative;
+}
+
+.list-con .list-title span {
+  font-weight: bold;
+}
+
+.list-con::before {
+  content: '';
+  width: 0.5rem;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 7%;
+  background: peachpuff;
+  z-index: -1;
+}
+
+.list-con .li-con {
+  padding: 0.5rem 1.5rem 1rem;
+  border-radius: 1.5rem;
+  background: peachpuff;
+}
+
+.list-con .err-data {
+  padding: 0.5rem 1.5rem 1rem;
+  border-radius: 1.5rem;
+  background-color: #f98686;
+
+}
+
+.list-con li+li {
+  margin-top: 1rem;
+}
+
+::marker {
+  font-weight: 600;
+  color: tomato;
+  font-size: 1.8rem;
+}
+
+.li-con {
+  display: flex;
+}
+
+
+.li-con span {
+  width: 150px;
+  border-right: solid 1px #fff;
+  margin-right: 20px;
+}
+
+.li-con span:nth-child(3) {
+  width: 500px;
+}
+
+.li-con span:last-child {
+  width: 80px;
+  border-right: none;
+}
+
+.id-span {
+  width: 34px !important;
+}
+
+.text-input {
+  margin-right: 20px;
+  border: none;
+  background-color: peachpuff;
+  padding: 5px 0;
+  border-radius: 3px;
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.title-width {
+  width: 150px;
+}
+
+.desc-width {
+  width: 300px;
+}
+
+
+.text-input:hover {
+  background-color: #e0e0e0;
+}
+
+.text-input:focus {
+  background-color: #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.error-msg {
+  border: solid 1px #f98686;
+  border-radius: 1.5rem;
+  margin-bottom: 20px;
+  color: #f98686;
+}
+
+.error-msg p {
+  padding: 5px 12px;
+}
