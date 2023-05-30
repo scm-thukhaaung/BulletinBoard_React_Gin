@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	constants "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/consts"
 	helper "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/helpers"
 	loginServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/login"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/types/request"
@@ -40,9 +41,7 @@ func (controller *LoginController) Login(ctx *gin.Context) {
 		ctx.Header("Content-Type", "applicaton/json")
 		ctx.JSON(http.StatusOK, response)
 	} else {
-
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid login data"})
-		return
+		helper.ErrorPanic(constants.InvalidLogin, ctx)
 	}
 }
 

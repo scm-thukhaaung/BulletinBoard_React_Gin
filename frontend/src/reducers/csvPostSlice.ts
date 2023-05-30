@@ -1,17 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { CsvPostItem } from "../interfaces/PostInterface";
 
-type csvItem = {
-    id: number;
-    title: string;
-    description: string;
-    status: string;
-    hasError: boolean ;
-};
 
 export const csvPostSlice = createSlice({
     name: "csvPost",
     initialState: {
-        csvPosts: [] as csvItem[],
+        csvPosts: [] as CsvPostItem[],
     },
     reducers: {
         addCsvList: (state, action) => {
@@ -19,18 +13,18 @@ export const csvPostSlice = createSlice({
             console.log('state-=-> ', state.csvPosts)
         },
         updatePost: (state, action) => {
-            const id = action.payload.id;
-            state.csvPosts[id].title = action.payload.title ? action.payload.title : state.csvPosts[id].title;
-            state.csvPosts[id].description = action.payload.description ? action.payload.description : state.csvPosts[id].description;
-            state.csvPosts[id].status = action.payload.status ? action.payload.status : state.csvPosts[id].status;
-            state.csvPosts[id].hasError = action.payload.hasError;
+            const id = action.payload.ID;
+            state.csvPosts[id].Title = action.payload.Title ? action.payload.Title : state.csvPosts[id].Title;
+            state.csvPosts[id].Description = action.payload.description ? action.payload.description : state.csvPosts[id].Description;
+            state.csvPosts[id].Status = action.payload.status ? action.payload.status : state.csvPosts[id].Status;
+            state.csvPosts[id].HasError = action.payload.hasError;
             console.log('payload-=> ', action.payload)
             console.log(state.csvPosts[id])
 
         },
         deleteTask: (state, action) => {
             const idxTask = state.csvPosts.findIndex(
-                (task) => task.id === action.payload
+                (task) => task.ID === action.payload
             );
             state.csvPosts.splice(idxTask, 1);
         },

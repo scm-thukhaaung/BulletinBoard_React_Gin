@@ -3,17 +3,18 @@ import { ChangeEvent, useState } from "react";
 import classes from './CsvPostList.module.css';
 import { TextField } from "@mui/material";
 import { updatePost } from "../../reducers/csvPostSlice";
+import { CsvPostItem } from "../../interfaces/PostInterface";
 
-type cvsItem = {
-    id: number;
-    title: string;
-    description: string;
-    status: string;
-    hasError: boolean;
-};
+// type cvsItem = {
+//     id: number;
+//     Title: string;
+//     Description: string;
+//     Status: string;
+//     HasError: boolean;
+// };
 export const CsvPostList = () => {
     let storedData = useSelector((state: any) => state.csvPost.csvPosts);
-    const [csvData] = useState<cvsItem[]>([...storedData]);
+    const [csvData] = useState<CsvPostItem[]>([...storedData]);
     const dispatch = useDispatch();
     const [isEditMode, setEditMode] = useState(false);
     const [editIndex, setEditIndex] = useState(0);
@@ -33,19 +34,19 @@ export const CsvPostList = () => {
 
     const updateData = (index: number) => {
         const data = {
-            id: index,
-            title: tmpTitle,
-            description: tmpDesc,
-            status: tmpStatus,
-            hasErr: tmpHasErr
+            ID: index,
+            Title: tmpTitle,
+            Description: tmpDesc,
+            Status: tmpStatus,
+            HasErr: tmpHasErr
         }
         dispatch(updatePost(data));
         csvData[index] = {
             ...csvData[index],
-            title: tmpTitle ? tmpTitle : csvData[index].title,
-            description: tmpDesc ? tmpDesc : csvData[index].description,
-            status: tmpStatus ? tmpStatus : csvData[index].status,
-            hasError: tmpHasErr
+            Title: tmpTitle ? tmpTitle : csvData[index].Title,
+            Description: tmpDesc ? tmpDesc : csvData[index].Description,
+            Status: tmpStatus ? tmpStatus : csvData[index].Status,
+            HasError: tmpHasErr
         };
     }
 
@@ -60,7 +61,7 @@ export const CsvPostList = () => {
 
     const handleTitleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
         setTmpTitle(event.target.value);
-        const searchIndex = csvData.findIndex((post: any, i: number) => i !== index && post.title === event.target.value);
+        const searchIndex = csvData.findIndex((post: any, i: number) => i !== index && post.Title === event.target.value);
         console.log("searchIndex", searchIndex)
         // if (searchIndex !== -1) {
         //     setHasErr(true);
@@ -94,7 +95,7 @@ export const CsvPostList = () => {
     const checkRowsDuplicate = (postList: any) => {
         for (let i = 0; i < postList.length; i++) {
             for (let j = i + 1; j < postList.length; j++) {
-                if (postList[i].title === postList[j].title) {
+                if (postList[i].Title === postList[j].Title) {
                     return false;
                 }
             }
@@ -105,17 +106,17 @@ export const CsvPostList = () => {
     // Check empty column
     const checkEmptyColumn = (postList: any) => {
         postList.forEach((eachPost: any) => {
-            if (!eachPost.title || !eachPost.description || !eachPost.status) {
+            if (!eachPost.Title || !eachPost.Description || !eachPost.Status) {
                 return false;
             }
         })
         return true;
     }
 
-    // Check status colum
+    // Check Status colum
     const checkStatusCol = (postList: any) => {
         postList.forEach((eachPost: any) => {
-            if (eachPost.status !== "1" && eachPost.status !== "0") {
+            if (eachPost.Status !== "1" && eachPost.Status !== "0") {
                 return false;
             }
         })
@@ -125,9 +126,9 @@ export const CsvPostList = () => {
     // Check with index duplicate
     const checkDupWithIndex = (index: number) => {
         for (let i = 0; i < csvData.length; i++) {
-            if (i !== index && csvData[i].title === csvData[index].title) {
+            if (i !== index && csvData[i].Title === csvData[index].Title) {
                 
-                csvData[index] = { ...csvData[index], hasError: true };
+                csvData[index] = { ...csvData[index], HasError: true };
                 return false
             }
         }
@@ -136,17 +137,17 @@ export const CsvPostList = () => {
 
     // Check empty column with index
     const checkEmptyWithIndex = (index: number) => {
-        if (csvData[index].title && csvData[index].description && csvData[index].status) {
+        if (csvData[index].Title && csvData[index].Description && csvData[index].Status) {
             return true;
         }
-        csvData[index] = { ...csvData[index], hasError: true };
+        csvData[index] = { ...csvData[index], HasError: true };
         return false;
     }
 
-    // Check status code with index
+    // Check Status code with index
     const checkStatusWithIndex = (index: number) => {
-        if (csvData[index].status !== "1" && csvData[index].status !== "0") {
-            csvData[index] = { ...csvData[index], hasError: true };
+        if (csvData[index].Status !== "1" && csvData[index].Status !== "0") {
+            csvData[index] = { ...csvData[index], HasError: true };
             return false;
         }
         return true;
@@ -191,9 +192,9 @@ export const CsvPostList = () => {
     const RowComponent = (props: any) => {
         return (
             <>
-                <span onDoubleClick={() => handleDoubleClick(props.data.id)}>{props.data.postData.title}</span>
-                <span onDoubleClick={() => handleDoubleClick(props.data.id)}>{props.data.postData.description}</span>
-                <span onDoubleClick={() => handleDoubleClick(props.data.id)}>{props.data.postData.status}</span>
+                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.postData.Title}</span>
+                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.postData.Description}</span>
+                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.postData.Status}</span>
             </>
         )
     }
@@ -202,7 +203,7 @@ export const CsvPostList = () => {
     const postListCom = (
         csvData.map((eachPost: any, i: number) => {
             return (
-                <li key={eachPost.title + i} className={!eachPost.hasError ?
+                <li key={eachPost.Title + i} className={!eachPost.HasError ?
                     classes["li-con"] :
                     [classes["li-con"], classes["err-data"]].join(' ')}>
                     <span className={classes["id-span"]}>{i + 1}</span>
@@ -218,27 +219,27 @@ export const CsvPostList = () => {
                                     <>
                                         {editIndex === i ? (
                                             <>
-                                                <span className={classes["title-width"]}>
+                                                <span className={classes["Title-width"]}>
                                                     <TextField id="standard-basic"
                                                         variant="standard"
-                                                        defaultValue={eachPost.title}
+                                                        defaultValue={eachPost.Title}
                                                         onChange={(event) => handleTitleChange(event, i)}
                                                         onBlur={() => handleBlur(i)}
                                                     />
                                                 </span>
-                                                <span className={classes["title-width"]}>
+                                                <span className={classes["Title-width"]}>
                                                     <TextField id="standard-basic"
                                                         style={{ width: '100%' }}
                                                         variant="standard"
-                                                        defaultValue={eachPost.description}
+                                                        defaultValue={eachPost.Description}
                                                         onChange={(event) => handleDescriptionChange(event, i)}
                                                         onBlur={() => handleBlur(i)}
                                                     />
                                                 </span>
-                                                <span className={classes["title-width"]}>
+                                                <span className={classes["Title-width"]}>
                                                     <TextField id="standard-basic"
                                                         variant="standard"
-                                                        defaultValue={eachPost.status}
+                                                        defaultValue={eachPost.Status}
                                                         onChange={(event) => handleStatusChange(event, i)}
                                                         onBlur={() => handleBlur(i)}
                                                     />
@@ -246,7 +247,7 @@ export const CsvPostList = () => {
                                             </>
                                         ) : (
                                             <>
-                                                <RowComponent data={{ postData: eachPost, id: i }} />
+                                                <RowComponent data={{ postData: eachPost, ID: i }} />
                                             </>
                                         )}
                                     </>
@@ -265,7 +266,7 @@ export const CsvPostList = () => {
                 <p> * Double click on the data to edit. </p>
             </div>
             <ul className={classes["list-con"]} id="post-list">
-                <li className={[classes["li-con"], classes["list-title"]].join(' ')} id="title">
+                <li className={[classes["li-con"], classes["list-Title"]].join(' ')} id="Title">
                     <span className={classes["id-span"]}>ID</span>
                     <span>Title</span>
                     <span>Description</span>
@@ -289,10 +290,10 @@ export default CsvPostList;
 
 // type CsvItem = {
 //   id: number;
-//   title: string;
-//   description: string;
-//   status: string;
-//   hasError: boolean;
+//   Title: string;
+//   Description: string;
+//   Status: string;
+//   HasError: boolean;
 // };
 
 // export const CsvPostList = () => {
@@ -316,7 +317,7 @@ export default CsvPostList;
 //   const handleTitleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
 //     setCsvData(prevData => {
 //       const newData = [...prevData];
-//       newData[index].title = event.target.value;
+//       newData[index].Title = event.target.value;
 //       return newData;
 //     });
 //   };
@@ -324,7 +325,7 @@ export default CsvPostList;
 //   const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
 //     setCsvData(prevData => {
 //       const newData = [...prevData];
-//       newData[index].description = event.target.value;
+//       newData[index].Description = event.target.value;
 //       return newData;
 //     });
 //   }
@@ -332,7 +333,7 @@ export default CsvPostList;
 //   const handleStatusChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
 //     setCsvData(prevData => {
 //       const newData = [...prevData];
-//       newData[index].status = event.target.value;
+//       newData[index].Status = event.target.value;
 //       return newData;
 //     });
 //   }
@@ -345,13 +346,13 @@ export default CsvPostList;
 //   const updateErrorFlg = (index: number) => {
 //     const rowData = csvData[index];
 
-//     const isDuplicate = csvData.some((post, i) => i !== index && post.title === rowData.title);
-//     const isNotEmpty = rowData.title && rowData.description && rowData.status;
-//     const isValidStatus = rowData.status === "1" || rowData.status === "0";
+//     const isDuplicate = csvData.some((post, i) => i !== index && post.Title === rowData.Title);
+//     const isNotEmpty = rowData.Title && rowData.Description && rowData.Status;
+//     const isValidStatus = rowData.Status === "1" || rowData.Status === "0";
 
 //     setCsvData(prevData => {
 //       const newData = [...prevData];
-//       newData[index].hasError = !(isDuplicate && isNotEmpty && isValidStatus);
+//       newData[index].HasError = !(isDuplicate && isNotEmpty && isValidStatus);
 //       return newData;
 //     });
 //   }
@@ -361,45 +362,45 @@ export default CsvPostList;
 
 //     return (
 //       <>
-//         <span onDoubleClick={() => handleDoubleClick(index)}>{data.title}</span>
-//         <span onDoubleClick={() => handleDoubleClick(index)}>{data.description}</span>
-//         <span onDoubleClick={() => handleDoubleClick(index)}>{data.status}</span>
+//         <span onDoubleClick={() => handleDoubleClick(index)}>{data.Title}</span>
+//         <span onDoubleClick={() => handleDoubleClick(index)}>{data.Description}</span>
+//         <span onDoubleClick={() => handleDoubleClick(index)}>{data.Status}</span>
 //       </>
 //     );
 //   }
 
 //   const postListCom = csvData.map((postData, index) => (
-//     <li key={postData.id} className={`${classes["li-con"]} ${postData.hasError && classes["err-data"]}`}>
+//     <li key={postData.id} className={`${classes["li-con"]} ${postData.HasError && classes["err-data"]}`}>
 //       <span className={classes["id-span"]}>{index + 1}</span>
 
 //       {!isEditMode || editIndex !== index ? (
 //         <RowComponent data={postData} index={index} />
 //       ) : (
 //         <>
-//           <span className={classes["title-width"]}>
+//           <span className={classes["Title-width"]}>
 //             <TextField
 //               id="standard-basic"
 //               variant="standard"
-//               defaultValue={postData.title}
+//               defaultValue={postData.Title}
 //               onChange={(event) => handleTitleChange(event, index)}
 //               onBlur={() => handleBlur(index)}
 //             />
 //           </span>
-//           <span className={classes["title-width"]}>
+//           <span className={classes["Title-width"]}>
 //             <TextField
 //               id="standard-basic"
 //               style={{ width: '100%' }}
 //               variant="standard"
-//               defaultValue={postData.description}
+//               defaultValue={postData.Description}
 //               onChange={(event) => handleDescriptionChange(event, index)}
 //               onBlur={() => handleBlur(index)}
 //             />
 //           </span>
-//           <span className={classes["title-width"]}>
+//           <span className={classes["Title-width"]}>
 //             <TextField
 //               id="standard-basic"
 //               variant="standard"
-//               defaultValue={postData.status}
+//               defaultValue={postData.Status}
 //               onChange={(event) => handleStatusChange(event, index)}
 //               onBlur={() => handleBlur(index)}
 //             />
@@ -415,7 +416,7 @@ export default CsvPostList;
 //         <p>* Double click on the data to edit.</p>
 //       </div>
 //       <ul className={classes["list-con"]} id="post-list">
-//         <li className={`${classes["li-con"]} ${classes["list-title"]}`} id="title">
+//         <li className={`${classes["li-con"]} ${classes["list-Title"]}`} id="Title">
 //           <span className={classes["id-span"]}>ID</span>
 //           <span>Title</span>
 //           <span>Description</span>

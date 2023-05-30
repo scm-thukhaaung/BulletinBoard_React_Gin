@@ -1,5 +1,5 @@
 import classes from './PostCsvPage.module.css';
-import { ChangeEvent, useRef, useState, useEffect } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { Box, Collapse, Zoom } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { parse } from "csv-parse/browser/esm/sync";
@@ -9,35 +9,24 @@ import CsvPostList from '../../components/csvPostList/CsvPostList';
 import { useSelector, useDispatch } from "react-redux";
 import { addCsvList } from '../../reducers/csvPostSlice';
 import CsvPostSvc from '../../services/CsvPostSvc';
-
-type cvsItem = {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    hasError: boolean;
-};
+import { CsvPostItem } from '../../interfaces/PostInterface';
 
 const PostCsvPage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [csvData, setCsvData] = useState<cvsItem[]>([]);
+    const [csvData, setCsvData] = useState<CsvPostItem[]>([]);
     const storedData = useSelector((state: any) => state.csvPost.csvPosts);
     const [filename, setFilename] = useState("");
     const dispatch = useDispatch();
 
     const handleSubmit = async() => {
         console.log("submitted data-=-> ", storedData)
-        // const fetchData = async () => {
             try{
-                const result = await CsvPostSvc();
+                const result = await CsvPostSvc(storedData);
                 console.log('result', result);
             } catch (error) {
                 console.error('Error at postCsv page: ', error);
             }
-        // }
     }
-
-    handleSubmit();
 
     // Read csv and set csvData 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,12 +49,13 @@ const PostCsvPage = () => {
             }
             const { result } = evt.target;
             const records = parse(result as string, {
-                columns: ["title", "description", "status"],
+                columns: ["Title", "Description", "Status"],
                 delimiter: ",",
                 trim: true,
                 skip_empty_lines: true
             });
             const dataRecords = records.slice(1)
+            console.log('read data00-0> ', dataRecords)
             checkRowsDuplicate(dataRecords);
             checkEmptyColumn(dataRecords);
             checkStatusCol(dataRecords);
@@ -85,14 +75,12 @@ const PostCsvPage = () => {
         fileInputRef.current?.click();
     };
 
-    
-
     // Check all the rows duplicate
     const checkRowsDuplicate = (postList: any) => {
         for (let i = 0; i < postList.length; i++) {
             for (let j = i + 1; j < postList.length; j++) {
-                if (postList[i].title === postList[j].title) {
-                    postList[i].hasError = true;
+                if (postList[i].Title === postList[j].Title) {
+                    postList[i].HasError = true;
                     return false;
                 }
             }
@@ -104,20 +92,20 @@ const PostCsvPage = () => {
     const checkEmptyColumn = (postList: any) => {
         let isEmpty = true;
         postList.forEach((eachPost: any) => {
-            if (!eachPost.title || !eachPost.description || !eachPost.status) {
-                eachPost.hasError = true;
+            if (!eachPost.Title || !eachPost.Description || !eachPost.Status) {
+                eachPost.HasError = true;
                 isEmpty = false;
             }
         })
         return isEmpty;
     }
 
-    // Check status colum
+    // Check Status colum
     const checkStatusCol = (postList: any) => {
         let isCorrect = true;
         postList.forEach((eachPost: any) => {
-            if (eachPost.status !== "1" && eachPost.status !== "0") {
-                eachPost.hasError = true;
+            if (eachPost.Status !== "1" && eachPost.Status !== "0") {
+                eachPost.HasError = true;
                 isCorrect = false;
             }
         })
@@ -127,7 +115,7 @@ const PostCsvPage = () => {
     //Check disabled
     const checkDisabled = () => {
         console.log('stroed data-=> ', storedData)
-        const searchIndex = storedData.findIndex((eachPost: any) => eachPost.hasError)
+        const searchIndex = storedData.findIndex((eachPost: any) => eachPost.HasError)
         if (searchIndex === -1) {
             // Not found the error
             return false;

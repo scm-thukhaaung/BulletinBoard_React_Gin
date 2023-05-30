@@ -36,6 +36,19 @@ func (PostDao *PostDao) Create(post models.Post, ctx *gin.Context) {
 	helper.ErrorPanic(result.Error, ctx)
 }
 
+// Create implements PostDaoInterface.
+func (PostDao *PostDao) AddCsvPosts(posts []models.Post, ctx *gin.Context) []models.Post {
+	var ErrPosts []models.Post
+
+	for _, eachPost := range posts {
+		result := initializers.DB.Create(&eachPost)
+		if result.Error != nil {
+			ErrPosts = append(ErrPosts, eachPost)
+		}
+	}
+	return ErrPosts
+}
+
 // Update implements PostDaoInterface.
 func (postDao *PostDao) Update(post models.Post, postId string, ctx *gin.Context) models.Post {
 

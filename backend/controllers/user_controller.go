@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	helper "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/helpers"
@@ -31,6 +31,7 @@ func NewUserController(UserServiceInterface userServices.UserServiceInterface) *
 // @Security 		ApiKeyAuth
 func (controller *UserController) FindAll(ctx *gin.Context) {
 	data := controller.UserServiceInterface.FindAll(ctx)
+	fmt.Println("data -=-> ", data)
 	response := response.Response{
 		Code:   http.StatusOK,
 		Status: "OK",
@@ -72,16 +73,16 @@ func (controller *UserController) FindOne(ctx *gin.Context) {
 // @Tags 			USER
 // @Accept 			json
 // @Produce 		json
-// @Param 			CreateUserRequest body request.CreateUserRequest true "User Request Body"
+// @Param 			UserRequest body request.UserRequest true "User Request Body"
 // @Success 		200 {object} response.Response{}
 // @Router 			/api/users [post]
 // @Security 		ApiKeyAuth
 func (controller *UserController) Create(ctx *gin.Context) {
-	createUserRequest := request.CreateUserRequest{}
-	err := ctx.ShouldBindJSON(&createUserRequest)
+	UserRequest := request.UserRequest{}
+	err := ctx.ShouldBindJSON(&UserRequest)
 	helper.ErrorPanic(err, ctx)
 
-	controller.UserServiceInterface.Create(createUserRequest, ctx)
+	controller.UserServiceInterface.Create(UserRequest, ctx)
 	response := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
@@ -92,29 +93,54 @@ func (controller *UserController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// Create csv users
+// @Summary Create new csv users
+// @Description Create new csv users
+// @Tags USER
+// @Accept json
+// @Produce json
+// @Param CsvUserRequest body request.CsvUserRequest true "User List Request Body"
+// @Success 200 {object} response.Response{}
+// @Router /api/users/csv-users [post]
+// @Security ApiKeyAuth
+func (controller *UserController) HandleCsvUsers(ctx *gin.Context) {
+	csvUserRequest := request.CsvUserRequest{}
+	err := ctx.BindJSON(&csvUserRequest)
+	helper.ErrorPanic(err, ctx)
+
+	retData := controller.UserServiceInterface.CreateCsvUsers(csvUserRequest, ctx)
+	response := response.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   retData,
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, response)
+}
+
 // Update a user
 // @Summary 		Update a user
 // @Description 	Update a user
 // @Tags 			USER
 // @Accept 			json
 // @Produce 		json
-// @Param 			CreateUserRequest body request.CreateUserRequest true "User Request Body"
+// @Param 			UserRequest body request.UserRequest true "User Request Body"
 // @Param 			id  path string  true  "Update user by id"
 // @Success 		200 {object} response.Response{}
 // @Router 			/api/users/{id} [put]
 // @Security 		ApiKeyAuth
 func (controller *UserController) Update(ctx *gin.Context) {
-	updateUserRequest := request.UpdateUserRequest{}
-	err := ctx.ShouldBindJSON(&updateUserRequest)
+	UserRequest := request.UserRequest{}
+	err := ctx.ShouldBindJSON(&UserRequest)
 	helper.ErrorPanic(err, ctx)
 
 	userId := ctx.Param("userId")
-	id, err := strconv.Atoi(userId)
-	helper.ErrorPanic(err, ctx)
+	// id, err := strconv.Atoi(userId)
+	// helper.ErrorPanic(err, ctx)
 
-	updateUserRequest.Id = uint(id)
+	// UserRequest.Id = uint(id)
 
-	controller.UserServiceInterface.Update(updateUserRequest, userId, ctx)
+	controller.UserServiceInterface.Update(UserRequest, userId, ctx)
 	response := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",

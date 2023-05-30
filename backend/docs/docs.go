@@ -16,6 +16,46 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/forget-password": {
+            "post": {
+                "description": "Send mail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FORGET PASSWORD"
+                ],
+                "summary": "Send mail",
+                "parameters": [
+                    {
+                        "description": "Mail Request Body",
+                        "name": "MailRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.MailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "description": "Authenticates user login",
@@ -100,11 +140,50 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Post Request Body",
-                        "name": "CreatePostRequest",
+                        "name": "PostRequest",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreatePostRequest"
+                            "$ref": "#/definitions/request.PostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/posts/csv-posts": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new csv posts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "POST"
+                ],
+                "summary": "Create new csv posts",
+                "parameters": [
+                    {
+                        "description": "Post List Request Body",
+                        "name": "CsvPostRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CsvPostRequest"
                         }
                     }
                 ],
@@ -171,11 +250,11 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Post Request Body",
-                        "name": "CreatePostRequest",
+                        "name": "PostRequest",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreatePostRequest"
+                            "$ref": "#/definitions/request.PostRequest"
                         }
                     },
                     {
@@ -228,6 +307,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/reset-password": {
+            "post": {
+                "description": "Rest Password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FORGET PASSWORD"
+                ],
+                "summary": "Rest password",
+                "parameters": [
+                    {
+                        "description": "Password Request Body",
+                        "name": "PasswordRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.PasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "security": [
@@ -272,11 +391,50 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "User Request Body",
-                        "name": "CreateUserRequest",
+                        "name": "UserRequest",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateUserRequest"
+                            "$ref": "#/definitions/request.UserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/csv-users": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new csv users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USER"
+                ],
+                "summary": "Create new csv users",
+                "parameters": [
+                    {
+                        "description": "User List Request Body",
+                        "name": "CsvUserRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CsvUserRequest"
                         }
                     }
                 ],
@@ -343,11 +501,11 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "User Request Body",
-                        "name": "CreateUserRequest",
+                        "name": "UserRequest",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateUserRequest"
+                            "$ref": "#/definitions/request.UserRequest"
                         }
                     },
                     {
@@ -402,35 +560,99 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "request.CreatePostRequest": {
+        "request.CsvPostRequest": {
+            "type": "object",
+            "properties": {
+                "Posts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.PostRequest"
+                    }
+                }
+            }
+        },
+        "request.CsvUserRequest": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.UserRequest"
+                    }
+                }
+            }
+        },
+        "request.LoginRequest": {
             "type": "object",
             "required": [
-                "description",
-                "title"
+                "email",
+                "password"
             ],
             "properties": {
-                "created_user_id": {
-                    "type": "integer"
-                },
-                "description": {
+                "email": {
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 1
                 },
-                "status": {
+                "password": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 1
+                }
+            }
+        },
+        "request.MailRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 1
+                }
+            }
+        },
+        "request.PasswordRequest": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 1
+                }
+            }
+        },
+        "request.PostRequest": {
+            "type": "object",
+            "required": [
+                "Description",
+                "Title"
+            ],
+            "properties": {
+                "Created_User_ID": {
                     "type": "integer"
                 },
-                "title": {
+                "Description": {
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 1
                 },
-                "updated_user_id": {
+                "Status": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 1
+                },
+                "Updated_User_ID": {
                     "type": "integer"
                 }
             }
         },
-        "request.CreateUserRequest": {
+        "request.UserRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -471,25 +693,9 @@ const docTemplate = `{
                 "type": {
                     "type": "string",
                     "default": "1"
-                }
-            }
-        },
-        "request.LoginRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
                 },
-                "password": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                "updated_user_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -518,11 +724,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
+	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Bulletin Board API",
-	Description:      "Bulletin Board Service API in Go using Gin Frameworl",
+	Description:      "Bulletin Board Service API in Go using Gin Framework",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

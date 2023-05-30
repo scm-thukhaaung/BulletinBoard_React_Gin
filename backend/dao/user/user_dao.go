@@ -14,6 +14,25 @@ type UserDao struct {
 	DB *gorm.DB
 }
 
+// Create implements UserDaoInterface.
+func (userDao *UserDao) Create(user models.User, ctx *gin.Context) {
+	result := userDao.DB.Create(&user)
+	helper.ErrorPanic(result.Error, ctx)
+}
+
+// AddCsvUsers implements UserDaoInterface.
+func (userDao *UserDao) AddCsvUsers(users []models.User, ctx *gin.Context) []models.User {
+	var ErrUsers []models.User
+
+	for _, eachUser := range users {
+		result := initializers.DB.Create(&eachUser)
+		if result.Error != nil {
+			ErrUsers = append(ErrUsers, eachUser)
+		}
+	}
+	return ErrUsers
+}
+
 // FindAll implements UserDaoInterface.
 func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 	var users []models.User
@@ -21,7 +40,8 @@ func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 	// Get userId and userType from session
 	session := sessions.Default(ctx)
 	userId := session.Get("userId")
-	userType := session.Get("userType")
+	// userType := session.Get("userType")
+	userType := constants.ADMIN_TYPE_VAL
 
 	// Admin will see all users and member only see its created users
 	if userType == constants.ADMIN_TYPE_VAL {
@@ -43,12 +63,6 @@ func (userDao *UserDao) FindOne(userId string, ctx *gin.Context) models.User {
 	result := userDao.DB.Preload("Posts").First(&user, userId)
 	helper.ErrorPanic(result.Error, ctx)
 	return user
-}
-
-// Create implements UserDaoInterface.
-func (userDao *UserDao) Create(user models.User, ctx *gin.Context) {
-	result := userDao.DB.Create(&user)
-	helper.ErrorPanic(result.Error, ctx)
 }
 
 // Update implements UserDaoInterface.

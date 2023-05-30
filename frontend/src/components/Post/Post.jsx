@@ -1,6 +1,6 @@
-import "../css/style.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
+import classes from "./Post.module.css";
 
 const Post = props => {
 
@@ -9,15 +9,15 @@ const Post = props => {
     };
 
     return (
-        <div className="post">
+        <div className={classes["post"]}>
             <h2>" {props.title} "</h2>
             <p>{props.description}</p>
 
-            <p className="post-created-by">created by သုခ</p>
-            <button className="post-delete-btn" onClick={handleClick}>
+            <p className={classes["post-created-by"]}>created by သုခ</p>
+            <button className={classes["post-delete-btn"]} onClick={handleClick}>
                 <DeleteIcon />
             </button>
-            <button className="post-update-btn" onClick={handleClick}>
+            <button className={classes["post-update-btn"]} onClick={handleClick}>
                 <EditIcon />
             </button>
         </div>

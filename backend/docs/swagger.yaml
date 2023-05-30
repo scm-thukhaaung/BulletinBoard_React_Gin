@@ -1,26 +1,70 @@
 basePath: /
 definitions:
-  request.CreatePostRequest:
+  request.CsvPostRequest:
     properties:
-      created_user_id:
-        type: integer
-      description:
+      Posts:
+        items:
+          $ref: '#/definitions/request.PostRequest'
+        type: array
+    type: object
+  request.CsvUserRequest:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/request.UserRequest'
+        type: array
+    type: object
+  request.LoginRequest:
+    properties:
+      email:
         maxLength: 200
         minLength: 1
         type: string
-      status:
-        type: integer
-      title:
+      password:
         maxLength: 200
         minLength: 1
         type: string
-      updated_user_id:
+    required:
+    - email
+    - password
+    type: object
+  request.MailRequest:
+    properties:
+      email:
+        maxLength: 200
+        minLength: 1
+        type: string
+    type: object
+  request.PasswordRequest:
+    properties:
+      password:
+        maxLength: 200
+        minLength: 1
+        type: string
+    required:
+    - password
+    type: object
+  request.PostRequest:
+    properties:
+      Created_User_ID:
+        type: integer
+      Description:
+        maxLength: 200
+        minLength: 1
+        type: string
+      Status:
+        type: integer
+      Title:
+        maxLength: 200
+        minLength: 1
+        type: string
+      Updated_User_ID:
         type: integer
     required:
-    - description
-    - title
+    - Description
+    - Title
     type: object
-  request.CreateUserRequest:
+  request.UserRequest:
     properties:
       address:
         type: string
@@ -47,23 +91,11 @@ definitions:
       type:
         default: "1"
         type: string
+      updated_user_id:
+        type: integer
     required:
     - email
     - name
-    - password
-    type: object
-  request.LoginRequest:
-    properties:
-      email:
-        maxLength: 200
-        minLength: 1
-        type: string
-      password:
-        maxLength: 200
-        minLength: 1
-        type: string
-    required:
-    - email
     - password
     type: object
   response.Response:
@@ -74,13 +106,39 @@ definitions:
       status:
         type: string
     type: object
-host: localhost:3000
+host: localhost:8080
 info:
   contact: {}
-  description: Bulletin Board Service API in Go using Gin Frameworl
+  description: Bulletin Board Service API in Go using Gin Framework
   title: Bulletin Board API
   version: "1.0"
 paths:
+  /api/forget-password:
+    post:
+      consumes:
+      - application/json
+      description: Send mail
+      parameters:
+      - description: Mail Request Body
+        in: body
+        name: MailRequest
+        required: true
+        schema:
+          $ref: '#/definitions/request.MailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Send mail
+      tags:
+      - FORGET PASSWORD
   /api/login:
     post:
       consumes:
@@ -129,10 +187,10 @@ paths:
       parameters:
       - description: Post Request Body
         in: body
-        name: CreatePostRequest
+        name: PostRequest
         required: true
         schema:
-          $ref: '#/definitions/request.CreatePostRequest'
+          $ref: '#/definitions/request.PostRequest'
       produces:
       - application/json
       responses:
@@ -193,10 +251,10 @@ paths:
       parameters:
       - description: Post Request Body
         in: body
-        name: CreatePostRequest
+        name: PostRequest
         required: true
         schema:
-          $ref: '#/definitions/request.CreatePostRequest'
+          $ref: '#/definitions/request.PostRequest'
       - description: Update post by id
         in: path
         name: id
@@ -214,6 +272,56 @@ paths:
       summary: Update a post
       tags:
       - POST
+  /api/posts/csv-posts:
+    post:
+      consumes:
+      - application/json
+      description: Create new csv posts
+      parameters:
+      - description: Post List Request Body
+        in: body
+        name: CsvPostRequest
+        required: true
+        schema:
+          $ref: '#/definitions/request.CsvPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create new csv posts
+      tags:
+      - POST
+  /api/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Rest Password
+      parameters:
+      - description: Password Request Body
+        in: body
+        name: PasswordRequest
+        required: true
+        schema:
+          $ref: '#/definitions/request.PasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Rest password
+      tags:
+      - FORGET PASSWORD
   /api/users:
     get:
       description: Returns user list
@@ -236,10 +344,10 @@ paths:
       parameters:
       - description: User Request Body
         in: body
-        name: CreateUserRequest
+        name: UserRequest
         required: true
         schema:
-          $ref: '#/definitions/request.CreateUserRequest'
+          $ref: '#/definitions/request.UserRequest'
       produces:
       - application/json
       responses:
@@ -300,10 +408,10 @@ paths:
       parameters:
       - description: User Request Body
         in: body
-        name: CreateUserRequest
+        name: UserRequest
         required: true
         schema:
-          $ref: '#/definitions/request.CreateUserRequest'
+          $ref: '#/definitions/request.UserRequest'
       - description: Update user by id
         in: path
         name: id
@@ -319,6 +427,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Update a user
+      tags:
+      - USER
+  /api/users/csv-users:
+    post:
+      consumes:
+      - application/json
+      description: Create new csv users
+      parameters:
+      - description: User List Request Body
+        in: body
+        name: CsvUserRequest
+        required: true
+        schema:
+          $ref: '#/definitions/request.CsvUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create new csv users
       tags:
       - USER
 securityDefinitions:
