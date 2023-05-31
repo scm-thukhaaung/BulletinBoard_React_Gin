@@ -4,8 +4,21 @@ import Footer from "../../components/common/Footer/Footer";
 
 import classes from "./UserListPage.module.css";
 import SearchUserArea from "../../components/common/SearchUserArea/SearchUserArea";
+import { useDispatch } from "react-redux";
+// import { getAllUsers } from "../../services/api/user-api";
+import { getUsersError, getUsersStatus, getAllUsers } from "../../store/Slices/usersSlice";
+
 
 const UserListPage = props => {
+    const dispatch = useDispatch();
+    dispatch(getAllUsers())
+    .then((originalPromiseResult) => {
+        console.log('originalPromiseResult', originalPromiseResult)
+      // handle result here
+    })
+    .catch((rejectedValueOrSerializedError) => {
+      // handle error here
+    })
     return (
         <>
             <Header />

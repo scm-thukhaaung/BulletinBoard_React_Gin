@@ -5,8 +5,8 @@ import { RouterProvider } from 'react-router-dom';
 import router from './routes';
 import store from './store/store';
 import { Provider } from 'react-redux';
-import { getAllPosts } from './store/Slices/postsSlice';
-store.dispatch(getAllPosts());
+// import { getAllPosts } from './store/Slices/postsSlice';
+// store.dispatch(getAllPosts());
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

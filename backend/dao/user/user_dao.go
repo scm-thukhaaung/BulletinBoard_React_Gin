@@ -1,9 +1,7 @@
 package userDao
 
 import (
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	constants "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/consts"
 	helper "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/helpers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
@@ -37,21 +35,26 @@ func (userDao *UserDao) AddCsvUsers(users []models.User, ctx *gin.Context) []mod
 func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 	var users []models.User
 
+	result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
+	helper.ErrorPanic(result.Error, ctx)
+
 	// Get userId and userType from session
-	session := sessions.Default(ctx)
-	userId := session.Get("userId")
-	userType := session.Get("userType")
+	// session := sessions.Default(ctx)
+	// userId := session.Get("userId")
+	// userType := session.Get("userType")
+
+	// fmt.Println(userId, userType)
 
 	// Admin will see all users and member only see its created users
-	if userType == constants.ADMIN_TYPE_VAL {
+	// if userType == constants.ADMIN_TYPE_VAL {
 
-		result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
-		helper.ErrorPanic(result.Error, ctx)
-	} else {
+	// 	result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
+	// 	helper.ErrorPanic(result.Error, ctx)
+	// } else {
 
-		result := initializers.DB.Model(&users).Where("created_user_id = ?", userId).Preload("Posts").Find(&users)
-		helper.ErrorPanic(result.Error, ctx)
-	}
+	// 	result := initializers.DB.Model(&users).Where("created_user_id = ?", userId).Preload("Posts").Find(&users)
+	// 	helper.ErrorPanic(result.Error, ctx)
+	// }
 
 	return users
 }
@@ -63,7 +66,6 @@ func (userDao *UserDao) FindOne(userId string, ctx *gin.Context) models.User {
 	helper.ErrorPanic(result.Error, ctx)
 	return user
 }
-
 
 // Update implements UserDaoInterface.
 func (userDao *UserDao) Update(user models.User, userId string, ctx *gin.Context) models.User {
