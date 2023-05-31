@@ -15,9 +15,10 @@ type UserDao struct {
 }
 
 // Create implements UserDaoInterface.
-func (userDao *UserDao) Create(user models.User, ctx *gin.Context) {
+func (userDao *UserDao) Create(user models.User, ctx *gin.Context) models.User{
 	result := userDao.DB.Create(&user)
 	helper.ErrorPanic(result.Error, ctx)
+	return user;
 }
 
 // AddCsvUsers implements UserDaoInterface.
