@@ -2,12 +2,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { ChangeEvent, useState } from "react";
 import classes from './CsvPostList.module.css';
 import { TextField } from "@mui/material";
-import { addCsvList, updatePost } from "../../reducers/csvPostSlice";
+// import { addCsvList, updatePost } from "../../reducers/csvPostSlice";
 import { CsvPostItem } from "../../interfaces/PostInterface";
 import { CheckTableUtilSvc } from "../../utils/utilSvc";
+import { checkPostExist, csvPostAction, getCsvPosts } from "../../store/Slices/csvPostSlice";
 
 const CsvPostList = () => {
-    let storedData = useSelector((state: any) => state.csvPost.csvPosts);
+    let storedData = useSelector(getCsvPosts);
+    const isPostExist = useSelector(checkPostExist);
     const csvData = [...storedData];
     const dispatch = useDispatch();
     const [isEditMode, setEditMode] = useState(false);
@@ -35,11 +37,13 @@ const CsvPostList = () => {
                 isDup = true;
             }
         }
+        
         let isStsWrong = false;
         if (csvData[index].Status !== "0" &&
             csvData[index].Status !== "1") {
             isStsWrong = true;
         }
+
         if (isDup || isStsWrong) {
             csvData[index] = { ...csvData[index], HasError: true };
         } else {
@@ -47,7 +51,7 @@ const CsvPostList = () => {
         }
 
         const updatedList = CheckTableUtilSvc(csvData);
-        dispatch(addCsvList(updatedList));
+        dispatch(csvPostAction.addCsvList(updatedList));
     }
 
     const updateData = (index: number, dataToUpdate: CsvPostItem) => {
@@ -58,7 +62,7 @@ const CsvPostList = () => {
             Status: dataToUpdate.Status,
             HasError: dataToUpdate.HasError
         }
-        dispatch(updatePost(data));
+        dispatch(csvPostAction.updatePost(data));
     }
 
     const handleDoubleClick = (index: number) => {
@@ -154,7 +158,12 @@ const CsvPostList = () => {
     return (
         <>
             < div className={classes["error-msg"]} id="error-msg">
-                <p> * Double click on the data to edit. </p>
+                {
+                    !isPostExist ?
+                        <p> * Double click on the data to edit. </p>
+                        :
+                        <p> * This title of these posts are already taken. </p>
+                }
             </div>
             <ul className={classes["list-con"]} id="post-list">
                 <li className={[classes["li-con"], classes["list-title"]].join(' ')} id="Title">

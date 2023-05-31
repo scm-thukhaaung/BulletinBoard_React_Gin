@@ -7,21 +7,21 @@ import { orange } from '@mui/material/colors';
 import ClearIcon from '@mui/icons-material/Clear';
 import CsvPostList from '../../components/csvPostList/CsvPostList';
 import { useSelector, useDispatch } from "react-redux";
-import { addCsvList } from '../../reducers/csvPostSlice';
-import CsvPostSvc from '../../services/CsvPostSvc';
 import { CsvPostItem } from '../../interfaces/PostInterface';
 import { CheckTableUtilSvc } from '../../utils/utilSvc';
+import { createCsvPost, csvPostAction, getCsvPosts } from '../../store/Slices/csvPostSlice';
 
 const PostCsvPage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [csvData, setCsvData] = useState<CsvPostItem[]>([]);
-    const storedData = useSelector((state: any) => state.csvPost.csvPosts);
+    const storedData = useSelector(getCsvPosts);
     const [filename, setFilename] = useState("");
-    const dispatch = useDispatch();
+    const dispatch: any = useDispatch();
 
     const handleSubmit = async () => {
         try {
-            const result = await CsvPostSvc(storedData);
+            const result = await dispatch(createCsvPost(storedData));
+        
         } catch (error) {
             console.error('Error at postCsv page: ', error);
         }
@@ -55,7 +55,7 @@ const PostCsvPage = () => {
             });
             const dataRecords = records.slice(1);
             const updatedList = CheckTableUtilSvc(dataRecords);
-            dispatch(addCsvList(updatedList));
+            dispatch(csvPostAction.addCsvList(updatedList));
             setCsvData(updatedList);
         };
         reader.readAsBinaryString(file);
@@ -63,6 +63,7 @@ const PostCsvPage = () => {
     };
 
     const resetData = () => {
+        dispatch(csvPostAction.setInitialState());
         setCsvData([]);
         setFilename("");
     }
