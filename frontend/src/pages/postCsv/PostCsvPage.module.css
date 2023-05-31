@@ -73,6 +73,7 @@
 
 .table-top span {
   padding: 1.5rem;
+  font-weight: bold;
 }
 
 .table-top span:last-child {

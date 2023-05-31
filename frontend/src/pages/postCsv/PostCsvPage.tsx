@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addCsvList } from '../../reducers/csvPostSlice';
 import CsvPostSvc from '../../services/CsvPostSvc';
 import { CsvPostItem } from '../../interfaces/PostInterface';
+import { CheckTableUtilSvc } from '../../utils/utilSvc';
 
 const PostCsvPage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -18,14 +19,12 @@ const PostCsvPage = () => {
     const [filename, setFilename] = useState("");
     const dispatch = useDispatch();
 
-    const handleSubmit = async() => {
-        console.log("submitted data-=-> ", storedData)
-            try{
-                const result = await CsvPostSvc(storedData);
-                console.log('result', result);
-            } catch (error) {
-                console.error('Error at postCsv page: ', error);
-            }
+    const handleSubmit = async () => {
+        try {
+            const result = await CsvPostSvc(storedData);
+        } catch (error) {
+            console.error('Error at postCsv page: ', error);
+        }
     }
 
     // Read csv and set csvData 
@@ -54,13 +53,10 @@ const PostCsvPage = () => {
                 trim: true,
                 skip_empty_lines: true
             });
-            const dataRecords = records.slice(1)
-            console.log('read data00-0> ', dataRecords)
-            checkRowsDuplicate(dataRecords);
-            checkEmptyColumn(dataRecords);
-            checkStatusCol(dataRecords);
-            dispatch(addCsvList(dataRecords));
-            setCsvData(dataRecords);
+            const dataRecords = records.slice(1);
+            const updatedList = CheckTableUtilSvc(dataRecords);
+            dispatch(addCsvList(updatedList));
+            setCsvData(updatedList);
         };
         reader.readAsBinaryString(file);
         e.target.value = "";
@@ -75,46 +71,8 @@ const PostCsvPage = () => {
         fileInputRef.current?.click();
     };
 
-    // Check all the rows duplicate
-    const checkRowsDuplicate = (postList: any) => {
-        for (let i = 0; i < postList.length; i++) {
-            for (let j = i + 1; j < postList.length; j++) {
-                if (postList[i].Title === postList[j].Title) {
-                    postList[i].HasError = true;
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    // Check empty column
-    const checkEmptyColumn = (postList: any) => {
-        let isEmpty = true;
-        postList.forEach((eachPost: any) => {
-            if (!eachPost.Title || !eachPost.Description || !eachPost.Status) {
-                eachPost.HasError = true;
-                isEmpty = false;
-            }
-        })
-        return isEmpty;
-    }
-
-    // Check Status colum
-    const checkStatusCol = (postList: any) => {
-        let isCorrect = true;
-        postList.forEach((eachPost: any) => {
-            if (eachPost.Status !== "1" && eachPost.Status !== "0") {
-                eachPost.HasError = true;
-                isCorrect = false;
-            }
-        })
-        return isCorrect;
-    }
-
     //Check disabled
     const checkDisabled = () => {
-        console.log('stroed data-=> ', storedData)
         const searchIndex = storedData.findIndex((eachPost: any) => eachPost.HasError)
         if (searchIndex === -1) {
             // Not found the error
@@ -127,7 +85,7 @@ const PostCsvPage = () => {
     return (
         <div className={!csvData.length ? classes["wrapper-csv"] : ''}>
             {
-                
+
                 !csvData.length ?
 
                     // Csv upload bottom section

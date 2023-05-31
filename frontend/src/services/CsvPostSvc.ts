@@ -33,8 +33,6 @@ const CsvPostSvc = async (postList: Post[]) => {
   setItem('user', userData)
   setItem('token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsIm5hbWUiOiJBZG1pbiIsImV4cCI6MTY4NTUwNjAxMn0.pPN-pIr7pV9zsm75qnn3rmAuRN28vgnr6VOjJ9EeBlU")
 
-  
-  console.log('postList-=> ', postList)
   const data = postList.map((eachPost: Post) => {
     const updatedPost: Post = {
       ...eachPost,
