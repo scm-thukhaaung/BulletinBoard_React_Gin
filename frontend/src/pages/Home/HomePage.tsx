@@ -1,11 +1,17 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import Footer from "../../components/common/Footer/Footer";
 import Header from "../../components/common/Header/Header";
 import CreatePostArea from "../../components/CreatePostArea/CreatePostArea";
 import Post from "../../components/Post/Post";
+import { getPostsError, getPostsStatus, selectAllPosts } from "../../store/Slices/postsSlice";
 
 const HomePage = (props: any) => {
-    const [posts, setPosts] = useState<any>([]);
+    const apiPosts = useSelector(selectAllPosts);
+    const apiPostsStatus = useSelector(getPostsStatus);
+    const apiPostsError = useSelector(getPostsError);
+
+    const [posts, setPosts] = useState<any>(apiPosts);
 
     const addPost = (newPost: any) => {
         setPosts(
@@ -28,19 +34,22 @@ const HomePage = (props: any) => {
         <>
             <Header />
             <CreatePostArea onAdd={addPost} />
-            <div className='posts-area clearfix'>
-                {posts.map((postItem: { title: any; description: any; }, index: any) => {
-                    return (
-                        <Post
-                            key={index}
-                            id={index}
-                            title={postItem.title}
-                            description={postItem.description}
-                            onDelete={deletePost}
-                        />
-                    );
-                })}
-            </div>
+            {apiPostsStatus === "succeeded" && (
+                <div className='posts-area clearfix'>
+                    {
+                        apiPosts.map((postItem: any, index: any) => {
+                            return (
+                                <Post
+                                    key={index}
+                                    id={index}
+                                    title={postItem.Title}
+                                    description={postItem.Description}
+                                    onDelete={deletePost}
+                                />
+                            );
+                        })}
+                </div>
+            )}
             <Footer />
         </>
     );

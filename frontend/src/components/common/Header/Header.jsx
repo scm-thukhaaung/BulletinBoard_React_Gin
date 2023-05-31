@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Box, AppBar, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, ThemeProvider } from '@mui/material';
 import { useState } from "react";
 import DraftsIcon from '@mui/icons-material/Drafts';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import classes from "./Header.module.css";
 import { Search, SearchIconWrapper, StyledInputBase, ToolBarStyle, FontTheme } from "../custom_mui/CustomMUI";
 
@@ -11,7 +12,8 @@ const settings = ['Profile ထဲ ဝင်မည်', 'User List ကြည့�
 const Header = () => {
 
     const [text] = useTypewriter({
-        words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
+        // words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
+        words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'Bulletin Board ပါ'],
         loop: false
     });
 
@@ -30,7 +32,7 @@ const Header = () => {
             <AppBar position="fixed" sx={{ borderBottom: "5px solid #000000; " }}>
                 <ToolBarStyle display="large">
                     <h1 className={classes["h1-txt-1"]}>
-                        "&nbsp; <DraftsIcon fontSize='large' /> &nbsp; {text} "
+                        "&nbsp; <LoyaltyIcon fontSize='large' /> &nbsp; {text} "
                     </h1>
                     <div className={classes["search-bar-menu-div"]}>
                         <Search>

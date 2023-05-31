@@ -5,6 +5,7 @@ go 1.20
 require github.com/swaggo/gin-swagger v1.6.0
 
 require (
+	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect

@@ -23,6 +23,11 @@
     src: url('../font/NotoSansMyanmar-SemiBold.ttf')
 }
 
+@font-face {
+    font-family: Walone-Bold;
+    src: url('../font/Z06-Walone Bold.ttf')
+}
+
 body {
     background: #eee;
     background-image: url("https://www.transparenttextures.com/patterns/food.png");
