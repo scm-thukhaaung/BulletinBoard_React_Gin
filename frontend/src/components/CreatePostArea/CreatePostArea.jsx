@@ -7,23 +7,36 @@ import Box from '@mui/material/Box';
 import { Zoom, Fab } from '@mui/material';
 import classes from "./CreatePostArea.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, selectTempPost, postsAction } from "../../store/Slices/postsSlice";
+import { createPost, selectTempPost, postsAction, isNewPost, updatePost } from "../../store/Slices/postsSlice";
 const CreatePostArea = (props) => {
     const dispatch = useDispatch();
     const tempPost = useSelector(selectTempPost);
+    const isNewPostItem = useSelector(isNewPost);
     const [isExpanded, setExpanded] = useState(false);
 
-    const handleChange = (event) => {
-        dispatch(
-            postsAction.setInputTempPost({
-                title: event.target.name["title"],
-                description: event.target.name["description"]
-            })
-        );
+    const handleTitleChange = (event) => {
+        let value = event.target.value;
+        dispatch(postsAction.setInputTempPost({
+            title: value,
+        }));
+    };
+
+    const handleDescriptionChange = (event) => {
+        let value = event.target.value;
+        dispatch(postsAction.setInputTempPost({
+            description: value,
+        }));
     };
 
     const submitPost = (event) => {
-        dispatch(createPost(tempPost)).unwrap();
+        if (!tempPost.Title || !tempPost.Description) return;
+
+        if (isNewPostItem) {
+            dispatch(createPost(tempPost)).unwrap();
+        } else {
+            dispatch(updatePost(tempPost)).unwrap();
+        }
+
         event.preventDefault();
     };
 
@@ -40,13 +53,10 @@ const CreatePostArea = (props) => {
         <div className={classes["create-post-component"]}>
 
             <form className={classes["create-post"]}>
-                {/* <p>{tempPost.Title}Hello</p>
-                <p>{tempPost.Description}Hello</p> */}
                 {(tempPost.Title ? true : isExpanded) && (
                     <input
                         name="title"
-                        onChange={handleChange}
-
+                        onChange={handleTitleChange}
                         value={tempPost.Title}
                         placeholder="ခေါင်းစဉ်"
                     />
@@ -55,7 +65,7 @@ const CreatePostArea = (props) => {
                 <textarea
                     name="description"
                     onClick={expand}
-                    onChange={handleChange}
+                    onChange={handleDescriptionChange}
                     value={tempPost.Description}
                     placeholder="ရင်ဖွင့်လိုက်ပါ..."
                     rows={isExpanded ? 3 : 1}

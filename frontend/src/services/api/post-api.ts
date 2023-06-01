@@ -14,8 +14,12 @@ const postCreate = (body: any) => {
     return axios.post(POST_API, body );
 };
 
+const postUpdate = (body: any, id: any) => {
+    return axios.put(`${POST_API}/${id}`, body)
+}
+
 const deletePost = (id: any) => {
     return axios.delete(`${POST_API}/${id}`);
 };
 
-export { getFindAll, getFindOne, postCreate, deletePost };
+export { getFindAll, getFindOne, postCreate, deletePost, postUpdate };
