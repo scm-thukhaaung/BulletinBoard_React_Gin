@@ -1,3 +1,4 @@
+import { FormControlLabel, Typography } from '@mui/material';
 import { useState, createRef, useEffect } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -7,10 +8,13 @@ import Box from '@mui/material/Box';
 import { Zoom, Fab } from '@mui/material';
 import classes from "./CreatePostArea.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, selectTempPost, postsAction, isNewPost, updatePost } from "../../store/Slices/postsSlice";
+import { createPost, selectTempPost, postsAction, isNewPost, updatePost, checkStatus } from "../../store/Slices/postsSlice";
+import { GoldenSwitch } from '../common/custom_mui/CustomMUI';
 const CreatePostArea = (props) => {
     const dispatch = useDispatch();
     const tempPost = useSelector(selectTempPost);
+    const checked = useSelector(checkStatus);
+    // const checked = tempPost.status === 1 ? true : false;
     const isNewPostItem = useSelector(isNewPost);
     const [isExpanded, setExpanded] = useState(false);
 
@@ -38,6 +42,16 @@ const CreatePostArea = (props) => {
         }
 
         event.preventDefault();
+    };
+
+    const handleStatusChange = (event) => {
+        let value = event.target.checked;
+
+
+        const status = value ? 1 : 0;
+        dispatch(postsAction.setInputTempPost({
+            status: status,
+        }));
     };
 
     const expand = () => {
@@ -70,8 +84,10 @@ const CreatePostArea = (props) => {
                     placeholder="ရင်ဖွင့်လိုက်ပါ..."
                     rows={isExpanded ? 3 : 1}
                 />
+                <p>{tempPost.Status?.toString()} Hello</p>
+                {(tempPost.Title ? true : isExpanded) && (<FormControlLabel control={<GoldenSwitch onChange={handleStatusChange} checked={tempPost.Status === 1 ? true : false}/>} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မျှဝေမည်...</Typography>} />)}
 
-                <Zoom in={(tempPost.Title ? true : isExpanded)}>
+                {(tempPost.Title ? true : isExpanded) && (<Zoom in={(tempPost.Title ? true : isExpanded)}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Fab onClick={submitPost}>
                             <AddIcon />
@@ -84,6 +100,7 @@ const CreatePostArea = (props) => {
                         </Fab>
                     </Box>
                 </Zoom>
+                )}
             </form>
         </div>
     );

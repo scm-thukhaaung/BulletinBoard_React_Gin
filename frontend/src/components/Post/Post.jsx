@@ -18,9 +18,6 @@ const Post = props => {
         pRef.current.style.width = `${h2Width}px`;
     }, []);
 
-    const handleClick = (props) => {
-        props.onDelete(props.id);
-    };
     const handleDelete = () => {
         try {
             const id = props.postItem.ID;

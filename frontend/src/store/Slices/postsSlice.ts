@@ -53,7 +53,7 @@ const updatePost = createAsyncThunk("posts/updatePost", async (initialPost: any)
     const body = {
         title: initialPost.Title,
         description: initialPost.Description,
-        state: 1,
+        status: initialPost.Status,
         updated_user_id: 2
     };
 
@@ -86,6 +86,9 @@ const postsSlice = createSlice({
 
             if (action.payload.description) {
                 state.tempPostState.post.Description = action.payload.description;
+            }
+            if (action.payload.status === 0 ||action.payload.status === 1) {
+                state.tempPostState.post.Status = action.payload.status;
             }
         }
     },
@@ -142,8 +145,8 @@ const getPostsStatus = (state: any) => state.posts.postInititalState.status;
 const selectTempPost = (state: any) => state.posts.tempPostState.post;
 
 const isNewPost = (state: any) => state.posts.tempPostState.newPost;
-
-export { selectAllPosts, getPostsError, getPostsStatus, selectTempPost, isNewPost };
+const checkStatus = (state: any) => state.posts.tempPostState.post.Status ;
+export { selectAllPosts, getPostsError, getPostsStatus, selectTempPost, isNewPost, checkStatus };
 export { getAllPosts, deletePost, createPost, updatePost };
 
 export const postsAction = postsSlice.actions;
