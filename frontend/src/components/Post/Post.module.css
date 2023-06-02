@@ -4,7 +4,6 @@
     border-radius: 7px;
     box-shadow: 0 2px 5px #ccc;
     padding: 10px;
-    width: 250px;
     margin: 16px;
     float: left;
 }
@@ -13,6 +12,7 @@
     font-size: 1.5em;
     margin-bottom: 15px;
     font-family: UMoe;
+    display: inline-block;
 }
 
 .post p {
@@ -21,7 +21,7 @@
     margin-bottom: 10px;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-family: NotoSansMyanmar-SemiBold;
+    font-family:  Walone-Bold;
     /* font-weight: 550; */
 }
 

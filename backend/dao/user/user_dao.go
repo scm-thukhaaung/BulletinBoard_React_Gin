@@ -1,9 +1,7 @@
 package userDao
 
 import (
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	constants "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/consts"
 	helper "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/helpers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
@@ -15,9 +13,10 @@ type UserDao struct {
 }
 
 // Create implements UserDaoInterface.
-func (userDao *UserDao) Create(user models.User, ctx *gin.Context) {
+func (userDao *UserDao) Create(user models.User, ctx *gin.Context) models.User{
 	result := userDao.DB.Create(&user)
 	helper.ErrorPanic(result.Error, ctx)
+	return user;
 }
 
 // AddCsvUsers implements UserDaoInterface.
@@ -37,22 +36,26 @@ func (userDao *UserDao) AddCsvUsers(users []models.User, ctx *gin.Context) []mod
 func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 	var users []models.User
 
+	result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
+	helper.ErrorPanic(result.Error, ctx)
+
 	// Get userId and userType from session
-	session := sessions.Default(ctx)
-	userId := session.Get("userId")
+	// session := sessions.Default(ctx)
+	// userId := session.Get("userId")
 	// userType := session.Get("userType")
-	userType := constants.ADMIN_TYPE_VAL
+
+	// fmt.Println(userId, userType)
 
 	// Admin will see all users and member only see its created users
-	if userType == constants.ADMIN_TYPE_VAL {
+	// if userType == constants.ADMIN_TYPE_VAL {
 
-		result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
-		helper.ErrorPanic(result.Error, ctx)
-	} else {
+	// 	result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
+	// 	helper.ErrorPanic(result.Error, ctx)
+	// } else {
 
-		result := initializers.DB.Model(&users).Where("created_user_id = ?", userId).Preload("Posts").Find(&users)
-		helper.ErrorPanic(result.Error, ctx)
-	}
+	// 	result := initializers.DB.Model(&users).Where("created_user_id = ?", userId).Preload("Posts").Find(&users)
+	// 	helper.ErrorPanic(result.Error, ctx)
+	// }
 
 	return users
 }

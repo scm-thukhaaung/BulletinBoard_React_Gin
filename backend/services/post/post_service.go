@@ -26,7 +26,7 @@ func (service *PostService) FindOne(postId string, ctx *gin.Context) models.Post
 }
 
 // Create implements PostServiceInterface
-func (service *PostService) Create(post request.PostRequest, ctx *gin.Context) {
+func (service *PostService) Create(post request.PostRequest, ctx *gin.Context) models.Post {
 
 	postModel := models.Post{
 		Title:           post.Title,
@@ -36,7 +36,8 @@ func (service *PostService) Create(post request.PostRequest, ctx *gin.Context) {
 		Updated_User_ID: post.Created_User_ID,
 	}
 
-	service.PostDaoInterface.Create(postModel, ctx)
+	data := service.PostDaoInterface.Create(postModel, ctx)
+	return data;
 }
 
 // CreateCsvPosts implements PostServiceInterface

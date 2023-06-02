@@ -82,11 +82,12 @@ func (controller *UserController) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&UserRequest)
 	helper.ErrorPanic(err, ctx)
 
-	controller.UserServiceInterface.Create(UserRequest, ctx)
+	retData := controller.UserServiceInterface.Create(UserRequest, ctx)
+
 	response := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   nil,
+		Data:   retData,
 	}
 
 	ctx.Header("Content-Type", "application/json")

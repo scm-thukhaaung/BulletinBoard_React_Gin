@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
-	"github.com/gin-contrib/cors"
 	_ "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/docs"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ func init() {
 
 //	@title			Bulletin Board API
 //	@version		1.0
-//	@description	Bulletin Board Service API in Go using Gin Framework
+//	@description	Bulletin Board Service API in Go using Gin Frameworl
 
 //	@host		localhost:8080
 //	@BasePath	/

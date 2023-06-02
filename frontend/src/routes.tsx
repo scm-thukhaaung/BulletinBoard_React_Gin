@@ -4,6 +4,7 @@ import App from "./App";
 import SignUpPage from "./pages/SignUp/SignUpPage";
 import UserListPage from "./pages/UserList/UserListPage";
 import UserCreatePage from "./pages/UserCreate/UserCreatePage";
+import HomePage from "./pages/Home/HomePage";
 import PostCsvPage from "./pages/postCsv/PostCsvPage";
 const router = createBrowserRouter([
     {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/",
-        element: <App />
+        element: <HomePage/>
     },
     {
         path: "/userlist",
