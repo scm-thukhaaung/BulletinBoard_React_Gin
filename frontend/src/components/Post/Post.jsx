@@ -1,14 +1,11 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
-import { useState, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import classes from "./Post.module.css";
-import { useNavigate } from "react-router-dom";
-import { deletePost, selectTempPost, setTempPost, postsAction } from "../../store/Slices/postsSlice";
+import { deletePost, postsAction } from "../../store/Slices/postsSlice";
 
 const Post = props => {
-    const tempPost = useSelector(selectTempPost);
-
     const h2Ref = useRef(null);
     const pRef = useRef(null);
     const dispatch = useDispatch();
@@ -22,14 +19,13 @@ const Post = props => {
         try {
             const id = props.postItem.ID;
             dispatch(deletePost({ id })).unwrap();
-            // props.onDelete(props.id);
         } catch (error) {
             console.log(`Failed to delete the post ${error}`);
         }
     };
 
     const handleExportData = () => {
-        if (props.postItem === "") return
+        if (props.postItem === "") return;
         dispatch(postsAction.setTempPost(props.postItem));
     };
 

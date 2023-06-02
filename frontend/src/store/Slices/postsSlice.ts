@@ -31,8 +31,6 @@ const deletePost = createAsyncThunk("posts/deletePost", async (initialPost: any)
 });
 
 const createPost = createAsyncThunk("posts/createPost", async (initialPost: any) => {
-    const { title, description, state = 1 } = initialPost;
-
     const body = {
         title: initialPost.Title,
         description: initialPost.Description,
@@ -141,12 +139,12 @@ const postsSlice = createSlice({
 const selectAllPosts = (state: any) => state.posts.postInititalState.posts;
 const getPostsError = (state: any) => state.posts.postInititalState.error;
 const getPostsStatus = (state: any) => state.posts.postInititalState.status;
-
 const selectTempPost = (state: any) => state.posts.tempPostState.post;
-
 const isNewPost = (state: any) => state.posts.tempPostState.newPost;
 const checkStatus = (state: any) => state.posts.tempPostState.post.Status ;
+
 export { selectAllPosts, getPostsError, getPostsStatus, selectTempPost, isNewPost, checkStatus };
+
 export { getAllPosts, deletePost, createPost, updatePost };
 
 export const postsAction = postsSlice.actions;
