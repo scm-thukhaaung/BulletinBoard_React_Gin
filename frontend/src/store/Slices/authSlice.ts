@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as auth from "../../services/api/auth-api"
-import { setItem } from "../../services/settings/dataHandleSvc";
+import { getItem, setItem } from "../../services/settings/dataHandleSvc";
 
 const authInititalState: any = {
-    authData: {},
+    authData: getItem("auth")? getItem("auth") : {},
     status: "idle",
     error: ""
 }
@@ -37,6 +37,7 @@ const authSlice = createSlice({
                 console.log('state.authData-=-> ', state.authData)
                 setItem('user', state.authData?.User)
                 setItem('token', state.authData?.Token)
+                setItem('auth', state.authData)
             })
             .addCase(authenticate.rejected, (state, action) => {
                 state.status = "failed";
