@@ -65,13 +65,6 @@ const CreateUserArea = () => {
                 <input type="password" placeholder="စကားဝှက်..." />
 
                 <input type="password" placeholder="စကားဝှက်ပြန် ရိုက်ထည့်ပါ..." />
-                {/* <div className={classes["select-div"]}>
-                    <select name="type" id="types">
-                        <option value="" disabled selected hidden className={classes["grey-color"]}>အသုံးပြုသူ အမျိုးအစား...</option>
-                        <option value="0">Admin</option>
-                        <option value="1">User</option>
-                    </select>
-                </div> */}
 
                 <input type="tel" placeholder="(+95) ဖုန်းနံပါတ်..." />
 
