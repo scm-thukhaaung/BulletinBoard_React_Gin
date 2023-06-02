@@ -4,9 +4,12 @@ import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes';
 import store from './store/store';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { getAllPosts } from './store/Slices/postsSlice';
+// import { getUserList, getuserListData } from './store/Slices/usersSlice';
 store.dispatch(getAllPosts());
+// store.dispatch(getUserList());
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

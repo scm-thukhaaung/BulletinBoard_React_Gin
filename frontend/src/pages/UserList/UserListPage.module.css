@@ -2,6 +2,13 @@
     margin-top: 110px;
 }
 
+.user-list-con {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
 .clearfix:after {
     content: " ";
     display: block;
