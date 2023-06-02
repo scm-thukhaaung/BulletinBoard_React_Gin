@@ -30,10 +30,11 @@ func (*PostDao) FindOne(postId string, ctx *gin.Context) models.Post {
 }
 
 // Create implements PostDaoInterface.
-func (PostDao *PostDao) Create(post models.Post, ctx *gin.Context) {
+func (PostDao *PostDao) Create(post models.Post, ctx *gin.Context) models.Post {
 
 	result := initializers.DB.Create(&post)
 	helper.ErrorPanic(result.Error, ctx)
+	return post
 }
 
 // Create implements PostDaoInterface.

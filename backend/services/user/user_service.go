@@ -13,7 +13,7 @@ type UserService struct {
 }
 
 // Create implements UserServiceInterface.
-func (service *UserService) Create(user request.UserRequest, ctx *gin.Context) {
+func (service *UserService) Create(user request.UserRequest, ctx *gin.Context) models.User {
 	parsedDob := utilSvc.ChangeTimeType(user.Date_Of_Birth)
 	userModel := models.User{
 		Name:            user.Name,
@@ -28,7 +28,8 @@ func (service *UserService) Create(user request.UserRequest, ctx *gin.Context) {
 		Updated_User_ID: uint(user.Created_User_ID),
 	}
 
-	service.UserDaoInterface.Create(userModel, ctx)
+	data := service.UserDaoInterface.Create(userModel, ctx)
+	return data
 }
 
 func (service *UserService) CreateCsvUsers(csvUsers request.CsvUserRequest, ctx *gin.Context) []models.User {
