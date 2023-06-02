@@ -1,52 +1,80 @@
-import { useState, createRef, useEffect } from "react";
+import { useState } from "react";
+import { FormControlLabel, Typography, Zoom, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 
-import { Zoom, Fab } from '@mui/material';
-import classes from "./CreatePostArea.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, selectTempPost, postsAction } from "../../store/Slices/postsSlice";
+
+import classes from "./CreatePostArea.module.css";
+
+import { createPost, selectTempPost, postsAction, isNewPost, updatePost } from "../../store/Slices/postsSlice";
+import { GoldenSwitch } from '../common/custom_mui/CustomMUI';
+
 const CreatePostArea = (props) => {
     const dispatch = useDispatch();
-    const tempPost = useSelector(selectTempPost);
+
     const [isExpanded, setExpanded] = useState(false);
 
-    const handleChange = (event) => {
-        dispatch(
-            postsAction.setInputTempPost({
-                title: event.target.name["title"],
-                description: event.target.name["description"]
-            })
-        );
-    };
+    const isNewPostItem = useSelector(isNewPost);
+    const tempPost = useSelector(selectTempPost);
 
-    const submitPost = (event) => {
-        dispatch(createPost(tempPost)).unwrap();
-        event.preventDefault();
+    /**
+     * Close Expand Action 
+     * @summary dispatch(postsAction.clearTempPost()) , setExpanded(false)
+     */
+    const closeExpand = () => {
+        dispatch(postsAction.clearTempPost());
+        setExpanded(false);
     };
 
     const expand = () => {
         setExpanded(true);
     };
 
-    const closeExpand = () => {
-        dispatch(postsAction.clearTempPost());
-        setExpanded(false);
+    const handleDescriptionChange = (event) => {
+        let value = event.target.value;
+        dispatch(postsAction.setInputTempPost({
+            description: value,
+        }));
+    };
+
+    const handleStatusChange = (event) => {
+        let value = event.target.checked;
+        const status = value ? 1 : 0;
+        dispatch(postsAction.setInputTempPost({
+            status: status,
+        }));
+    };
+
+    const handleTitleChange = (event) => {
+        let value = event.target.value;
+        dispatch(postsAction.setInputTempPost({
+            title: value,
+        }));
+    };
+
+    const submitPost = (event) => {
+        if (!tempPost.Title || !tempPost.Description) return;
+
+        if (isNewPostItem) {
+            dispatch(createPost(tempPost)).unwrap();
+        } else {
+            dispatch(updatePost(tempPost)).unwrap();
+        }
+
+        event.preventDefault();
     };
 
     return (
         <div className={classes["create-post-component"]}>
 
             <form className={classes["create-post"]}>
-                {/* <p>{tempPost.Title}Hello</p>
-                <p>{tempPost.Description}Hello</p> */}
                 {(tempPost.Title ? true : isExpanded) && (
                     <input
                         name="title"
-                        onChange={handleChange}
-
+                        onChange={handleTitleChange}
                         value={tempPost.Title}
                         placeholder="ခေါင်းစဉ်"
                     />
@@ -55,13 +83,15 @@ const CreatePostArea = (props) => {
                 <textarea
                     name="description"
                     onClick={expand}
-                    onChange={handleChange}
+                    onChange={handleDescriptionChange}
                     value={tempPost.Description}
                     placeholder="ရင်ဖွင့်လိုက်ပါ..."
                     rows={isExpanded ? 3 : 1}
                 />
+                <p>{tempPost.Status?.toString()} Hello</p>
+                {(tempPost.Title ? true : isExpanded) && (<FormControlLabel control={<GoldenSwitch onChange={handleStatusChange} checked={tempPost.Status === 1 ? true : false} />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မျှဝေမည်...</Typography>} />)}
 
-                <Zoom in={(tempPost.Title ? true : isExpanded)}>
+                {(tempPost.Title ? true : isExpanded) && (<Zoom in={(tempPost.Title ? true : isExpanded)}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Fab onClick={submitPost}>
                             <AddIcon />
@@ -74,6 +104,7 @@ const CreatePostArea = (props) => {
                         </Fab>
                     </Box>
                 </Zoom>
+                )}
             </form>
         </div>
     );

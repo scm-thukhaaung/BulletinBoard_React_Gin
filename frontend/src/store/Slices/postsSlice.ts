@@ -10,7 +10,8 @@ const postInititalState: any = {
 const tempPostState: any = {
     post: {},
     status: "idle",
-    error: ""
+    error: "",
+    newPost: true,
 };
 
 const getAllPosts = createAsyncThunk("posts/getAllPosts", async () => {
@@ -30,12 +31,10 @@ const deletePost = createAsyncThunk("posts/deletePost", async (initialPost: any)
 });
 
 const createPost = createAsyncThunk("posts/createPost", async (initialPost: any) => {
-    const { title, description, state = 1 } = initialPost;
-
     const body = {
-        title,
-        description,
-        state,
+        title: initialPost.Title,
+        description: initialPost.Description,
+        state: 1,
         created_user_id: 1,
     };
 
@@ -48,20 +47,47 @@ const createPost = createAsyncThunk("posts/createPost", async (initialPost: any)
     }
 });
 
+const updatePost = createAsyncThunk("posts/updatePost", async (initialPost: any) => {
+    const body = {
+        title: initialPost.Title,
+        description: initialPost.Description,
+        status: initialPost.Status,
+        updated_user_id: 2
+    };
+
+    try {
+        const response = await posts.postUpdate(JSON.stringify(body), initialPost.ID);
+        if (response.status === 200) return response?.data;
+        return `${response.status} : ${response.statusText}`;
+    } catch (error: any) {
+        return error.message;
+    }
+});
+
 const postsSlice = createSlice({
     name: "posts",
     initialState: { postInititalState, tempPostState },
     reducers: {
         setTempPost(state, action) {
-            state.tempPostState.post = action.payload
+            state.tempPostState.post = action.payload;
+            state.tempPostState.newPost = false;
         },
         clearTempPost(state) {
-            state.tempPostState.post.Title = ""
-            state.tempPostState.post.Description = ""
+            state.tempPostState.post.Title = "";
+            state.tempPostState.post.Description = "";
+            state.tempPostState.newPost = true;
         },
         setInputTempPost(state, action) {
-            state.tempPostState.post.Title = action.payload.title
-            state.tempPostState.post.Description = action.payload.description
+            if (action.payload.title) {
+                state.tempPostState.post.Title = action.payload.title;
+            }
+
+            if (action.payload.description) {
+                state.tempPostState.post.Description = action.payload.description;
+            }
+            if (action.payload.status === 0 ||action.payload.status === 1) {
+                state.tempPostState.post.Status = action.payload.status;
+            }
         }
     },
     extraReducers(builder) {
@@ -92,18 +118,34 @@ const postsSlice = createSlice({
                     return;
                 }
                 state.postInititalState.posts = state.postInititalState.posts.concat(action.payload?.data);
+            })
+            .addCase(updatePost.fulfilled, (state, action) => {
+                if (!action?.payload) {
+                    return;
+                }
+ 
+                state.postInititalState.posts = state.postInititalState.posts.map((post: any) => {
+                    if (post.ID === action.payload.data.ID) {
+                        return action.payload.data
+                    }
+
+                    return post
+                })
             });
+
     }
 });
 
 const selectAllPosts = (state: any) => state.posts.postInititalState.posts;
 const getPostsError = (state: any) => state.posts.postInititalState.error;
 const getPostsStatus = (state: any) => state.posts.postInititalState.status;
-
 const selectTempPost = (state: any) => state.posts.tempPostState.post;
+const isNewPost = (state: any) => state.posts.tempPostState.newPost;
+const checkStatus = (state: any) => state.posts.tempPostState.post.Status ;
 
-export { selectAllPosts, getPostsError, getPostsStatus, selectTempPost };
-export { getAllPosts, deletePost, createPost };
+export { selectAllPosts, getPostsError, getPostsStatus, selectTempPost, isNewPost, checkStatus };
+
+export { getAllPosts, deletePost, createPost, updatePost };
 
 export const postsAction = postsSlice.actions;
 export default postsSlice.reducer;

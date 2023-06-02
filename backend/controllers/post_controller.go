@@ -66,6 +66,9 @@ func (controller *PostController) HandleCsvPosts(ctx *gin.Context) {
 		Status: "Ok",
 		Data:   retData,
 	}
+	if len(retData) != 0 {
+		response.Code = http.StatusBadRequest
+	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, response)
 }

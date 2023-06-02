@@ -20,7 +20,7 @@ func init() {
 
 //	@title			Bulletin Board API
 //	@version		1.0
-//	@description	Bulletin Board Service API in Go using Gin Framework
+//	@description	Bulletin Board Service API in Go using Gin Frameworl
 
 //	@host		localhost:8080
 //	@BasePath	/
@@ -40,10 +40,16 @@ func main() {
 	gin.ForceConsoleColor()
 	router := gin.Default()
 
+	// Config for CORS
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AddAllowHeaders("authorization")
+	router.Use(cors.New(config))
+
 	// Serve static files
 	router.Static("/assets", "./assets")
 	router.Static("/static", "./static")
-	router.Use(cors.Default())
+
 	// Initialize session
 	store := cookie.NewStore([]byte(os.Getenv("SESSION_SECRET_KEY")))
 	router.Use(sessions.Sessions("mysession", store))

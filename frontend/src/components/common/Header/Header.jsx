@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
     const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [text] = useTypewriter({
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'Bulletin Board ပါ'],

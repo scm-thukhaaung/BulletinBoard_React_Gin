@@ -2,7 +2,7 @@ basePath: /
 definitions:
   request.CsvPostRequest:
     properties:
-      posts:
+      Posts:
         items:
           $ref: '#/definitions/request.PostRequest'
         type: array
@@ -46,23 +46,23 @@ definitions:
     type: object
   request.PostRequest:
     properties:
-      created_user_id:
+      Created_User_ID:
         type: integer
-      description:
+      Description:
         maxLength: 200
         minLength: 1
         type: string
-      status:
+      Status:
         type: integer
-      title:
+      Title:
         maxLength: 200
         minLength: 1
         type: string
-      updated_user_id:
+      Updated_User_ID:
         type: integer
     required:
-    - description
-    - title
+    - Description
+    - Title
     type: object
   request.UserRequest:
     properties:

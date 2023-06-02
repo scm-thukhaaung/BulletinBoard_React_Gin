@@ -563,7 +563,7 @@ const docTemplate = `{
         "request.CsvPostRequest": {
             "type": "object",
             "properties": {
-                "posts": {
+                "Posts": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/request.PostRequest"
@@ -627,27 +627,27 @@ const docTemplate = `{
         "request.PostRequest": {
             "type": "object",
             "required": [
-                "description",
-                "title"
+                "Description",
+                "Title"
             ],
             "properties": {
-                "created_user_id": {
+                "Created_User_ID": {
                     "type": "integer"
                 },
-                "description": {
+                "Description": {
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 1
                 },
-                "status": {
+                "Status": {
                     "type": "integer"
                 },
-                "title": {
+                "Title": {
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 1
                 },
-                "updated_user_id": {
+                "Updated_User_ID": {
                     "type": "integer"
                 }
             }
