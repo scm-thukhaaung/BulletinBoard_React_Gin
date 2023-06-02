@@ -6,6 +6,11 @@ import UserListPage from "./pages/UserList/UserListPage";
 import UserCreatePage from "./pages/UserCreate/UserCreatePage";
 import HomePage from "./pages/Home/HomePage";
 import PostCsvPage from "./pages/postCsv/PostCsvPage";
+import { getAllPosts, selectAllPosts } from "./store/Slices/postsSlice";
+import Auth from "./services/settings/isAuth";
+import store from "./store/store";
+
+const PostLoader = () => store.dispatch(getAllPosts());
 const router = createBrowserRouter([
     {
         path: "/login",
@@ -17,7 +22,12 @@ const router = createBrowserRouter([
     },
     {
         path: "/",
-        element: <HomePage/>
+        element: <>
+            <Auth>
+                <HomePage />
+            </Auth>
+        </>,
+        loader: PostLoader,
     },
     {
         path: "/userlist",
@@ -30,10 +40,6 @@ const router = createBrowserRouter([
     {
         path: "/csv-posts",
         element: <PostCsvPage />
-
-
-
-
     }
 ]);
 

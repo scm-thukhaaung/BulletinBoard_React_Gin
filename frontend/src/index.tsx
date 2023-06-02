@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes';
-import { store } from "./store/store";
+import store from "./store/store";
 import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(
