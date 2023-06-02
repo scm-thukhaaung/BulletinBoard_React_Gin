@@ -1,41 +1,38 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { FormControlLabel, Typography } from '@mui/material';
 import { useTypewriter } from 'react-simple-typewriter';
 import { GoldenSwitch } from '../../components/common/custom_mui/CustomMUI';
 import classes from './LoginPage.module.css';
-import { login } from "../../services/api/auth-api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { authenticate, getAuthStatus, getAuthUser } from "../../store/Slices/authSlice";
-import { User } from "../../interfaces/UserInterface";
+import { authenticate, getAuthStatus } from "../../store/Slices/authSlice";
 
 const LoginPage = (props: any) => {
     const dispatch: any = useDispatch();
     const apiLoginStatus = useSelector(getAuthStatus);
-    const authUser = useSelector(getAuthUser);
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
 
     const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
-    }
+    };
 
     const handlePwd = (event: ChangeEvent<HTMLInputElement>) => {
         setPwd(event.target.value);
-    }
+    };
 
     const handleLogin = async () => {
         const data = {
             Email: email,
             Password: pwd
-        }
-        const result = await dispatch(authenticate(data)).unwrap()
-        console.log('result==> ', result)
+        };
+        const result = await dispatch(authenticate(data)).unwrap();
+        console.log('result==> ', result);
         if (result?.data?.User) {
             navigate('/');
         }
-    }
+    };
 
     const [text] = useTypewriter({
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],

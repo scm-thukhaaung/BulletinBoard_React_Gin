@@ -1,7 +1,7 @@
 import { Post } from "./PostInterface";
 
 
-export interface User {
+export interface UserInterface {
     ID?: number,
     CreatedAt?: Date,
     UpdatedAt?: Date,

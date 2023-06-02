@@ -1,6 +1,5 @@
 import axios from "axios";
-import { User } from "../../interfaces/UserInterface";
-import { getItem } from "../settings/dataHandleSvc";
+import { UserInterface } from "../../interfaces/UserInterface";
 const USER_API = "http://localhost:8080/api" + '/users';
 const options = {
     headers: {
@@ -9,7 +8,7 @@ const options = {
 }
 
 
-const getAllUsers = (): Promise<User[]> => {
+const getAllUsers = (): Promise<UserInterface[]> => {
     return new Promise((resolve, reject) => {
         axios.get(USER_API, options)
           .then(response => {
