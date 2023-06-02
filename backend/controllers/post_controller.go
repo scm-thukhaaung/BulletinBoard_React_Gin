@@ -35,11 +35,11 @@ func (controller *PostController) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&postRequest)
 	helper.ErrorPanic(err, ctx)
 
-	controller.PostServiceInterface.Create(postRequest, ctx)
+	retDate := controller.PostServiceInterface.Create(postRequest, ctx)
 	response := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   nil,
+		Data:   retDate,
 	}
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, response)

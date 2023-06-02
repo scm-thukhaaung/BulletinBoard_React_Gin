@@ -9,7 +9,7 @@ import (
 type PostServiceInterface interface {
 	FindAll(ctx *gin.Context) []models.Post
 	FindOne(postId string, ctx *gin.Context) models.Post
-	Create(post request.PostRequest, ctx *gin.Context)
+	Create(post request.PostRequest, ctx *gin.Context) models.Post
 	CreateCsvPosts(csvPosts request.CsvPostRequest, ctx *gin.Context) []models.Post
 	Update(post request.PostRequest, postId string, ctx *gin.Context) models.Post
 	Delete(postId string, ctx *gin.Context)

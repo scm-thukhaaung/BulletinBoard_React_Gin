@@ -1,18 +1,25 @@
 import axios from "axios";
-const USER_API = "http://localhost:8080/api" + '/posts';
+const POST_API = "http://localhost:8080/api" + '/posts';
 
 
 const getFindAll = () => {
-    return axios.get(USER_API);
-}
+    return axios.get(POST_API);
+};
 
 const getFindOne = (id: any) => {
-    return axios.get(`${USER_API}/${id}`);
-}
+    return axios.get(`${POST_API}/${id}`);
+};
 
 const postCreate = (body: any) => {
-    return axios.post(USER_API, {...body});
+    return axios.post(POST_API, body );
+};
+
+const postUpdate = (body: any, id: any) => {
+    return axios.put(`${POST_API}/${id}`, body)
 }
 
+const deletePost = (id: any) => {
+    return axios.delete(`${POST_API}/${id}`);
+};
 
-export { getFindAll, getFindOne, postCreate  };
+export { getFindAll, getFindOne, postCreate, deletePost, postUpdate };

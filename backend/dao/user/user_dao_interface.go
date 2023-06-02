@@ -6,7 +6,7 @@ import (
 )
 
 type UserDaoInterface interface {
-	Create(user models.User, ctx *gin.Context)
+	Create(user models.User, ctx *gin.Context) models.User
 	AddCsvUsers(users []models.User, ctx *gin.Context) []models.User
 	FindOne(userId string, ctx *gin.Context) models.User
 	FindAll(ctx *gin.Context) []models.User

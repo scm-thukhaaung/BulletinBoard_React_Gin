@@ -13,12 +13,6 @@ const HomePage = (props: any) => {
 
     const [posts, setPosts] = useState<any>(apiPosts);
 
-    const addPost = (newPost: any) => {
-        setPosts(
-            (prevPosts: any[]) => {
-                return [...prevPosts, newPost];
-            });
-    };
 
     const deletePost = (id: any) => {
         setPosts(
@@ -33,7 +27,7 @@ const HomePage = (props: any) => {
     return (
         <>
             <Header />
-            <CreatePostArea onAdd={addPost} />
+            <CreatePostArea />
             {apiPostsStatus === "succeeded" && (
                 <div className='posts-area clearfix'>
                     {
@@ -42,12 +36,12 @@ const HomePage = (props: any) => {
                                 <Post
                                     key={index}
                                     id={index}
-                                    title={postItem.Title}
-                                    description={postItem.Description}
+                                    postItem={postItem}
                                     onDelete={deletePost}
                                 />
                             );
-                        })}
+                        })
+                    }
                 </div>
             )}
             <Footer />
