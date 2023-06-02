@@ -47,7 +47,6 @@ func main() {
 	router.Use(cors.New(config))
 
 	// Serve static files
-	router.Static("/assets", "./assets")
 	router.Static("/static", "./static")
 
 	// Initialize session

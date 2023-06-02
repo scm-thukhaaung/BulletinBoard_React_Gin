@@ -5,13 +5,14 @@ import { useState } from "react";
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import classes from "./Header.module.css";
 import { Search, SearchIconWrapper, StyledInputBase, ToolBarStyle, FontTheme } from "../custom_mui/CustomMUI";
+import { logout } from "../../../services/api/auth-api";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
     const navigate = useNavigate();
-    const navigate = useNavigate();
 
     const [text] = useTypewriter({
+        // words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'Bulletin Board ပါ'],
         loop: false
     });
@@ -26,17 +27,10 @@ const Header = () => {
         setAnchorElUser(null);
     };
 
-    const handleCreate = () => {
-        navigate('/users');
-    };
-
-    const handleUserList = () => {
-        navigate('/userlist');
-    };
-
     const handleLogout = () => {
+        logout();
         navigate('/login');
-    };
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }} >
@@ -80,17 +74,19 @@ const Header = () => {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    <MenuItem key="Menu-Item0"
-                                        onClick={handleCreate}
-                                        sx={{
-                                            '&:hover': {
-                                                color: '#fff',
-                                                backgroundColor: '#f5ba13',
-                                            },
-                                        }}
-                                    >
-                                        <Typography textAlign="center"> အသုံးပြုသူဖန်တီးမည် </Typography>
-                                    </MenuItem>
+                                    {/* {settings.map((setting) => (
+                                        <MenuItem key={setting}
+                                            onClick={handleCloseUserMenu}
+                                            sx={{
+                                                '&:hover': {
+                                                    color: '#fff',
+                                                    backgroundColor: '#f5ba13',
+                                                },
+                                            }}
+                                        >
+                                            <Typography textAlign="center">{setting}</Typography>
+                                        </MenuItem>
+                                    ))} */}
                                     <MenuItem key="Menu-Item1"
                                         onClick={handleCloseUserMenu}
                                         sx={{
@@ -103,7 +99,7 @@ const Header = () => {
                                         <Typography textAlign="center"> Profile ထဲ ဝင်မည် </Typography>
                                     </MenuItem>
                                     <MenuItem key="Menu-Item2"
-                                        onClick={handleUserList}
+                                        onClick={handleCloseUserMenu}
                                         sx={{
                                             '&:hover': {
                                                 color: '#fff',
