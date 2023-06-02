@@ -10,13 +10,8 @@ const getFindAll = () => {
 };
 
 const getFindOne = (id: number) => {
-    console.log('id in service-=-> ', id)
     return axios.get(`${USER_API}/${id}`);
 };
-
-// const postCreate = (body: any) => {
-//     return axios.post(USER_API, body );
-// };
 
 const deleteUser = (id: number) => {
     return axios.delete(`${USER_API}/${id}`);

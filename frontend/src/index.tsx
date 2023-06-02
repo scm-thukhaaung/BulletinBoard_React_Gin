@@ -4,11 +4,7 @@ import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes';
 import store from './store/store';
-import { Provider, useSelector } from 'react-redux';
-import { getAllPosts } from './store/Slices/postsSlice';
-// import { getUserList, getuserListData } from './store/Slices/usersSlice';
-store.dispatch(getAllPosts());
-// store.dispatch(getUserList());
+import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

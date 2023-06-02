@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -10,13 +10,14 @@ import { myDefaultTheme } from "../custom_mui/CustomMUI";
 import { Typography } from "@mui/material";
 import { UserInterface } from "../../../interfaces/UserInterface";
 import { formatDate } from "../../../services/settings/dateFormatSvc";
-import { createUser, updateUser } from "../../../store/Slices/usersSlice";
-import { useDispatch } from "react-redux";
+import { createUser, getEditUser, updateUser } from "../../../store/Slices/usersSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const CreateUserArea = (props: any) => {
+const CreateUserArea = () => {
     const dispatch: any = useDispatch();
     const navigate = useNavigate();
+    const [photoInput, setPhoto] = useState('');
     const [nameInput, setName] = useState('');
     const [emailInput, setEmail] = useState('');
     const [pwdInput, setPwd] = useState('');
@@ -24,15 +25,20 @@ const CreateUserArea = (props: any) => {
     const [dateInput, setDate] = useState('');
     const [typeInput, setType] = useState('');
     const [adresInput, setAdres] = useState('');
-    const userData: UserInterface = props?.userData;
-    console.log(userData)
-    let date;
-    if (userData.ID) {
-        date = formatDate(userData.Date_Of_Birth)
-    }
-    console.log('date-=> ', date)
     const [startDateInputType, setStartDateInputType] = useState('text');
 
+    // Image upload
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [nameInputError, setNameInputError] = useState(false);
+    const fileInputRef: any = useRef(null);
+
+    const userData = useSelector(getEditUser);
+    useEffect(() => {
+        if (userData.ID) {
+            const formattedDate = formatDate(userData.Date_Of_Birth);
+            setDate(formattedDate);
+        }
+    }, [selectedFile, userData]);
     const startDateHandleFocus = () => {
         setStartDateInputType('date');
     };
@@ -41,16 +47,33 @@ const CreateUserArea = (props: any) => {
         setStartDateInputType('text');
     };
 
-    // Image upload
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [nameInputError, setNameInputError] = useState(false);
-    const fileInputRef: any = useRef(null);
-
     const handleFileClick = () => {
         fileInputRef.current.click();
     };
 
+    const getBase64 = (imageFile: any) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64String = (reader.result as string).split(",")[1];
+                resolve(base64String);
+            };
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(imageFile);
+        });
+    }
+
     const handleFileChange = (event: any) => {
+        setPhoto('');
+        const fileList = event.target.files;
+        if (fileList.length > 0) {
+            const file: File = fileList[0];
+            if (file.type === 'image/jpeg' || file.type === 'image/png') {
+                getBase64(file).then((data: any) => setPhoto(data));
+            } else {
+                console.error("Not an image.")
+            }
+        }
         setSelectedFile(event.target.files[0]);
     };
 
@@ -62,47 +85,29 @@ const CreateUserArea = (props: any) => {
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const emailValue = event.target.value.trim();
         setEmail(emailValue);
-        // setNameInputError(nameValue === "");
     };
     const handlePwdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const pwdValue = event.target.value.trim();
         setPwd(pwdValue);
-        // setNameInputError(nameValue === "");
     };
     const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const phoneValue = event.target.value.trim();
         setPhone(phoneValue);
-        // setNameInputError(nameValue === "");
     };
     const handleDobChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const dobValue = event.target.value;
         setDate(dobValue);
-        // setNameInputError(nameValue === "");
     };
     const handleAdresChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const adresValue = event.target.value;
         setAdres(adresValue);
-        // setNameInputError(nameValue === "");
     };
     const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const typeValue = event.target.value;
         setType(typeValue);
-        // setNameInputError(nameValue === "");
-    };
-
-    const handleUpload = (name: string) => {
-        if (selectedFile) {
-            const file = fileInputRef.current.files[0];
-            const fileBlob = new Blob([file], { type: file.type });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(fileBlob);
-            link.download = {name}+'.png';
-            link.click();
-        }
     };
 
     const handleUpdate = async () => {
-        handleUpload(nameInput);
         const data: UserInterface = {
             ID: userData.ID ? userData.ID : 0,
             Name: nameInput,
@@ -112,7 +117,7 @@ const CreateUserArea = (props: any) => {
             Date_Of_Birth: dateInput,
             Address: adresInput,
             Type: typeInput,
-            Profile_Photo: "string",
+            Profile_Photo: photoInput,
             Created_User_ID: 1,
             Updated_User_ID: 1,
         }
@@ -131,13 +136,12 @@ const CreateUserArea = (props: any) => {
             Date_Of_Birth: dateInput,
             Address: adresInput,
             Type: typeInput,
-            Profile_Photo: "string",
+            Profile_Photo: photoInput,
             Created_User_ID: 1,
             Updated_User_ID: 1,
         }
         await dispatch(createUser(data));
         navigate('/userlist');
-
     }
     return (
         <div className={classes["create-user-area-component"]}>
@@ -146,9 +150,11 @@ const CreateUserArea = (props: any) => {
                     <div
                         className={classes["image-section"]}
                         onClick={handleFileClick}
-                        style={{ backgroundImage: selectedFile ? `url(${URL.createObjectURL(selectedFile)})` : 'none' }}
+                        style={{
+                            backgroundImage: selectedFile ? `url(${URL.createObjectURL(selectedFile)})` : `url(http://localhost:8080/assets/${userData.Profile_Photo})`
+                        }}
                     >
-                        {!selectedFile && <span>ပုံရွေးရန် click နှိပ်ပါ...</span>}
+                        {!selectedFile && !userData.Profile_Photo && <span>ပုံရွေးရန် click နှိပ်ပါ...</span>}
                     </div>
                     <input
                         ref={fileInputRef}
@@ -182,7 +188,7 @@ const CreateUserArea = (props: any) => {
 
                 <input type={startDateInputType} onFocus={startDateHandleFocus}
                     onChange={handleDobChange}
-                    defaultValue={userData.Date_Of_Birth ? date : ""}
+                    defaultValue={userData.Date_Of_Birth ? dateInput : ""}
                     onBlur={startDateHandleBlur} placeholder="မွေးနေ့..." />
 
                 <input name="address" onChange={handleAdresChange} placeholder="လိပ်စာ..." required defaultValue={userData.Address ? userData.Address : ''} />

@@ -71,59 +71,47 @@ const usersSlice = createSlice({
         setEditMode(state, action) {
             state.isEditMode = true;
             state.updateUserData = action.payload;
-            console.log('updateMode is-=> ', state.isEditMode, state.updateUserData)
         },
     },
     extraReducers(builder) {
         builder
             .addCase(createUser.fulfilled, (state, action) => {
-                console.log('getUserList fulfilled:', action.payload);
                 state.status = "succeeded";
                 state.userList = [...state.userList, action.payload.data];
-                console.log('state-=-> ', state.status, state.userList)
             })
             .addCase(createUser.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
             })
             .addCase(getUserList.fulfilled, (state, action) => {
-                console.log('getUserList fulfilled:', action.payload);
                 state.status = "succeeded";
                 state.userList = action.payload.data;
-                console.log('state-=-> ', state.status, state.userList)
             })
             .addCase(getUserList.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
             })
             .addCase(deleteFromList.fulfilled, (state, action) => {
-                console.log('deleteUser fulfilled:', action.payload);
                 state.status = "succeeded";
                 const id = action.payload;
-                console.log('state-=-> ', action.payload, state.userList)
                 const tmpList = state.userList.filter((user: UserInterface) => user.ID !== id);
                 state.userList = tmpList;
-                console.log('deletd list-=-> ', state.userList)
             })
             .addCase(deleteFromList.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
             })
             .addCase(getOneUser.fulfilled, (state, action) => {
-                console.log('getUserList fulfilled:', action.payload);
                 state.status = "succeeded";
                 state.updateUserData = action.payload.data;
-                console.log('state-=-> ', state.status, state.updateUserData)
             })
             .addCase(getOneUser.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
             })
             .addCase(updateUser.fulfilled, (state, action) => {
-                console.log('getUserList fulfilled:', action.payload);
                 state.status = "succeeded";
                 state.userList[action.payload.id] = action.payload.userData;
-                console.log('state-=-> ', state.status, state.userList)
             })
             .addCase(updateUser.rejected, (state, action) => {
                 state.status = "failed";

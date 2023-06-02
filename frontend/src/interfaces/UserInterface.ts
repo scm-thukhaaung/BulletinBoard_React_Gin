@@ -9,7 +9,7 @@ export interface UserInterface {
     Name: string,
     Email?: string,
     Password?: string,
-    Profile_Photo?: string,
+    Profile_Photo?: string|null,
     Type?: string,
     Phone?: string,
     Address?: string,

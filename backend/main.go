@@ -41,6 +41,7 @@ func main() {
 	router := gin.Default()
 
 	// Serve static files
+	router.Static("/assets", "./assets")
 	router.Static("/static", "./static")
 	router.Use(cors.Default())
 	// Initialize session

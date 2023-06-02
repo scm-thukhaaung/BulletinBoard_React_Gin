@@ -11,10 +11,8 @@ import { useNavigate } from "react-router-dom";
 const User = (props: { userData: UserInterface; }) => {
     const navigate = useNavigate();
     const dispatch: any = useDispatch();
-    // const { userData, key } = props;
     const userData = props.userData;
-    // console.log('userData-=-=> ', userData)
-    const profilePicUrl = userData.Profile_Photo || profile;
+    const profilePicUrl = userData.Profile_Photo ? `http://localhost:8080/assets/${userData.Profile_Photo}` : profile
     let formattedDate;
     if (userData.Date_Of_Birth) {
         formattedDate = formatDate(userData.Date_Of_Birth);
