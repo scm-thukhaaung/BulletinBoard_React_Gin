@@ -8,6 +8,7 @@ import PostCsvPage from "./pages/postCsv/PostCsvPage";
 import { getAllPosts, selectAllPosts } from "./store/Slices/postsSlice";
 import Auth from "./services/settings/isAuth";
 import store from "./store/store";
+import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 
 const PostLoader = () => store.dispatch(getAllPosts());
 const router = createBrowserRouter([
