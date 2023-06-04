@@ -1,26 +1,26 @@
 export const getItem = (key: string) => {
-    try {
-        const serializedData = localStorage.getItem(key);
-        return serializedData !== null ? JSON.parse(serializedData) : null;
-    } catch (error) {
-        console.error('Error retrieving data from localStorage:', error);
-        return null;
-    }
+  if (localStorage.getItem('rememberMe') === 'true') {
+    const serializedData = localStorage.getItem(key);
+    return serializedData !== null ? JSON.parse(serializedData) : null;
+  } else {
+    return sessionStorage.getItem(key);
+  }
 }
 
 export const setItem = (key: string, value: any) => {
-    try {
-      const serializedData = JSON.stringify(value);
-      localStorage.setItem(key, serializedData);
-    } catch (error) {
-      console.error('Error storing data in localStorage:', error);
-    }
-  };
-  
-  export const removeItem = (key: string) => {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.error('Error removing data from localStorage:', error);
-    }
-  };
+  if (localStorage.getItem('rememberMe') === 'true') {
+    const serializedData = JSON.stringify(value);
+    localStorage.setItem(key, serializedData);
+  } else {
+    const serializedData = JSON.stringify(value);
+    sessionStorage.setItem(key, serializedData);
+  }
+};
+
+export const removeItem = (key: string) => {
+  if (localStorage.getItem('rememberMe') === 'true') {
+    localStorage.removeItem(key);
+  } else {
+    sessionStorage.removeItem('key');
+  }
+};
