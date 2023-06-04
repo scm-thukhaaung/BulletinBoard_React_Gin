@@ -1,29 +1,30 @@
-import classes from './PostCsvPage.module.css';
+import classes from './UserCsvPage.module.css';
 import { ChangeEvent, useRef, useState } from "react";
 import { Box, Collapse, Zoom } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { parse } from "csv-parse/browser/esm/sync";
 import { orange } from '@mui/material/colors';
 import ClearIcon from '@mui/icons-material/Clear';
-import CsvPostList from '../../components/csvPostList/CsvPostList';
-import { useSelector, useDispatch } from "react-redux";
-import { CsvPostItem } from '../../interfaces/PostInterface';
-import { CheckPostUtilSvc } from '../../utils/utilSvc';
-import { createCsvPost, csvPostAction, getCsvPosts } from '../../store/Slices/csvPostSlice';
 
-const PostCsvPage = () => {
+import { useSelector, useDispatch } from "react-redux";
+import { CheckUserUtilSvc } from '../../utils/utilSvc';
+import { createCsvUser, csvUserAction, getcsvUsers } from '../../store/Slices/csvUserSlice';
+import CsvUserList from '../../components/csvUserList/CsvUserList';
+import { CsvUserItem } from '../../interfaces/UserInterface';
+
+const UserCsvPage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [csvData, setCsvData] = useState<CsvPostItem[]>([]);
-    const storedData = useSelector(getCsvPosts);
+    const [csvData, setCsvData] = useState<CsvUserItem[]>([]);
+    const storedData = useSelector(getcsvUsers);
     const [filename, setFilename] = useState("");
     const dispatch: any = useDispatch();
 
     const handleSubmit = async () => {
         try {
-            const result = await dispatch(createCsvPost(storedData));
+            const result = await dispatch(createCsvUser(storedData));
         
         } catch (error) {
-            console.error('Error at postCsv page: ', error);
+            console.error('Error at userCsv page: ', error);
         }
     }
 
@@ -48,14 +49,14 @@ const PostCsvPage = () => {
             }
             const { result } = evt.target;
             const records = parse(result as string, {
-                columns: ["Title", "Description", "Status"],
+                columns: ["Name", "Email", "Type"],
                 delimiter: ",",
                 trim: true,
                 skip_empty_lines: true
             });
             const dataRecords = records.slice(1);
-            const updatedList = CheckPostUtilSvc(dataRecords);
-            dispatch(csvPostAction.addCsvList(updatedList));
+            const updatedList = CheckUserUtilSvc(dataRecords);
+            dispatch(csvUserAction.addCsvList(updatedList));
             setCsvData(updatedList);
         };
         reader.readAsBinaryString(file);
@@ -63,7 +64,7 @@ const PostCsvPage = () => {
     };
 
     const resetData = () => {
-        dispatch(csvPostAction.setInitialState());
+        dispatch(csvUserAction.setInitialState());
         setCsvData([]);
         setFilename("");
     }
@@ -74,7 +75,7 @@ const PostCsvPage = () => {
 
     //Check disabled
     const checkDisabled = () => {
-        const searchIndex = storedData.findIndex((eachPost: any) => eachPost.HasError)
+        const searchIndex = storedData.findIndex((eachUser: any) => eachUser.HasError)
         if (searchIndex === -1) {
             // Not found the error
             return false;
@@ -86,7 +87,6 @@ const PostCsvPage = () => {
     return (
         <div className={!csvData.length ? classes["wrapper-csv"] : ''}>
             {
-
                 !csvData.length ?
 
                     // Csv upload bottom section
@@ -112,7 +112,7 @@ const PostCsvPage = () => {
                         </div>
                     </Zoom>
                     :
-                    // Csv post list showing section
+                    // Csv user list showing section
                     <div>
                         <Zoom in={csvData.length !== 0}
                             className={classes["read-data-con"]}
@@ -136,7 +136,7 @@ const PostCsvPage = () => {
                                     <Zoom in={csvData.length !== 0}
                                         style={{ transformOrigin: '0 0 0' }}
                                         {...(csvData.length !== 0 ? { timeout: 500 } : {})}>
-                                        <Collapse in={csvData.length !== 0}><CsvPostList /></Collapse>
+                                        <Collapse in={csvData.length !== 0}><CsvUserList /></Collapse>
                                     </Zoom >
 
                                 </Box>
@@ -149,4 +149,4 @@ const PostCsvPage = () => {
     );
 }
 
-export default PostCsvPage;
+export default UserCsvPage;

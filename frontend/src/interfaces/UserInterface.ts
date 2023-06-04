@@ -17,5 +17,14 @@ export interface UserInterface {
     Created_User_ID?: number,
     Updated_User_ID?: number,
     Deleted_User_ID?: number,
+    HasError?: boolean,
     Post?: Post
+}
+
+export interface CsvUserItem {
+    ID?: number,
+    Name?: string,
+    Email?: string,
+    Type?: string,
+    HasError?: boolean
 }
