@@ -12,7 +12,6 @@ const getAllUsers = (): Promise<UserInterface[]> => {
     return new Promise((resolve, reject) => {
         axios.get(USER_API, options)
           .then(response => {
-            console.log('users -=> ', response.data.data)
             resolve(response.data.data);
           })
           .catch((error) => {

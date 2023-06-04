@@ -14,7 +14,7 @@ const authenticate = createAsyncThunk("auth/login", async (loginData: any) => {
         return response?.data;
     } catch (error: any) {
         console.error(error); 
-        return error;
+        throw error;
     }
 })
 
@@ -28,13 +28,10 @@ const authSlice = createSlice({
         builder
             .addCase(authenticate.pending, (state, action) => {
                 state.status = "loading";
-                console.log('loading');
             })
             .addCase(authenticate.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.authData = action.payload?.data;
-                console.log("...succeed", action.payload?.data)
-                console.log('state.authData-=-> ', state.authData)
                 setItem('user', state.authData?.User)
                 setItem('token', state.authData?.Token)
                 setItem('auth', state.authData)
@@ -42,7 +39,6 @@ const authSlice = createSlice({
             .addCase(authenticate.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
-                console.log("...fail", action.error)
             })
     }
 })

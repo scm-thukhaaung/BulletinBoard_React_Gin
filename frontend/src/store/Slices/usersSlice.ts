@@ -9,7 +9,6 @@ const UserInititalState: any = {
 
 const getAllUsers = createAsyncThunk("users/getAllUsers", async () => {
     const response = await users.getAllUsers()
-    // console.log(response.data)
     return response;
 })
 
@@ -23,17 +22,14 @@ const usersSlice = createSlice({
         builder
             .addCase(getAllUsers.pending, (state, action) => {
                 state.status = "loading";
-                console.log("state status-=-> ", state.status)
             })
             .addCase(getAllUsers.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.users = state.users.concat(action.payload)
-                console.log("..action.payload==> ", action.payload)
             })
             .addCase(getAllUsers.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
-                console.log(".fail==> ", state.error)
             })
     }
 })
