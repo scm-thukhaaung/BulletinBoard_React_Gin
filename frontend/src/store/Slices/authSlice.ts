@@ -5,7 +5,8 @@ import { getItem, setItem } from "../../services/settings/dataHandleSvc";
 const authInititalState: any = {
     authData: getItem("auth")? getItem("auth") : {},
     status: "idle",
-    error: ""
+    error: "",
+    type: "user"
 }
 
 const authenticate = createAsyncThunk("auth/login", async (loginData: any) => {
@@ -35,6 +36,10 @@ const authSlice = createSlice({
                 setItem('user', state.authData?.User)
                 setItem('token', state.authData?.Token)
                 setItem('auth', state.authData)
+
+                if (action.payload?.data.User.Type === "1") {
+                    state.type = "admin"
+                }
             })
             .addCase(authenticate.rejected, (state, action) => {
                 state.status = "failed";
@@ -45,5 +50,7 @@ const authSlice = createSlice({
 const getAuthUser = (state: any) => state.authData;
 const getAuthError = (state: any) => state.error;
 const getAuthStatus = (state: any) => state.status;
-export { authenticate, getAuthUser, getAuthError, getAuthStatus }
+const getAuthType = (state: any) => state.auth.type;
+
+export { authenticate, getAuthUser, getAuthError, getAuthStatus, getAuthType }
 export default authSlice.reducer

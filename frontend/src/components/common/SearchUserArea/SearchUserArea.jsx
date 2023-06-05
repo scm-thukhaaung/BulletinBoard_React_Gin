@@ -71,26 +71,27 @@ const SearchUserArea = (props) => {
                     value={post.description}
                 />
 
-                {isExpanded && (
-                    <>
-                        <input name="email" placeholder="အီးမေးလ်" />
-                        <div className={classes["start-end-date-div"]}>
-                            <input type={startDateInputType} onFocus={startDateHandleFocus}
-                                onBlur={startDateHandleBlur} placeholder="ရက် အစ" />
-                            <input type={endDateInputType} onFocus={endDateHandleFocus}
-                                onBlur={endDateHandleBlur} placeholder="ရက် အဆုံး" />
-                        </div>
-                        <div className={classes["btn-div"]}>
-                            <button className={classes["search-btn"]} type="button" onClick={closeExpand}>
-                                ပိတ်မည်...
-                            </button>
-                            <button className={classes["search-btn"]} type="button">
-                                ရှာ မည်...
-                            </button>
-
-                        </div>
-                    </>
-                )}
+                {
+                    isExpanded && (
+                        <>
+                            <input name="email" placeholder="အီးမေးလ်" />
+                            <div className={classes["start-end-date-div"]}>
+                                <input type={startDateInputType} onFocus={startDateHandleFocus}
+                                    onBlur={startDateHandleBlur} placeholder="ရက် အစ" />
+                                <input type={endDateInputType} onFocus={endDateHandleFocus}
+                                    onBlur={endDateHandleBlur} placeholder="ရက် အဆုံး" />
+                            </div>
+                            <div className={classes["btn-div"]}>
+                                <button className={classes["search-btn"]} type="button" onClick={closeExpand}>
+                                    ပိတ်မည်...
+                                </button>
+                                <button className={classes["search-btn"]} type="button">
+                                    ရှာ မည်...
+                                </button>
+                            </div>
+                        </>
+                    )
+                }
             </form>
         </div>
     );

@@ -9,6 +9,7 @@ const login = (loginData: any) => {
 const logout = () => {
   removeItem('user');
   removeItem('token');
+  removeItem('auth');
 }
 
 

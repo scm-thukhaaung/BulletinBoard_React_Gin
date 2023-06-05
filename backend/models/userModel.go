@@ -17,9 +17,9 @@ type User struct {
 	Phone           string     `gorm:"type:varchar(20)"`
 	Address         string     `gorm:"type:varchar(20)"`
 	Date_Of_Birth   *time.Time `gorm:"autoCreateTime:false"`
-	Created_User_ID int       `gorm:"type:int;not null"`
-	Updated_User_ID int       `gorm:"type:int;not null"`
-	Deleted_User_ID int       `gorm:"type:int"`
+	Created_User_ID uint       `gorm:"type:int;not null"`
+	Updated_User_ID uint       `gorm:"type:int;not null"`
+	Deleted_User_ID uint       `gorm:"type:int"`
 	Posts           []Post     `gorm:"foreignkey:Created_User_ID"`
 }
 

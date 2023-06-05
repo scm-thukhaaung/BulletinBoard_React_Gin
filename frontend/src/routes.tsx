@@ -6,6 +6,7 @@ import HomePage from "./pages/Home/HomePage";
 import PostCsvPage from "./pages/PostCsv/PostCsvPage";
 import { getAllPosts } from "./store/Slices/postsSlice";
 import Auth from "./services/settings/isAuth";
+import Admin from "./services/settings/isAdmin";
 import store from "./store/store";
 import UserListPage from "./pages/UserList/UserListPage";
 import { getOneUser, getUserList } from "./store/Slices/usersSlice";
@@ -35,31 +36,55 @@ const router = createBrowserRouter([
     },
     {
         path: "/userlist",
-        element: <UserListPage />,
+        element:
+            <Auth>
+                <Admin>
+                    <UserListPage />,
+                </Admin>
+            </Auth>,
         loader: UserListLoader,
     },
     {
         path: "/users/:id",
-        element: <UserCreatePage />,
+        element:
+            <Auth>
+                <Admin>
+                    <UserCreatePage />
+                </Admin>
+            </Auth>,
         loader: ({ params }) => {
-            return store.dispatch(getOneUser(params.id))
+            return store.dispatch(getOneUser(params.id));
         },
     },
     {
         path: "/users",
-        element: <UserCreatePage />
+        element:
+            <Auth>
+                <Admin>
+                    <UserCreatePage />
+                </Admin>
+            </Auth>,
     },
     {
         path: "/csv-posts",
-        element: <PostCsvPage />
+        element:
+            <Auth>
+                <PostCsvPage />
+            </Auth>
     },
     {
         path: "/forget-password",
-        element: <ForgetPassword />
+        element:
+            <Auth>
+                <ForgetPassword />
+            </Auth>
     },
     {
         path: "/csv-users",
-        element: <UserCsvPage />
+        element:
+            <Auth>
+                <UserCsvPage />
+            </Auth>
     }
 
 ]);
