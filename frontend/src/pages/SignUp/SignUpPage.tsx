@@ -7,7 +7,7 @@ import { Constant } from '../../consts/Constant';
 import { createUser } from '../../store/Slices/usersSlice';
 import classes from './SignUpPage.module.css';
 
-const SignUpPage = (props: any) => {
+const SignUpPage = () => {
     const dispatch: any = useDispatch();
     const navigate = useNavigate();
     const [nameVal, setName] = useState('');
@@ -17,6 +17,8 @@ const SignUpPage = (props: any) => {
     const [matchErr, setMatchErr] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [emailErr, setEmailErr] = useState(false);
+    const [nameErr, setNameErr] = useState(false);
+    const [pwdErr, setPwdErr] = useState(false);
 
     const [text] = useTypewriter({
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
@@ -25,11 +27,16 @@ const SignUpPage = (props: any) => {
 
     const handleNameChange = (event: any) => {
         setName(event.target.value);
+        if (!event.target.value) {
+            setNameErr(true);
+        } else {
+            setNameErr(false);
+        }
     }
 
     const handleEmailChange = (event: any) => {
         setEmail(event.target.value);
-        if (!Constant.emailRegExp.test(event.target.value)) {
+        if (!Constant.emailRegExp.test(event.target.value) || !event.target.value) {
             setEmailErr(true);
         } else {
             setEmailErr(false);
@@ -38,6 +45,11 @@ const SignUpPage = (props: any) => {
 
     const handlePwdChange = (event: any) => {
         setPwd(event.target.value);
+        if (!event.target.value) {
+            setPwdErr(true);
+        } else {
+            setPwdErr(false);
+        }
     }
 
     const handleConfirmPwd = (event: any) => {
@@ -81,13 +93,33 @@ const SignUpPage = (props: any) => {
                 " {text} "
             </h1>
             <form className={classes["signup-form"]}>
-                <input name="name" placeholder="အမည်" onChange={handleNameChange} />
+                <div className={classes['input-con']}>
+                    <input name="name" placeholder="အမည်" onChange={handleNameChange} />
+                    {
+                        nameErr && <span> အမည်ကိုဖြည့်ပါ။ </span>
+                    }
+                </div>
 
+                <div className={classes['input-con']}>
                 <input name="email" placeholder="အီးမေးလ်" onChange={handleEmailChange} />
+                    {
+                        emailErr && <span> မှန်ကန်သောအီးမေးလ်ကိုဖြည့်ပါ။ </span>
+                    }
+                </div>
 
+                <div className={classes['input-con']}>
                 <input type="password" placeholder="စကားဝှက်" onChange={handlePwdChange} />
+                    {
+                        pwdErr && <span> စကားဝှက်ကိုဖြည့်ပါ။ </span>
+                    }
+                </div>
 
+                <div className={classes['input-con']}>
                 <input type="password" placeholder="စကားဝှက်ပြန် ရိုက်ထည့်ပါ..." onChange={handleConfirmPwd} />
+                    {
+                        matchErr && <span> စကားဝှက် မကိုက်ညီပါ။ </span>
+                    }
+                </div>
 
                 <button className={classes["signup-btn"]} type="button" onClick={handleSignUp} disabled={checkDisable()}>
                     အကောင့်အသစ် ဖွင့်မည်...
