@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTypewriter } from 'react-simple-typewriter';
+import CommonDialog from '../../components/common/CommonDialog/CommonDialog';
 import Loading from '../../components/Loading/Loading';
 import { Constant } from '../../consts/Constant';
+import { Message } from '../../consts/Message';
 import { createUser } from '../../store/Slices/usersSlice';
 import classes from './SignUpPage.module.css';
 
@@ -19,6 +21,7 @@ const SignUpPage = () => {
     const [emailErr, setEmailErr] = useState(false);
     const [nameErr, setNameErr] = useState(false);
     const [pwdErr, setPwdErr] = useState(false);
+    const [signUpErr, setSignUpErr] = useState('');
 
     const [text] = useTypewriter({
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
@@ -79,9 +82,18 @@ const SignUpPage = () => {
             Created_User_ID: 1000,
             Updated_User_ID: 1000,
         }
-        await dispatch(createUser(userData));
-        setLoading(false);
-        navigate('/login');
+        try {
+            await dispatch(createUser(userData));
+            setLoading(false);
+            navigate('/login');
+        } catch {
+            setLoading(false);
+            setSignUpErr(Message.notSignUp)
+        }
+    }
+
+    const handleCloseDialog = () => {
+        setSignUpErr('');
     }
 
     return (
@@ -89,6 +101,7 @@ const SignUpPage = () => {
             {
                 isLoading && <Loading />
             }
+            {signUpErr && <CommonDialog message={signUpErr} onClick={handleCloseDialog} />}
             <h1 className={classes["hdr"]}>
                 " {text} "
             </h1>
@@ -101,21 +114,21 @@ const SignUpPage = () => {
                 </div>
 
                 <div className={classes['input-con']}>
-                <input name="email" placeholder="အီးမေးလ်" onChange={handleEmailChange} />
+                    <input name="email" placeholder="အီးမေးလ်" onChange={handleEmailChange} />
                     {
                         emailErr && <span> မှန်ကန်သောအီးမေးလ်ကိုဖြည့်ပါ။ </span>
                     }
                 </div>
 
                 <div className={classes['input-con']}>
-                <input type="password" placeholder="စကားဝှက်" onChange={handlePwdChange} />
+                    <input type="password" placeholder="စကားဝှက်" onChange={handlePwdChange} />
                     {
                         pwdErr && <span> စကားဝှက်ကိုဖြည့်ပါ။ </span>
                     }
                 </div>
 
                 <div className={classes['input-con']}>
-                <input type="password" placeholder="စကားဝှက်ပြန် ရိုက်ထည့်ပါ..." onChange={handleConfirmPwd} />
+                    <input type="password" placeholder="စကားဝှက်ပြန် ရိုက်ထည့်ပါ..." onChange={handleConfirmPwd} />
                     {
                         matchErr && <span> စကားဝှက် မကိုက်ညီပါ။ </span>
                     }

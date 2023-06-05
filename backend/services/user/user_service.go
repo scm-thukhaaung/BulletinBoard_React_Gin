@@ -28,8 +28,8 @@ func (service *UserService) Create(user request.UserRequest, ctx *gin.Context) m
 		Phone:           user.Phone,
 		Address:         user.Address,
 		Date_Of_Birth:   parsedDob,
-		Created_User_ID: uint(user.Created_User_ID),
-		Updated_User_ID: uint(user.Created_User_ID),
+		Created_User_ID: int(user.Created_User_ID),
+		Updated_User_ID: int(user.Created_User_ID),
 	}
 
 	data := service.UserDaoInterface.Create(userModel, ctx)
@@ -51,8 +51,8 @@ func (service *UserService) CreateCsvUsers(csvUsers request.CsvUserRequest, ctx 
 			Phone:           eachUser.Phone,
 			Address:         eachUser.Address,
 			Date_Of_Birth:   parsedDob,
-			Created_User_ID: uint(eachUser.Created_User_ID),
-			Updated_User_ID: uint(eachUser.Created_User_ID),
+			Created_User_ID: int(eachUser.Created_User_ID),
+			Updated_User_ID: int(eachUser.Created_User_ID),
 		}
 		userList = append(userList, userModel)
 	}
@@ -87,7 +87,8 @@ func (service *UserService) Update(user request.UserRequest, userId string, ctx 
 		helper.ErrorPanic(err, ctx)
 	}
 
-	folderPath := "C:/Users/thukhaaung/Desktop/Go/src/github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/assets/img"
+	folderPath := os.Getenv("IMG_FOLDER_PATH")
+	// folderPath := "C:/Users/thukhaaung/Desktop/Go/src/github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/assets/img"
 	imgFileName := userId + ".png"
 
 	// Create a new file in the folder
@@ -113,7 +114,7 @@ func (service *UserService) Update(user request.UserRequest, userId string, ctx 
 		Phone:           user.Phone,
 		Address:         user.Address,
 		Date_Of_Birth:   parsedDob,
-		Updated_User_ID: uint(user.Updated_User_ID),
+		Updated_User_ID: int(user.Updated_User_ID),
 	}
 
 	data := service.UserDaoInterface.Update(userModel, userId, ctx)

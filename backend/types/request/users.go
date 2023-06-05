@@ -12,7 +12,7 @@ type UserRequest struct {
 	Phone           string `json:"Phone"`
 	Address         string `json:"Address"`
 	Date_Of_Birth   string `json:"Date_Of_Birth"`
-	Created_User_ID uint   `json:"Created_User_ID"`
+	Created_User_ID int    `json:"Created_User_ID"`
 	Updated_User_ID int    `json:"Updated_User_ID"`
 }
 

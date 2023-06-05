@@ -10,9 +10,12 @@ import { myDefaultTheme } from "../custom_mui/CustomMUI";
 import { Typography } from "@mui/material";
 import { UserInterface } from "../../../interfaces/UserInterface";
 import { formatDate } from "../../../services/settings/dateFormatSvc";
-import { createUser, getEditUser, updateUser } from "../../../store/Slices/usersSlice";
+import { createUser, getEditUser, getuserListSts, updateUser } from "../../../store/Slices/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Message } from "../../../consts/Message";
+import Loading from "../../Loading/Loading";
+import CommonDialog from "../CommonDialog/CommonDialog";
 
 const CreateUserArea = () => {
     const dispatch: any = useDispatch();
@@ -33,12 +36,24 @@ const CreateUserArea = () => {
     const fileInputRef: any = useRef(null);
 
     const userData = useSelector(getEditUser);
+
+    const apiUserStatus = useSelector(getuserListSts);
+    const [isLoading, setLoading] = useState(false);
+    const [userError, setUserErr] = useState('');
     useEffect(() => {
         if (userData.ID) {
             const formattedDate = formatDate(userData.Date_Of_Birth);
             setDate(formattedDate);
         }
-    }, [selectedFile, userData]);
+        if (apiUserStatus === "idle" || apiUserStatus === "loading") {
+            setLoading(true);
+        } else if (apiUserStatus === "failed") {
+            setUserErr(Message.notCreateUser);
+            setLoading(false);
+        } else {
+            setLoading(false);
+        }
+    }, [apiUserStatus, selectedFile, userData]);
     const startDateHandleFocus = () => {
         setStartDateInputType('date');
     };
@@ -71,7 +86,7 @@ const CreateUserArea = () => {
             if (file.type === 'image/jpeg' || file.type === 'image/png') {
                 getBase64(file).then((data: any) => setPhoto(data));
             } else {
-                console.error("Not an image.")
+                setUserErr(Message.notAnImage)
             }
         }
         setSelectedFile(event.target.files[0]);
@@ -143,8 +158,13 @@ const CreateUserArea = () => {
         await dispatch(createUser(data));
         navigate('/userlist');
     }
+    const handleCloseDialog =()=>{
+        setUserErr('');
+    }
     return (
         <div className={classes["create-user-area-component"]}>
+            {isLoading && <Loading />}
+            {userError && <CommonDialog message={userError} onClick={handleCloseDialog} />}
             <form className={classes["create-user-area-form"]}>
                 <div className={classes["profile-photo-upload"]}>
                     <div

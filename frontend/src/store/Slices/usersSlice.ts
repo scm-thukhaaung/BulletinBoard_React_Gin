@@ -50,7 +50,7 @@ const updateUser = createAsyncThunk("/users/update", async (userData: any) => {
         return retData;
     } catch (error) {
         console.error(error);
-        return;
+        return error;
     }
 
 })
@@ -76,6 +76,9 @@ const usersSlice = createSlice({
     },
     extraReducers(builder) {
         builder
+            .addCase(createUser.pending, (state, action) => {
+                state.status = "loading";
+            })
             .addCase(createUser.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.userList = [...state.userList, action.payload.data];
@@ -84,6 +87,9 @@ const usersSlice = createSlice({
                 state.status = "failed";
                 state.error = action.error?.message;
             })
+            .addCase(getUserList.pending, (state, action) => {
+                state.status = "loading";
+            })
             .addCase(getUserList.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.userList = action.payload.data;
@@ -91,6 +97,9 @@ const usersSlice = createSlice({
             .addCase(getUserList.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
+            })
+            .addCase(deleteFromList.pending, (state, action) => {
+                state.status = "loading";
             })
             .addCase(deleteFromList.fulfilled, (state, action) => {
                 state.status = "succeeded";
@@ -102,6 +111,9 @@ const usersSlice = createSlice({
                 state.status = "failed";
                 state.error = action.error?.message;
             })
+            .addCase(getOneUser.pending, (state, action) => {
+                state.status = "loading";
+            })
             .addCase(getOneUser.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.updateUserData = action.payload.data;
@@ -109,6 +121,9 @@ const usersSlice = createSlice({
             .addCase(getOneUser.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
+            })
+            .addCase(updateUser.pending, (state, action) => {
+                state.status = "loading";
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.status = "succeeded";

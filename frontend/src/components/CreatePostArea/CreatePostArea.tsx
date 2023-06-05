@@ -12,8 +12,8 @@ import classes from "./CreatePostArea.module.css";
 import { createPost, selectTempPost, postsAction, isNewPost, updatePost } from "../../store/Slices/postsSlice";
 import { GoldenSwitch } from '../common/custom_mui/CustomMUI';
 
-const CreatePostArea = (props) => {
-    const dispatch = useDispatch();
+const CreatePostArea = () => {
+    const dispatch: any = useDispatch();
 
     const [isExpanded, setExpanded] = useState(false);
 
@@ -33,14 +33,14 @@ const CreatePostArea = (props) => {
         setExpanded(true);
     };
 
-    const handleDescriptionChange = (event) => {
+    const handleDescriptionChange = (event: any) => {
         let value = event.target.value;
         dispatch(postsAction.setInputTempPost({
             description: value,
         }));
     };
 
-    const handleStatusChange = (event) => {
+    const handleStatusChange = (event: any) => {
         let value = event.target.checked;
         const status = value ? 1 : 0;
         dispatch(postsAction.setInputTempPost({
@@ -48,14 +48,14 @@ const CreatePostArea = (props) => {
         }));
     };
 
-    const handleTitleChange = (event) => {
+    const handleTitleChange = (event: any) => {
         let value = event.target.value;
         dispatch(postsAction.setInputTempPost({
             title: value,
         }));
     };
 
-    const submitPost = (event) => {
+    const submitPost = (event: any) => {
         if (!tempPost.Title || !tempPost.Description) return;
 
         if (isNewPostItem) {
