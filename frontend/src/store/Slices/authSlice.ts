@@ -50,7 +50,7 @@ const authSlice = createSlice({
 const getAuthUser = (state: any) => state.authData;
 const getAuthError = (state: any) => state.error;
 const getAuthStatus = (state: any) => state.status;
-const getAuthType = (state: any) => state.type;
+const getAuthType = (state: any) => state.auth.type;
 
 export { authenticate, getAuthUser, getAuthError, getAuthStatus, getAuthType }
 export default authSlice.reducer

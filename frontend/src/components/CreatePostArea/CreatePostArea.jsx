@@ -92,12 +92,18 @@ const CreatePostArea = (props) => {
 
                 {(tempPost.Title ? true : isExpanded) && (<Zoom in={(tempPost.Title ? true : isExpanded)}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Fab onClick={submitPost}>
-                            <AddIcon />
-                        </Fab>
-                        <Fab >
-                            <EditIcon />
-                        </Fab>
+                        {
+                            !tempPost.Title &&
+                            <Fab onClick={submitPost}>
+                                <AddIcon />
+                            </Fab>
+                        }
+                        {
+                            tempPost.Title &&
+                            <Fab >
+                                <EditIcon />
+                            </Fab>
+                        }
                         <Fab onClick={closeExpand}>
                             <CloseIcon />
                         </Fab>

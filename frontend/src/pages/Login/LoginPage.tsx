@@ -17,13 +17,25 @@ const LoginPage = () => {
     const [pwd, setPwd] = useState("");
     const [loginError, setLoginErr] = useState(false)
     const [isLoading, setLoading] = useState(false);
+    const [emailErr, setEmailErr] = useState(true);
+    const [pwdErr, setPwdErr] = useState(true);
 
     const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
+        if (!event.target.value) {
+            setEmailErr(true);
+        } else {
+            setEmailErr(false);
+        }
     };
 
     const handlePwd = (event: ChangeEvent<HTMLInputElement>) => {
         setPwd(event.target.value);
+        if (!event.target.value) {
+            setPwdErr(true);
+        } else {
+            setPwdErr(false);
+        }
     };
 
     const handleLogin = async () => {
@@ -43,6 +55,14 @@ const LoginPage = () => {
             setLoginErr(true);
         }
     };
+
+    const checkDisable = () => {
+        if (emailErr || pwdErr) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     const [text] = useTypewriter({
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
@@ -69,7 +89,7 @@ const LoginPage = () => {
 
                     <a className={classes["forgot-pwd"]} href='/forget-password'>စကားဝှက်မေ့သွားပြီလား...?</a>
                 </div>
-                <button className={classes["login-btn"]} onClick={handleLogin} type="button">
+                <button className={classes["login-btn"]} onClick={handleLogin} type="button" disabled={checkDisable()}>
                     လော့အင်ဝင်မည်...
                 </button>
                 <a className={classes["create-account"]} href='/signup'>

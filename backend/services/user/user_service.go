@@ -87,7 +87,7 @@ func (service *UserService) Update(user request.UserRequest, userId string, ctx 
 		helper.ErrorPanic(err, ctx)
 	}
 
-	folderPath := "C:/Users/thukhaaung/Desktop/Go/src/github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/assets/img"
+	folderPath := os.Getenv("IMG_FOLDER_PATH")
 	imgFileName := userId + ".png"
 
 	// Create a new file in the folder
