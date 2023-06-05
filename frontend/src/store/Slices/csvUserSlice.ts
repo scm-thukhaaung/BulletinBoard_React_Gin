@@ -17,11 +17,10 @@ const csvUserData: any = {
 const createCsvUser= createAsyncThunk(" /csv-users", async (csvUserList: CsvUserItem[]) => {
     try {
         const result = csvUserList.map((eachUser: CsvUserItem) => {
-            const preparedList: UserInterface = {
+            const preparedList: any = {
                 ...eachUser,
                 Created_User_ID: getItem('user').ID,
                 Updated_User_ID: getItem('user').ID,
-
             };
             return preparedList;
         });
