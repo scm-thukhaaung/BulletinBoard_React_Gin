@@ -20,7 +20,7 @@ const Post = props => {
             const id = props.postItem.ID;
             dispatch(deletePost({ id })).unwrap();
         } catch (error) {
-            console.log(`Failed to delete the post ${error}`);
+            console.error(`Failed to delete the post ${error}`);
         }
     };
 
