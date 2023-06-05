@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthType } from '../../../store/Slices/authSlice';
 import { getAllPosts, postsAction, selectAllPosts } from '../../../store/Slices/postsSlice';
+import { getItem } from '../../../services/settings/dataHandleSvc';
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -44,6 +45,10 @@ const Header = () => {
         logout();
         navigate('/login');
     };
+
+    const handleProfile = () => {
+        navigate('/users/'+getItem('user').ID)
+    }
 
     const handleSearchEnter = (event) => {
         if (event.key === "Enter") {
@@ -115,7 +120,7 @@ const Header = () => {
                                         </MenuItem>
                                     }
                                     <MenuItem key="Menu-Item1"
-                                        onClick={handleCloseUserMenu}
+                                        onClick={handleProfile}
                                         sx={{
                                             '&:hover': {
                                                 color: '#fff',
