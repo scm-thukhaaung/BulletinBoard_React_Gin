@@ -75,9 +75,7 @@ const router = createBrowserRouter([
     {
         path: "/forget-password",
         element:
-            <Auth>
-                <ForgetPassword />
-            </Auth>
+            <ForgetPassword />
     },
     {
         path: "/csv-users",
