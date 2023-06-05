@@ -13,10 +13,10 @@ type UserDao struct {
 }
 
 // Create implements UserDaoInterface.
-func (userDao *UserDao) Create(user models.User, ctx *gin.Context) models.User{
+func (userDao *UserDao) Create(user models.User, ctx *gin.Context) models.User {
 	result := userDao.DB.Create(&user)
 	helper.ErrorPanic(result.Error, ctx)
-	return user;
+	return user
 }
 
 // AddCsvUsers implements UserDaoInterface.
@@ -35,18 +35,17 @@ func (userDao *UserDao) AddCsvUsers(users []models.User, ctx *gin.Context) []mod
 // FindAll implements UserDaoInterface.
 func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 	var users []models.User
-
 	result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
 	helper.ErrorPanic(result.Error, ctx)
 
-	// Get userId and userType from session
+	return users
+
+	// // Get userId and userType from session
 	// session := sessions.Default(ctx)
 	// userId := session.Get("userId")
 	// userType := session.Get("userType")
 
-	// fmt.Println(userId, userType)
-
-	// Admin will see all users and member only see its created users
+	// // Admin will see all users and member only see its created users
 	// if userType == constants.ADMIN_TYPE_VAL {
 
 	// 	result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
@@ -57,7 +56,7 @@ func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 	// 	helper.ErrorPanic(result.Error, ctx)
 	// }
 
-	return users
+	// return users
 }
 
 // FindOne implements UserDaoInterface.

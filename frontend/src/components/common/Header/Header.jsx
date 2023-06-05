@@ -12,7 +12,6 @@ const Header = () => {
     const navigate = useNavigate();
 
     const [text] = useTypewriter({
-        // words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'Bulletin Board ပါ'],
         loop: false
     });
@@ -25,6 +24,14 @@ const Header = () => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const handleCreate = () => {
+        navigate('/users');
+    };
+
+    const handleUserList = () => {
+        navigate('/userlist');
     };
 
     const handleLogout = () => {
@@ -74,19 +81,17 @@ const Header = () => {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    {/* {settings.map((setting) => (
-                                        <MenuItem key={setting}
-                                            onClick={handleCloseUserMenu}
-                                            sx={{
-                                                '&:hover': {
-                                                    color: '#fff',
-                                                    backgroundColor: '#f5ba13',
-                                                },
-                                            }}
-                                        >
-                                            <Typography textAlign="center">{setting}</Typography>
-                                        </MenuItem>
-                                    ))} */}
+                                    <MenuItem key="Menu-Item0"
+                                        onClick={handleCreate}
+                                        sx={{
+                                            '&:hover': {
+                                                color: '#fff',
+                                                backgroundColor: '#f5ba13',
+                                            },
+                                        }}
+                                    >
+                                        <Typography textAlign="center"> အသုံးပြုသူဖန်တီးမည် </Typography>
+                                    </MenuItem>
                                     <MenuItem key="Menu-Item1"
                                         onClick={handleCloseUserMenu}
                                         sx={{
@@ -99,7 +104,7 @@ const Header = () => {
                                         <Typography textAlign="center"> Profile ထဲ ဝင်မည် </Typography>
                                     </MenuItem>
                                     <MenuItem key="Menu-Item2"
-                                        onClick={handleCloseUserMenu}
+                                        onClick={handleUserList}
                                         sx={{
                                             '&:hover': {
                                                 color: '#fff',

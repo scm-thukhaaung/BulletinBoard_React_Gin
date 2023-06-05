@@ -4,7 +4,7 @@ import classes from './CsvPostList.module.css';
 import { TextField } from "@mui/material";
 // import { addCsvList, updatePost } from "../../reducers/csvPostSlice";
 import { CsvPostItem } from "../../interfaces/PostInterface";
-import { CheckTableUtilSvc } from "../../utils/utilSvc";
+import { CheckPostUtilSvc } from "../../utils/utilSvc";
 import { checkPostExist, csvPostAction, getCsvPosts } from "../../store/Slices/csvPostSlice";
 
 const CsvPostList = () => {
@@ -50,7 +50,7 @@ const CsvPostList = () => {
             csvData[index] = { ...csvData[index], HasError: false };
         }
 
-        const updatedList = CheckTableUtilSvc(csvData);
+        const updatedList = CheckPostUtilSvc(csvData);
         dispatch(csvPostAction.addCsvList(updatedList));
     }
 
@@ -162,7 +162,7 @@ const CsvPostList = () => {
                     !isPostExist ?
                         <p> * Double click on the data to edit. </p>
                         :
-                        <p> * This title of these posts are already taken. </p>
+                        <p> * The title of these posts are already taken. </p>
                 }
             </div>
             <ul className={classes["list-con"]} id="post-list">

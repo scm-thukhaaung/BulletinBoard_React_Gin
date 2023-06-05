@@ -8,7 +8,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import CsvPostList from '../../components/csvPostList/CsvPostList';
 import { useSelector, useDispatch } from "react-redux";
 import { CsvPostItem } from '../../interfaces/PostInterface';
-import { CheckTableUtilSvc } from '../../utils/utilSvc';
+import { CheckPostUtilSvc } from '../../utils/utilSvc';
 import { createCsvPost, csvPostAction, getCsvPosts } from '../../store/Slices/csvPostSlice';
 
 const PostCsvPage = () => {
@@ -54,7 +54,7 @@ const PostCsvPage = () => {
                 skip_empty_lines: true
             });
             const dataRecords = records.slice(1);
-            const updatedList = CheckTableUtilSvc(dataRecords);
+            const updatedList = CheckPostUtilSvc(dataRecords);
             dispatch(csvPostAction.addCsvList(updatedList));
             setCsvData(updatedList);
         };

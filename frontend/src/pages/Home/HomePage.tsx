@@ -6,7 +6,7 @@ import Header from "../../components/common/Header/Header";
 import CreatePostArea from "../../components/CreatePostArea/CreatePostArea";
 import Loading from "../../components/Loading/Loading";
 import Post from "../../components/Post/Post";
-import { Message } from "../../consts/message";
+import { Message } from "../../consts/Message";
 import { getPostsStatus, selectAllPosts } from "../../store/Slices/postsSlice";
 
 const HomePage = (props: any) => {

@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { authenticate } from "../../store/Slices/authSlice";
 import CommonDialog from "../../components/common/CommonDialog/CommonDialog";
 import Loading from "../../components/Loading/Loading";
-import { Message } from "../../consts/message";
+import { Message } from "../../consts/Message";
 
 const LoginPage = () => {
     const dispatch: any = useDispatch();
@@ -67,7 +67,7 @@ const LoginPage = () => {
                 <div className={classes["mini-div"]}>
                     <FormControlLabel control={<GoldenSwitch />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မှတ်မိပေးပါ...</Typography>} />
 
-                    <a className={classes["forgot-pwd"]} href='/'>စကားဝှက်မေ့သွားပြီလား...?</a>
+                    <a className={classes["forgot-pwd"]} href='/forget-password'>စကားဝှက်မေ့သွားပြီလား...?</a>
                 </div>
                 <button className={classes["login-btn"]} onClick={handleLogin} type="button">
                     လော့အင်ဝင်မည်...
