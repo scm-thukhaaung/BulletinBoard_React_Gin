@@ -7,10 +7,12 @@ import classes from "./Header.module.css";
 import { Search, SearchIconWrapper, StyledInputBase, ToolBarStyle, FontTheme } from "../custom_mui/CustomMUI";
 import { logout } from "../../../services/api/auth-api";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAuthType } from '../../../store/Slices/authSlice';
+import { getAllPosts, postsAction, selectAllPosts } from '../../../store/Slices/postsSlice';
 
 const Header = () => {
+    const dispatch = useDispatch();
     const authType = useSelector(getAuthType);
 
     const navigate = useNavigate();
@@ -43,7 +45,16 @@ const Header = () => {
         navigate('/login');
     };
 
-    const handleSearchEnter = () => {
+    const handleSearchEnter = (event) => {
+        if (event.key === "Enter") {
+            console.log(event.target.value )
+            if (event.target.value) {
+                let searchValue= event.target.value;
+                dispatch(postsAction.searchPost({searchValue}))
+            } else {
+                dispatch(getAllPosts());
+            }
+        }
     }
 
     return (
@@ -61,6 +72,7 @@ const Header = () => {
                             <StyledInputBase
                                 placeholder="ရင်ဖွင့်စာများ ရှာပါ..."
                                 inputProps={{ 'aria-label': 'search' }}
+                                onKeyDown={handleSearchEnter}
                             />
                         </Search>
 

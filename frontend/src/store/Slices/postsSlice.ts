@@ -88,6 +88,15 @@ const postsSlice = createSlice({
             if (action.payload.status === 0 ||action.payload.status === 1) {
                 state.tempPostState.post.Status = action.payload.status;
             }
+        },
+        searchPost(state, action) {
+            if ( action.payload.searchValue ) {
+                  const givenString = action.payload.searchValue;
+                  
+                  const filteredArray = state.postInititalState.posts.filter((obj: any) => obj.Title.toLowerCase().includes(givenString.toLowerCase()));
+                  
+                  state.postInititalState.posts = filteredArray;
+            }
         }
     },
     extraReducers(builder) {
