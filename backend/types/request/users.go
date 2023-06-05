@@ -4,16 +4,16 @@ type FindAllUserRequest struct {
 }
 
 type UserRequest struct {
-	Name            string `validate:"required,max=200,min=1" json:"name"`
-	Email           string `validate:"required,max=200,min=1" json:"email"`
-	Password        string `validate:"required,max=200,min=1" json:"password"`
-	Profile_Photo   string `json:"profile_photo"`
-	Type            string `default:"1" json:"type"`
-	Phone           string `json:"phone"`
-	Address         string `json:"address"`
-	Date_Of_Birth   string `json:"date_of_birth"`
-	Created_User_ID uint   `json:"created_user_id"`
-	Updated_User_ID uint   `json:"updated_user_id"`
+	Name            string `validate:"required,max=200,min=1" json:"Name"`
+	Email           string `validate:"required,max=200,min=1" json:"Email"`
+	Password        string `validate:"required,max=200,min=1" json:"Password"`
+	Profile_Photo   string `json:"Profile_Photo"`
+	Type            string `default:"1" json:"Type"`
+	Phone           string `json:"Phone"`
+	Address         string `json:"Address"`
+	Date_Of_Birth   string `json:"Date_Of_Birth"`
+	Created_User_ID uint   `json:"Created_User_ID"`
+	Updated_User_ID int    `json:"Updated_User_ID"`
 }
 
 type LoginRequest struct {

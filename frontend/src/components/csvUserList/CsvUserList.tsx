@@ -1,30 +1,30 @@
 import { useSelector, useDispatch } from "react-redux";
 import { ChangeEvent, useState } from "react";
-import classes from './CsvPostList.module.css';
+import classes from './CsvUserList.module.css';
 import { TextField } from "@mui/material";
-// import { addCsvList, updatePost } from "../../reducers/csvPostSlice";
-import { CsvPostItem } from "../../interfaces/PostInterface";
-import { CheckPostUtilSvc } from "../../utils/utilSvc";
-import { checkPostExist, csvPostAction, getCsvPosts } from "../../store/Slices/csvPostSlice";
+import { CheckUserUtilSvc } from "../../utils/utilSvc";
+import { checkUserExist, csvUserAction, getcsvUsers } from "../../store/Slices/csvUserSlice";
+import { CsvUserItem, UserInterface } from "../../interfaces/UserInterface";
+import { Constant } from "../../consts/Constant";
 
-const CsvPostList = () => {
-    let storedData = useSelector(getCsvPosts);
-    const isPostExist = useSelector(checkPostExist);
+const CsvUserList = () => {
+    let storedData = useSelector(getcsvUsers);
+    const isUserExist = useSelector(checkUserExist);
     const csvData = [...storedData];
     const dispatch = useDispatch();
     const [isEditMode, setEditMode] = useState(false);
     const [editIndex, setEditIndex] = useState(0);
-    const [tmpTitle, setTmpTitle] = useState("");
-    const [tmpDesc, setTmpDesc] = useState("");
-    const [tmpStatus, setTmpStatus] = useState("");
+    const [tmpName, setTmpName] = useState("");
+    const [tmpEmail, setTmpEmail] = useState("");
+    const [tmpType, setTmpType] = useState("");
 
     // Update the store data
     const handleBlur = (index: number) => {
         setEditMode(false);
         setEditIndex(-1);
-        csvData[index] = { ...csvData[index], Title: tmpTitle ? tmpTitle : csvData[index].Title }
-        csvData[index] = { ...csvData[index], Description: tmpDesc ? tmpDesc : csvData[index].Description }
-        csvData[index] = { ...csvData[index], Status: tmpStatus ? tmpStatus : csvData[index].Status }
+        csvData[index] = { ...csvData[index], Name: tmpName ? tmpName : csvData[index].Name }
+        csvData[index] = { ...csvData[index], Email: tmpEmail ? tmpEmail : csvData[index].Email }
+        csvData[index] = { ...csvData[index], Type: tmpType ? tmpType : csvData[index].Type }
         checkError(index);
         updateData(index, csvData[index]);
     }
@@ -33,72 +33,78 @@ const CsvPostList = () => {
     const checkError = (index: number) => {
         let isDup = false;
         for (let i = 0; i < csvData.length; i++) {
-            if (i !== index && csvData[i].Title === csvData[index].Title) {
+            if (i !== index && csvData[i].Name === csvData[index].Name) {
+                isDup = true;
+            }
+            if (i !== index && csvData[i].Email === csvData[index].Email) {
+                isDup = true;
+            }
+            if (!Constant.emailRegExp.test(csvData[i].Email)) {
                 isDup = true;
             }
         }
-        
-        let isStsWrong = false;
-        if (csvData[index].Status !== "0" &&
-            csvData[index].Status !== "1") {
-            isStsWrong = true;
+
+        let isTypeWrong = false;
+        if (csvData[index].Type !== "0" &&
+            csvData[index].Type !== "1") {
+            isTypeWrong = true;
         }
 
-        if (isDup || isStsWrong) {
+        if (isDup || isTypeWrong) {
             csvData[index] = { ...csvData[index], HasError: true };
         } else {
             csvData[index] = { ...csvData[index], HasError: false };
         }
 
-        const updatedList = CheckPostUtilSvc(csvData);
-        dispatch(csvPostAction.addCsvList(updatedList));
+        const updatedList = CheckUserUtilSvc(csvData);
+        dispatch(csvUserAction.addCsvList(updatedList));
     }
 
-    const updateData = (index: number, dataToUpdate: CsvPostItem) => {
+    const updateData = (index: number, dataToUpdate: CsvUserItem) => {
         const data = {
             ID: index,
-            Title: dataToUpdate.Title,
-            Description: dataToUpdate.Description,
-            Status: dataToUpdate.Status,
+            Name: dataToUpdate.Name,
+            Email: dataToUpdate.Email,
+            Type: dataToUpdate.Type,
             HasError: dataToUpdate.HasError
         }
-        dispatch(csvPostAction.updatePost(data));
+        dispatch(csvUserAction.updateUser(data));
     }
 
     const handleDoubleClick = (index: number) => {
         setEditMode(true);
         setEditIndex(index);
-        setTmpTitle("");
-        setTmpDesc("");
-        setTmpStatus("");
+        setTmpName("");
+        setTmpEmail("");
+        setTmpType("");
     }
 
-    const handleTitleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-        setTmpTitle(event.target.value);
+    const handleNameChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+        setTmpName(event.target.value);
     };
 
-    const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-        setTmpDesc(event.target.value)
+    const handleEmailChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+        setTmpEmail(event.target.value)
     }
 
-    const handleStatusChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
-        setTmpStatus(event.target.value);
+    const handleTypeChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
+        setTmpType(event.target.value);
     }
 
     const RowComponent = (props: any) => {
         return (
             <>
-                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.postData.Title}</span>
-                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.postData.Description}</span>
-                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.postData.Status}</span>
+                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.userData.Name}</span>
+                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.userData.Email}</span>
+                <span onDoubleClick={() => handleDoubleClick(props.data.ID)}>{props.data.userData.Type}</span>
             </>
         )
     }
 
-    const postListCom = (
-        csvData.map((eachPost: any, i: number) => {
+    const userListCom = (
+        csvData.map((eachUser: UserInterface, i: number) => {
             return (
-                <li key={eachPost.Title + i} className={!eachPost.HasError ?
+                <li key={eachUser.Name! + i} className={!eachUser.HasError ?
                     classes["li-con"] :
                     [classes["li-con"], classes["err-data"]].join(' ')}>
                     <span className={classes["id-span"]}>{i + 1}</span>
@@ -108,7 +114,7 @@ const CsvPostList = () => {
                             {
                                 !isEditMode ? (
                                     <>
-                                        <RowComponent data={{ postData: eachPost, id: i }} />
+                                        <RowComponent data={{ userData: eachUser, id: i }} />
                                     </>
                                 ) : (
                                     <>
@@ -117,8 +123,8 @@ const CsvPostList = () => {
                                                 <span className={classes["Title-width"]}>
                                                     <TextField id="standard-basic"
                                                         variant="standard"
-                                                        defaultValue={eachPost.Title}
-                                                        onChange={(event) => handleTitleChange(event, i)}
+                                                        defaultValue={eachUser.Name}
+                                                        onChange={(event) => handleNameChange(event, i)}
                                                         onBlur={() => handleBlur(i)}
                                                     />
                                                 </span>
@@ -126,23 +132,23 @@ const CsvPostList = () => {
                                                     <TextField id="standard-basic"
                                                         style={{ width: '100%' }}
                                                         variant="standard"
-                                                        defaultValue={eachPost.Description}
-                                                        onChange={(event) => handleDescriptionChange(event, i)}
+                                                        defaultValue={eachUser.Email}
+                                                        onChange={(event) => handleEmailChange(event, i)}
                                                         onBlur={() => handleBlur(i)}
                                                     />
                                                 </span>
                                                 <span className={classes["Title-width"]}>
                                                     <TextField id="standard-basic"
                                                         variant="standard"
-                                                        defaultValue={eachPost.Status}
-                                                        onChange={(event) => handleStatusChange(event, i)}
+                                                        defaultValue={eachUser.Type}
+                                                        onChange={(event) => handleTypeChange(event, i)}
                                                         onBlur={() => handleBlur(i)}
                                                     />
                                                 </span>
                                             </>
                                         ) : (
                                             <>
-                                                <RowComponent data={{ postData: eachPost, ID: i }} />
+                                                <RowComponent data={{ userData: eachUser, ID: i }} />
                                             </>
                                         )}
                                     </>
@@ -159,25 +165,25 @@ const CsvPostList = () => {
         <>
             < div className={classes["error-msg"]} id="error-msg">
                 {
-                    !isPostExist ?
+                    !isUserExist ?
                         <p> * Double click on the data to edit. </p>
                         :
-                        <p> * The title of these posts are already taken. </p>
+                        <p> * The name or email of these users are already taken. </p>
                 }
             </div>
-            <ul className={classes["list-con"]} id="post-list">
-                <li className={[classes["li-con"], classes["list-title"]].join(' ')} id="Title">
+            <ul className={classes["list-con"]} id="user-list">
+                <li className={[classes["li-con"], classes["list-name"]].join(' ')} id="Title">
                     <span className={classes["id-span"]}>ID</span>
-                    <span>Title</span>
-                    <span>Description</span>
-                    <span>Status</span>
+                    <span>Name</span>
+                    <span>Email</span>
+                    <span>Type</span>
                 </li>
                 {
-                    postListCom
+                    userListCom
                 }
             </ul >
         </>
     )
 }
 
-export default CsvPostList;
+export default CsvUserList;
