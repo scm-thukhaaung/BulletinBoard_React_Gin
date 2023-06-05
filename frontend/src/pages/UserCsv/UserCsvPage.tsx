@@ -11,33 +11,50 @@ import { CheckUserUtilSvc } from '../../utils/utilSvc';
 import { createCsvUser, csvUserAction, getcsvUsers } from '../../store/Slices/csvUserSlice';
 import CsvUserList from '../../components/csvUserList/CsvUserList';
 import { CsvUserItem } from '../../interfaces/UserInterface';
+import { useNavigate } from 'react-router-dom';
+import { Message } from '../../consts/Message';
+import Loading from '../../components/Loading/Loading';
+import CommonDialog from '../../components/common/CommonDialog/CommonDialog';
 
 const UserCsvPage = () => {
+    const navigate = useNavigate();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [csvData, setCsvData] = useState<CsvUserItem[]>([]);
     const storedData = useSelector(getcsvUsers);
     const [filename, setFilename] = useState("");
     const dispatch: any = useDispatch();
+    const [csvError, setCsvError] = useState('');
+    const [isLoading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
+        setLoading(true);
         try {
             const result = await dispatch(createCsvUser(storedData));
-        
+            setLoading(false);
+            if (!result.payload.data.length) {
+                navigate('/userlist');
+            } else {
+                setCsvError(Message.csvUserAlreadyExist);
+            }
         } catch (error) {
-            console.error('Error at userCsv page: ', error);
+            setLoading(false);
+            setCsvError(Message.csvError)
         }
     }
 
     // Read csv and set csvData 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+        setLoading(true);
         resetData();
         if (!e.target.files) {
+            setLoading(false);
             return;
         }
         let file = e.target.files[0];
         const { name } = file;
         if (!name.endsWith(".csv")) {
-            console.error("Not a csv file.");
+            setLoading(false);
+            setCsvError(Message.notCsvFile);
             return;
         }
         setFilename(name);
@@ -45,6 +62,7 @@ const UserCsvPage = () => {
         const reader = new FileReader();
         reader.onload = (evt) => {
             if (!evt?.target?.result) {
+                setLoading(false);
                 return;
             }
             const { result } = evt.target;
@@ -59,6 +77,7 @@ const UserCsvPage = () => {
             dispatch(csvUserAction.addCsvList(updatedList));
             setCsvData(updatedList);
         };
+        setLoading(false);
         reader.readAsBinaryString(file);
         e.target.value = "";
     };
@@ -84,8 +103,15 @@ const UserCsvPage = () => {
         return true;
     }
 
+    const handleCloseDialog = () => {
+        setCsvError('');
+    }
+    
+
     return (
         <div className={!csvData.length ? classes["wrapper-csv"] : ''}>
+            {isLoading && <Loading />}
+            {csvError && <CommonDialog message={csvError} onClick={handleCloseDialog} />}
             {
                 !csvData.length ?
 

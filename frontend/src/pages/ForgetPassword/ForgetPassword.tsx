@@ -3,6 +3,8 @@ import { useState } from "react";
 import { resetPassword, sendEmail } from '../../services/api/forgetPassword-api';
 import classes from './ForgetPassword.module.css'
 import Loading from '../../components/Loading/Loading';
+import { Message } from '../../consts/Message';
+import CommonDialog from '../../components/common/CommonDialog/CommonDialog';
 
 const ForgetPassword = () => {
     const navigate = useNavigate();
@@ -12,15 +14,21 @@ const ForgetPassword = () => {
     const [mailAdres, setMail] = useState('');
     const [pwdInput, setPwd] = useState('');
     const [isLoading, setLoading] = useState(false);
+    const [forPwdError, setForPwdError] = useState('');
 
     const handleEmailSend = async () => {
         setLoading(true);
         const data = {
             email: mailAdres
         }
-        await sendEmail(data);
-        setLoading(false);
-        navigate('/login');
+        try {
+            await sendEmail(data);
+            setLoading(false);
+            navigate('/login');
+        } catch {
+            setLoading(false);
+            setForPwdError(Message.notSendEmail)
+        }
     }
 
     const handlePwdReset = async () => {
@@ -41,13 +49,18 @@ const ForgetPassword = () => {
         setPwd(event.target.value);
     }
 
+    const handleCloseDialog = () => {
+        setForPwdError('');
+    }
+    
     return (
         <div className={classes["create-user-area-component"]}>
             {
-                isLoading ? 
-                <Loading />
-                : ''
+                isLoading ?
+                    <Loading />
+                    : ''
             }
+            {forPwdError && <CommonDialog message={forPwdError} onClick={handleCloseDialog} />}
             <form className={classes["create-user-area-form"]}>
                 {
                     !token ?

@@ -9,12 +9,12 @@ import Auth from "./services/settings/isAuth";
 import Admin from "./services/settings/isAdmin";
 import store from "./store/store";
 import UserListPage from "./pages/UserList/UserListPage";
-import { getOneUser } from "./store/Slices/usersSlice";
+import { getOneUser, getUserList } from "./store/Slices/usersSlice";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 import UserCsvPage from "./pages/UserCsv/UserCsvPage";
 
-
 const PostLoader = () => store.dispatch(getAllPosts());
+const UserListLoader = () => store.dispatch(getUserList());
 
 const router = createBrowserRouter([
     {
@@ -39,9 +39,10 @@ const router = createBrowserRouter([
         element:
             <Auth>
                 <Admin>
-                    <UserListPage />
+                    <UserListPage />,
                 </Admin>
-            </Auth>
+            </Auth>,
+        loader: UserListLoader,
     },
     {
         path: "/users/:id",

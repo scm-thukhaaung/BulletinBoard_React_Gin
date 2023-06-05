@@ -8,7 +8,7 @@ type Post struct {
 	Title           string `gorm:"type:varchar(255);unique;not null;"`
 	Description     string `gorm:"type:varchar;not null;"`
 	Status          string   `gorm:"type:int;not null;"`
-	Created_User_ID uint   `gorm:"type:int;not null;"`
-	Updated_User_ID uint   `gorm:"type:int;not null;"`
-	Deleted_User_ID uint   `gorm:"type:int;"`
+	Created_User_ID int   `gorm:"type:int;not null;"`
+	Updated_User_ID int   `gorm:"type:int;not null;"`
+	Deleted_User_ID int   `gorm:"type:int;"`
 }

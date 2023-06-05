@@ -1,10 +1,4 @@
 import { useState } from "react";
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import CloseIcon from '@mui/icons-material/Close';
-import Box from '@mui/material/Box';
-
-import { Zoom, Fab } from '@mui/material';
 import classes from "./SearchUserArea.module.css";
 
 const SearchUserArea = (props) => {

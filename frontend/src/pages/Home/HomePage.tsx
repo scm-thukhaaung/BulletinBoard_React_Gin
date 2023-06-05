@@ -9,26 +9,28 @@ import Post from "../../components/Post/Post";
 import { Message } from "../../consts/Message";
 import { getPostsStatus, selectAllPosts } from "../../store/Slices/postsSlice";
 
-const HomePage = (props: any) => {
+const HomePage = () => {
+    // const dispatch:any = useDispatch();
     const apiPosts = useSelector(selectAllPosts);
     const apiPostsStatus = useSelector(getPostsStatus);
-    const postErrSts = useSelector(getPostsStatus);
-    const [postError, setPostErr] = useState(false);
+    const postStatus = useSelector(getPostsStatus);
+    // const [postError, setPostErr] = useState(false);
     const [isLoading, setLoading] = useState(true);
+    const [fetchErr, setFetchErr] = useState('');
+
     useEffect(() => {
-        if (postErrSts !== 'loading') {
+        // dispatch(getAllPosts());
+        if (postStatus === "idle" || postStatus === "loading") {
+            setLoading(true);
+        } else if (postStatus === "failed") {
+            setFetchErr(Message.notFetchUserList);
             setLoading(false);
         } else {
-            setLoading(true);
+            setLoading(false);
         }
-        if (postErrSts === 'failed') {
-            setPostErr(true);
-        }
-
-    }, [postErrSts])
+    }, [postStatus]);
 
     const [setPosts] = useState<any>(apiPosts);
-
 
     const deletePost = (id: any) => {
         setPosts(
@@ -41,7 +43,7 @@ const HomePage = (props: any) => {
     };
 
     const handleCloseDialog = () => {
-        setPostErr(false);
+        setFetchErr('');
     }
 
     return (
@@ -51,7 +53,7 @@ const HomePage = (props: any) => {
                 isLoading && <Loading />
             }
             {
-                postError && <CommonDialog message={Message.postFetchError} onClick={handleCloseDialog} />
+                fetchErr && <CommonDialog message={Message.postFetchError} onClick={handleCloseDialog} />
             }
             <CreatePostArea />
             {apiPostsStatus === "succeeded" && (
