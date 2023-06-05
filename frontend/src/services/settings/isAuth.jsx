@@ -3,7 +3,6 @@ import store from "../../store/store";
 
 const Auth = ({ children }) => {
     const auth = store.getState().auth;
-
     if (!auth.authData?.User) {
         return <Navigate to='/login' />;
     }

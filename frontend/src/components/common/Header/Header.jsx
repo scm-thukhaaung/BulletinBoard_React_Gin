@@ -7,8 +7,12 @@ import classes from "./Header.module.css";
 import { Search, SearchIconWrapper, StyledInputBase, ToolBarStyle, FontTheme } from "../custom_mui/CustomMUI";
 import { logout } from "../../../services/api/auth-api";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getAuthType } from '../../../store/Slices/authSlice';
 
 const Header = () => {
+    const authType = useSelector(getAuthType);
+
     const navigate = useNavigate();
 
     const [text] = useTypewriter({
@@ -37,6 +41,9 @@ const Header = () => {
     const handleLogout = () => {
         logout();
         navigate('/login');
+    };
+
+    const handleSearchEnter = () => {
     }
 
     return (
@@ -81,17 +88,20 @@ const Header = () => {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    <MenuItem key="Menu-Item0"
-                                        onClick={handleCreate}
-                                        sx={{
-                                            '&:hover': {
-                                                color: '#fff',
-                                                backgroundColor: '#f5ba13',
-                                            },
-                                        }}
-                                    >
-                                        <Typography textAlign="center"> အသုံးပြုသူဖန်တီးမည် </Typography>
-                                    </MenuItem>
+                                    {
+                                        authType === "admin" &&
+                                        <MenuItem key="Menu-Item0"
+                                            onClick={handleCreate}
+                                            sx={{
+                                                '&:hover': {
+                                                    color: '#fff',
+                                                    backgroundColor: '#f5ba13',
+                                                },
+                                            }}
+                                        >
+                                            <Typography textAlign="center"> အသုံးပြုသူဖန်တီးမည် </Typography>
+                                        </MenuItem>
+                                    }
                                     <MenuItem key="Menu-Item1"
                                         onClick={handleCloseUserMenu}
                                         sx={{
@@ -103,17 +113,20 @@ const Header = () => {
                                     >
                                         <Typography textAlign="center"> Profile ထဲ ဝင်မည် </Typography>
                                     </MenuItem>
-                                    <MenuItem key="Menu-Item2"
-                                        onClick={handleUserList}
-                                        sx={{
-                                            '&:hover': {
-                                                color: '#fff',
-                                                backgroundColor: '#f5ba13',
-                                            },
-                                        }}
-                                    >
-                                        <Typography textAlign="center"> User List ကြည့်မည် </Typography>
-                                    </MenuItem>
+                                    {
+                                        authType === "admin" &&
+                                        <MenuItem key="Menu-Item2"
+                                            onClick={handleUserList}
+                                            sx={{
+                                                '&:hover': {
+                                                    color: '#fff',
+                                                    backgroundColor: '#f5ba13',
+                                                },
+                                            }}
+                                        >
+                                            <Typography textAlign="center"> User List ကြည့်မည် </Typography>
+                                        </MenuItem>
+                                    }
                                     <MenuItem key="Menu-Item3"
                                         onClick={handleCloseUserMenu}
                                         sx={{
