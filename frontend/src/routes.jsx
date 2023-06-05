@@ -1,16 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/Login/LoginPage";
 import SignUpPage from "./pages/SignUp/SignUpPage";
-import UserListPage from "./pages/UserList/UserListPage";
 import UserCreatePage from "./pages/UserCreate/UserCreatePage";
 import HomePage from "./pages/Home/HomePage";
 import PostCsvPage from "./pages/postCsv/PostCsvPage";
-import { getAllPosts, selectAllPosts } from "./store/Slices/postsSlice";
+import { getAllPosts } from "./store/Slices/postsSlice";
 import Auth from "./services/settings/isAuth";
 import store from "./store/store";
+import UserListPage from "./pages/UserList/UserListPage";
+import { getOneUser } from "./store/Slices/usersSlice";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 
 const PostLoader = () => store.dispatch(getAllPosts());
+
 const router = createBrowserRouter([
     {
         path: "/login",
@@ -34,7 +36,14 @@ const router = createBrowserRouter([
         element: <UserListPage />
     },
     {
-        path: "/create-user",
+        path: "/users/:id",
+        element: <UserCreatePage />,
+        loader: ({ params }) => {
+            return store.dispatch(getOneUser(params.id))
+        },
+    },
+    {
+        path: "/users",
         element: <UserCreatePage />
     },
     {
@@ -45,6 +54,7 @@ const router = createBrowserRouter([
         path: "/forget-password",
         element: <ForgetPassword />
     }
+
 ]);
 
 export default router;

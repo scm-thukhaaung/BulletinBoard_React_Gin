@@ -52,7 +52,7 @@ const LoginPage = (props: any) => {
                 <div className={classes["mini-div"]}>
                     <FormControlLabel control={<GoldenSwitch />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မှတ်မိပေးပါ...</Typography>} />
 
-                    <a className={classes["forgot-pwd"]} href='/'>စကားဝှက်မေ့သွားပြီလား...?</a>
+                    <a className={classes["forgot-pwd"]} href='/forget-password'>စကားဝှက်မေ့သွားပြီလား...?</a>
                 </div>
                 <button className={classes["login-btn"]} onClick={handleLogin} type="button">
                     လော့အင်ဝင်မည်...
