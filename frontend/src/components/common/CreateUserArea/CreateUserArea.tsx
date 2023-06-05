@@ -13,6 +13,7 @@ import { formatDate } from "../../../services/settings/dateFormatSvc";
 import { createUser, getEditUser, updateUser } from "../../../store/Slices/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Constant } from "../../../consts/Constant";
 
 const CreateUserArea = () => {
     const dispatch: any = useDispatch();
@@ -27,9 +28,16 @@ const CreateUserArea = () => {
     const [adresInput, setAdres] = useState('');
     const [startDateInputType, setStartDateInputType] = useState('text');
 
+    const [nameErr, setNameErr] = useState(false);
+    const [emailErr, setEmailErr] = useState(false);
+    const [pwdErr, setPwdErr] = useState(false);
+    const [matchErr, setMatchErr] = useState(false);
+    const [phoneErr, setPhoneErr] = useState(false);
+    const today = new Date().toISOString().split('T')[0];
+
+
     // Image upload
     const [selectedFile, setSelectedFile] = useState(null);
-    const [nameInputError, setNameInputError] = useState(false);
     const fileInputRef: any = useRef(null);
 
     const userData = useSelector(getEditUser);
@@ -80,19 +88,46 @@ const CreateUserArea = () => {
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const nameValue = event.target.value.trim();
         setName(nameValue);
-        setNameInputError(nameValue === "");
+        if (!nameValue) {
+            setNameErr(true);
+        } else {
+            setNameErr(false);
+        }
     };
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const emailValue = event.target.value.trim();
         setEmail(emailValue);
+        if (!emailValue) {
+            setEmailErr(true);
+        } else {
+            setEmailErr(false);
+        }
     };
     const handlePwdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const pwdValue = event.target.value.trim();
         setPwd(pwdValue);
+        if (!pwdValue) {
+            setPwdErr(true);
+        } else {
+            setPwdErr(false);
+        }
+    };
+    const handleConfirmPwdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const confirmPwdValue = event.target.value.trim();
+        if (pwdInput !== confirmPwdValue) {
+            setMatchErr(true);
+        } else {
+            setPwdErr(false);
+        }
     };
     const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const phoneValue = event.target.value.trim();
         setPhone(phoneValue);
+        if (phoneValue && !Constant.phoneRegExp.test(phoneValue)) {
+            setPhoneErr(true);
+        } else {
+            setPhoneErr(false);
+        }
     };
     const handleDobChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const dobValue = event.target.value;
@@ -143,6 +178,15 @@ const CreateUserArea = () => {
         await dispatch(createUser(data));
         navigate('/userlist');
     }
+
+    const checkDisable = () => {
+        if (nameErr || emailErr || pwdErr || phoneErr) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return (
         <div className={classes["create-user-area-component"]}>
             <form className={classes["create-user-area-form"]}>
@@ -166,32 +210,63 @@ const CreateUserArea = () => {
 
                 </div>
 
-                <input
-                    name="name"
-                    placeholder="အမည်..."
-                    required
-                    defaultValue={userData.Name ? userData.Name : ""}
-                    onChange={handleNameChange}
-                    className={nameInputError ? classes["error-input"] : ""}
-                />
-                {nameInputError && (
-                    <span className={classes["error-message"]}>Name is required.</span>
-                )}
+                <div className={classes['input-con']}>
+                    <input
+                        name="name"
+                        placeholder="အမည်..."
+                        required
+                        defaultValue={userData.Name ? userData.Name : ""}
+                        onChange={handleNameChange}
+                    />
+                    {nameErr && (
+                        <span> အမည်ကိုဖြည့်ပါ။ </span>
+                    )}
 
-                <input name="email" onChange={handleEmailChange} placeholder="အီးမေးလ်..." required defaultValue={userData.Email ? userData.Email : ''} />
+                </div>
 
-                <input type="password" onChange={handlePwdChange} placeholder="စကားဝှက်..." required defaultValue={userData.Password ? userData.Password : ''} />
+                <div className={classes['input-con']}>
+                    <input name="email" onChange={handleEmailChange} placeholder="အီးမေးလ်..." required defaultValue={userData.Email ? userData.Email : ''} />
+                    {emailErr && (
+                        <span> မှန်ကန်သောအီးမေးလ်ကိုဖြည့်ပါ။ </span>
+                    )}
 
-                <input type="password" placeholder="စကားဝှက်ပြန် ရိုက်ထည့်ပါ..." required defaultValue={userData.Password ? userData.Password : ''} />
+                </div>
 
-                <input type="tel" onChange={handlePhoneChange} placeholder="(+95) ဖုန်းနံပါတ်..." defaultValue={userData.Phone ? userData.Phone : ''} />
+                <div className={classes['input-con']}>
+                    <input type="password" onChange={handlePwdChange} placeholder="စကားဝှက်..." required defaultValue={userData.Password ? userData.Password : ''} />
+                    {pwdErr && (
+                        <span> စကားဝှက်ကိုဖြည့်ပါ။ </span>
+                    )}
 
-                <input type={startDateInputType} onFocus={startDateHandleFocus}
-                    onChange={handleDobChange}
-                    defaultValue={userData.Date_Of_Birth ? dateInput : ""}
-                    onBlur={startDateHandleBlur} placeholder="မွေးနေ့..." />
+                </div>
 
-                <input name="address" onChange={handleAdresChange} placeholder="လိပ်စာ..." required defaultValue={userData.Address ? userData.Address : ''} />
+                <div className={classes['input-con']}>
+                    <input type="password" onChange={handleConfirmPwdChange} placeholder="စကားဝှက်ပြန် ရိုက်ထည့်ပါ..." required defaultValue={userData.Password ? userData.Password : ''} />
+                    {matchErr && (
+                        <span> စကားဝှက် မကိုက်ညီပါ။ </span>
+                    )}
+
+                </div>
+
+                <div className={classes['input-con']}>
+                    <input type="tel" onChange={handlePhoneChange} placeholder="(+95) ဖုန်းနံပါတ်..." defaultValue={userData.Phone ? userData.Phone : ''} />
+                    {phoneErr && (
+                        <span> ဖုန်းနံပါတ်ဖြည့်ပါ။ </span>
+                    )}
+
+                </div>
+
+                <div className={classes['input-con']}>
+                    <input type={startDateInputType} onFocus={startDateHandleFocus}
+                        onChange={handleDobChange}
+                        max={today}
+                        defaultValue={userData.Date_Of_Birth ? dateInput : ""}
+                        onBlur={startDateHandleBlur} placeholder="မွေးနေ့..." />
+                </div>
+
+                <div className={classes['input-con']}>
+                    <input name="address" onChange={handleAdresChange} placeholder="လိပ်စာ..." required defaultValue={userData.Address ? userData.Address : ''} />
+                </div>
 
                 <ThemeProvider theme={myDefaultTheme}>
                     <FormControl className={classes["fc-radio"]} >
@@ -213,11 +288,11 @@ const CreateUserArea = () => {
 
                 {
                     userData.ID ?
-                        <button className={classes["create-user-btn"]} type="button" onClick={handleUpdate} >
+                        <button className={classes["create-user-btn"]} disabled={checkDisable()} type="button" onClick={handleUpdate} >
                             Update
                         </button>
                         :
-                        <button className={classes["create-user-btn"]} type="button" onClick={handleCreate} >
+                        <button className={classes["create-user-btn"]} disabled={checkDisable()} type="button" onClick={handleCreate} >
                             အကောင့်အသစ် ဖွင့်မည်...
                         </button>
                 }

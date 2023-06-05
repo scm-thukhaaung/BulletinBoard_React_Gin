@@ -88,17 +88,22 @@ const CreatePostArea = (props) => {
                     placeholder="ရင်ဖွင့်လိုက်ပါ..."
                     rows={isExpanded ? 3 : 1}
                 />
-                <p>{tempPost.Status?.toString()} Hello</p>
                 {(tempPost.Title ? true : isExpanded) && (<FormControlLabel control={<GoldenSwitch onChange={handleStatusChange} checked={tempPost.Status === 1 ? true : false} />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မျှဝေမည်...</Typography>} />)}
 
                 {(tempPost.Title ? true : isExpanded) && (<Zoom in={(tempPost.Title ? true : isExpanded)}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Fab onClick={submitPost}>
-                            <AddIcon />
-                        </Fab>
-                        <Fab >
-                            <EditIcon />
-                        </Fab>
+                        {
+                            !tempPost.Title &&
+                            <Fab onClick={submitPost}>
+                                <AddIcon />
+                            </Fab>
+                        }
+                        {
+                            tempPost.Title &&
+                            <Fab >
+                                <EditIcon />
+                            </Fab>
+                        }
                         <Fab onClick={closeExpand}>
                             <CloseIcon />
                         </Fab>

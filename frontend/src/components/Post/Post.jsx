@@ -34,7 +34,7 @@ const Post = props => {
             <h2 ref={h2Ref}>" {props.postItem.Title} "</h2>
             <p ref={pRef}>{props.postItem.Description}</p>
 
-            <p className={classes["post-created-by"]} >created by သုခ</p>
+            {/* <p className={classes["post-created-by"]} >created by သုခ</p> */}
             <button className={classes["post-delete-btn"]} onClick={handleDelete}>
                 <DeleteIcon />
             </button>
