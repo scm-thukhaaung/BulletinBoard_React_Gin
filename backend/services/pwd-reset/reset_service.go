@@ -10,11 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	constants "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/consts"
-	models "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
 	resetPwdDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/pwd-reset"
 	userDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/user"
 	helper "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/helpers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
+	models "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
 	utilSvc "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/utils"
 
 	// "github.com/go-mail/mail"

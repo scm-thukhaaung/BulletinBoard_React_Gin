@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,7 +30,6 @@ func NewUserController(UserServiceInterface userServices.UserServiceInterface) *
 // @Security 		ApiKeyAuth
 func (controller *UserController) FindAll(ctx *gin.Context) {
 	data := controller.UserServiceInterface.FindAll(ctx)
-	fmt.Println("data -=-> ", data)
 	response := response.Response{
 		Code:   http.StatusOK,
 		Status: "OK",
