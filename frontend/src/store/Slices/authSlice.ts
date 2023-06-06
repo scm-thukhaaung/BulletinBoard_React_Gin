@@ -6,7 +6,7 @@ const authInititalState: any = {
     authData: getItem("auth")? getItem("auth") : {},
     status: "idle",
     error: "",
-    type: "user"
+    type: getItem("auth")?.User?.Type === "0" ? "admin" : "user"
 }
 
 const authenticate = createAsyncThunk("auth/login", async (loginData: any) => {
