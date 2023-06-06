@@ -65,8 +65,8 @@ const Header = () => {
         <Box sx={{ flexGrow: 1 }} >
             <AppBar position="fixed" sx={{ borderBottom: "5px solid #000000; " }}>
                 <ToolBarStyle display="large">
-                    <h1 className={classes["h1-txt-1"]}>
-                        "&nbsp; <LoyaltyIcon fontSize='large' /> &nbsp; {text} "
+                    <h1 className={classes["h1-txt-1"]}><a href='/'>
+                        "&nbsp; <LoyaltyIcon fontSize='large' /> &nbsp; {text} "</a>
                     </h1>
                     <div className={classes["search-bar-menu-div"]}>
                         <Search>

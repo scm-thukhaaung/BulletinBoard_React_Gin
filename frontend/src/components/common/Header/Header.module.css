@@ -9,6 +9,11 @@
     align-items: center;
 }
 
+.h1-txt-1 a {
+    color: #fff;
+    text-decoration: none;
+}
+
 .search-bar-menu-div{
     display: flex;
     justify-content: space-between;

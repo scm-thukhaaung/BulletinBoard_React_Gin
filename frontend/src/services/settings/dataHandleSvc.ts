@@ -3,7 +3,8 @@ export const getItem = (key: string) => {
     const serializedData = localStorage.getItem(key);
     return serializedData !== null ? JSON.parse(serializedData) : null;
   } else {
-    return sessionStorage.getItem(key);
+    const serializedData = sessionStorage.getItem(key);
+    return serializedData !== null ? JSON.parse(serializedData) : null;
   }
 }
 
@@ -21,6 +22,11 @@ export const removeItem = (key: string) => {
   if (localStorage.getItem('rememberMe') === 'true') {
     localStorage.removeItem(key);
   } else {
-    sessionStorage.removeItem('key');
+    sessionStorage.removeItem(key);
   }
 };
+
+export const clearItem = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+}

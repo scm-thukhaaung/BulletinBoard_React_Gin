@@ -46,7 +46,7 @@ const UserListPage = () => {
             {listCondition === 'failed' && <CommonDialog message={fetchErr} onClick={handleCloseDialog} />}
             <div className={[classes["clearfix"], classes["user-list-area"]].join(" ")}>
                 <p className={classes["total-user"]}>အသုံးပြုသူ စုစုပေါင်း "{storedList.length}" ယောက် ရှိပါသည်...</p>
-                <SearchUserArea />
+                {/* <SearchUserArea /> */}
                 <div className={classes["user-list-con"]}>
                     <UserList />
                 </div>

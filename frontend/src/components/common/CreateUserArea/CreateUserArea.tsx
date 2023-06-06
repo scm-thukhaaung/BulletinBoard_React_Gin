@@ -12,7 +12,7 @@ import { UserInterface } from "../../../interfaces/UserInterface";
 import { formatDate } from "../../../services/settings/dateFormatSvc";
 import { createUser, getEditUser, getuserListSts, updateUser } from "../../../store/Slices/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Constant } from "../../../consts/Constant";
 import { Message } from "../../../consts/Message";
 import Loading from "../../Loading/Loading";
@@ -42,8 +42,11 @@ const CreateUserArea = () => {
     // Image upload
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef: any = useRef(null);
-
-    const userData = useSelector(getEditUser);
+    const { id } = useParams();
+    let userData = useSelector(getEditUser);
+    if (!id) {
+        userData = {};
+    }
 
     const apiUserStatus = useSelector(getuserListSts);
     const [isLoading, setLoading] = useState(false);
@@ -202,7 +205,7 @@ const CreateUserArea = () => {
         }
     }
 
-    const handleCloseDialog =()=>{
+    const handleCloseDialog = () => {
         setUserErr('');
     }
     return (
