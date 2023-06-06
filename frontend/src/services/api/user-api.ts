@@ -4,7 +4,7 @@ import { getItem } from "../settings/dataHandleSvc";
 const USER_API = "http://localhost:8080/api" + "/users";
 const options = {
     headers: {
-        'authorization': getItem('token')
+        'Authorization': getItem('token')
     }
 }
 

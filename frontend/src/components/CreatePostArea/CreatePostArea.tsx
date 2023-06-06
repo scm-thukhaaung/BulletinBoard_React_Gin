@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FormControlLabel, Typography, Zoom, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 
@@ -61,7 +60,6 @@ const CreatePostArea = () => {
         if (isNewPostItem) {
             dispatch(createPost(tempPost)).unwrap();
         } else {
-            console.log(tempPost, "--tempPost");
             dispatch(updatePost(tempPost)).unwrap();
         }
 

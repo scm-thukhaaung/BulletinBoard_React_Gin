@@ -9,7 +9,7 @@ import { logout } from "../../../services/api/auth-api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthType } from '../../../store/Slices/authSlice';
-import { getAllPosts, postsAction, selectAllPosts } from '../../../store/Slices/postsSlice';
+import { getAllPosts, postsAction } from '../../../store/Slices/postsSlice';
 import { getItem } from '../../../services/settings/dataHandleSvc';
 
 const Header = () => {
@@ -52,7 +52,6 @@ const Header = () => {
 
     const handleSearchEnter = (event) => {
         if (event.key === "Enter") {
-            console.log(event.target.value )
             if (event.target.value) {
                 let searchValue= event.target.value;
                 dispatch(postsAction.searchPost({searchValue}))

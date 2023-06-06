@@ -54,7 +54,6 @@ const createPost = createAsyncThunk("posts/createPost", async (initialPost: any)
 });
 
 const updatePost = createAsyncThunk("posts/updatePost", async (initialPost: any) => {
-    console.log(initialPost.Status, "Status ----");
     const body = {
         title: initialPost.Title,
         description: initialPost.Description,
@@ -142,8 +141,6 @@ const postsSlice = createSlice({
 
 
                 state.postInititalState.posts = state.postInititalState.posts.map((post: any) => {
-                    console.log(action.payload.data.ID, "---action.payload.data.ID")
-                    console.log(post.ID, "---post.ID")
                     if (post.ID === action.payload.data.ID) {
                         return action.payload.data
                     }

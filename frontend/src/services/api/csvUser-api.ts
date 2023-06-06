@@ -4,7 +4,7 @@ import { getItem } from "../settings/dataHandleSvc";
 const CSVUSER_API = "http://localhost:8080/api" + "/users/csv-users";
 const options = {
     headers: {
-        'authorization': getItem('token')
+        'Authorization': getItem('token')
     }
 }
 

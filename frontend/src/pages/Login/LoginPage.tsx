@@ -71,7 +71,6 @@ const LoginPage = () => {
     });
 
     const handleSwitch = () => {
-        console.log('switchVal-=> ', !switchVal)
         localStorage.setItem('rememberMe', String(!switchVal));
         setSwitch(!switchVal);
     }

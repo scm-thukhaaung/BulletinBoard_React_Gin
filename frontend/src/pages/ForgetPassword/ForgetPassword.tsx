@@ -77,7 +77,6 @@ const ForgetPassword = () => {
     }
 
     const checkDisable = () => {
-        console.log('err-=> ', emailErr)
         if (emailErr) {
             return true;
         } else {

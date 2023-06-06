@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getItem } from "../settings/dataHandleSvc";
 const MAIL_SEND_API = "http://localhost:8080/api" + '/forget-password';
 const RESET_API = "http://localhost:8080/api" + '/reset-password';
 
@@ -18,7 +17,7 @@ const sendEmail = (mailData: any) => {
 const resetPassword = (pwdData: any, token: string|null) => {
     const options = {
         headers: {
-            'authorization': token
+            'Authorization': token
         }
     }
     return new Promise((resolve, reject) => {

@@ -3,7 +3,7 @@ import { getItem } from "../settings/dataHandleSvc";
 const POST_API = "http://localhost:8080/api" + '/posts';
 const options = {
     headers: {
-        'authorization': getItem('token')
+        'Authorization': getItem('token')
     }
 }
 
