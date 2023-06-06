@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as posts from "../../services/api/post-api";
+import { getItem } from "../../services/settings/dataHandleSvc";
 
 const postInititalState: any = {
     posts: [],
@@ -15,8 +16,12 @@ const tempPostState: any = {
 };
 
 const getAllPosts = createAsyncThunk("posts/getAllPosts", async () => {
-    const response = await posts.getFindAll();
-    return response?.data;
+    try{
+        const response = await posts.getFindAll();
+        return response?.data;
+    } catch (error: any) {
+        return error;
+    }
 });
 
 const deletePost = createAsyncThunk("posts/deletePost", async (initialPost: any) => {
@@ -32,10 +37,11 @@ const deletePost = createAsyncThunk("posts/deletePost", async (initialPost: any)
 
 const createPost = createAsyncThunk("posts/createPost", async (initialPost: any) => {
     const body = {
-        title: initialPost.Title,
-        description: initialPost.Description,
-        state: 1,
-        created_user_id: 1,
+        Title: initialPost.Title,
+        Description: initialPost.Description,
+        Status: "1",
+        Created_User_ID: getItem('user').ID,
+        Updated_User_ID: getItem('user').ID
     };
 
     try {
@@ -43,15 +49,16 @@ const createPost = createAsyncThunk("posts/createPost", async (initialPost: any)
         if (response.status === 200) return response?.data;
         return `${response.status} : ${response.statusText}`;
     } catch (error: any) {
-        return error.message;
+        throw error;
     }
 });
 
 const updatePost = createAsyncThunk("posts/updatePost", async (initialPost: any) => {
+    console.log(initialPost.Status, "Status ----");
     const body = {
         title: initialPost.Title,
         description: initialPost.Description,
-        status: initialPost.Status,
+        status: initialPost.Status.toString(),
         updated_user_id: 2
     };
 
@@ -85,8 +92,17 @@ const postsSlice = createSlice({
             if (action.payload.description) {
                 state.tempPostState.post.Description = action.payload.description;
             }
-            if (action.payload.status === 0 ||action.payload.status === 1) {
+            if (action.payload.status === "0" || action.payload.status === "1") {
                 state.tempPostState.post.Status = action.payload.status;
+            }
+        },
+        searchPost(state, action) {
+            if ( action.payload.searchValue ) {
+                  const givenString = action.payload.searchValue;
+                  
+                  const filteredArray = state.postInititalState.posts.filter((obj: any) => obj.Title.toLowerCase().includes(givenString.toLowerCase()));
+                  
+                  state.postInititalState.posts = filteredArray;
             }
         }
     },
@@ -123,8 +139,11 @@ const postsSlice = createSlice({
                 if (!action?.payload) {
                     return;
                 }
- 
+
+
                 state.postInititalState.posts = state.postInititalState.posts.map((post: any) => {
+                    console.log(action.payload.data.ID, "---action.payload.data.ID")
+                    console.log(post.ID, "---post.ID")
                     if (post.ID === action.payload.data.ID) {
                         return action.payload.data
                     }
@@ -141,7 +160,7 @@ const getPostsError = (state: any) => state.posts.postInititalState.error;
 const getPostsStatus = (state: any) => state.posts.postInititalState.status;
 const selectTempPost = (state: any) => state.posts.tempPostState.post;
 const isNewPost = (state: any) => state.posts.tempPostState.newPost;
-const checkStatus = (state: any) => state.posts.tempPostState.post.Status ;
+const checkStatus = (state: any) => state.posts.tempPostState.post.Status;
 
 export { selectAllPosts, getPostsError, getPostsStatus, selectTempPost, isNewPost, checkStatus };
 

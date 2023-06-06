@@ -4,8 +4,6 @@ import (
 	"os"
 
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	_ "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/docs"
 
 	"github.com/gin-gonic/gin"
@@ -47,11 +45,8 @@ func main() {
 	router.Use(cors.New(config))
 
 	// Serve static files
+	router.Static("/assets", "./assets")
 	router.Static("/static", "./static")
-
-	// Initialize session
-	store := cookie.NewStore([]byte(os.Getenv("SESSION_SECRET_KEY")))
-	router.Use(sessions.Sessions("mysession", store))
 
 	routes.ApiRouter(router)
 	// routes.WebRouter(router)

@@ -7,12 +7,18 @@ import classes from "./Header.module.css";
 import { Search, SearchIconWrapper, StyledInputBase, ToolBarStyle, FontTheme } from "../custom_mui/CustomMUI";
 import { logout } from "../../../services/api/auth-api";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthType } from '../../../store/Slices/authSlice';
+import { getAllPosts, postsAction, selectAllPosts } from '../../../store/Slices/postsSlice';
+import { getItem } from '../../../services/settings/dataHandleSvc';
 
 const Header = () => {
+    const dispatch = useDispatch();
+    const authType = useSelector(getAuthType);
+
     const navigate = useNavigate();
 
     const [text] = useTypewriter({
-        // words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'ဘူလတင် ဘုတ်ပါ'],
         words: ['ရင်ဖွင့်ပါ', 'ရင်ဖွင့်ရာ', 'Bulletin Board ပါ'],
         loop: false
     });
@@ -27,9 +33,33 @@ const Header = () => {
         setAnchorElUser(null);
     };
 
+    const handleCreate = () => {
+        navigate('/users');
+    };
+
+    const handleUserList = () => {
+        navigate('/userlist');
+    };
+
     const handleLogout = () => {
         logout();
         navigate('/login');
+    };
+
+    const handleProfile = () => {
+        navigate('/users/'+getItem('user').ID)
+    }
+
+    const handleSearchEnter = (event) => {
+        if (event.key === "Enter") {
+            console.log(event.target.value )
+            if (event.target.value) {
+                let searchValue= event.target.value;
+                dispatch(postsAction.searchPost({searchValue}))
+            } else {
+                dispatch(getAllPosts());
+            }
+        }
     }
 
     return (
@@ -47,6 +77,7 @@ const Header = () => {
                             <StyledInputBase
                                 placeholder="ရင်ဖွင့်စာများ ရှာပါ..."
                                 inputProps={{ 'aria-label': 'search' }}
+                                onKeyDown={handleSearchEnter}
                             />
                         </Search>
 
@@ -74,9 +105,10 @@ const Header = () => {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    {/* {settings.map((setting) => (
-                                        <MenuItem key={setting}
-                                            onClick={handleCloseUserMenu}
+                                    {
+                                        authType === "admin" &&
+                                        <MenuItem key="Menu-Item0"
+                                            onClick={handleCreate}
                                             sx={{
                                                 '&:hover': {
                                                     color: '#fff',
@@ -84,11 +116,11 @@ const Header = () => {
                                                 },
                                             }}
                                         >
-                                            <Typography textAlign="center">{setting}</Typography>
+                                            <Typography textAlign="center"> အသုံးပြုသူဖန်တီးမည် </Typography>
                                         </MenuItem>
-                                    ))} */}
+                                    }
                                     <MenuItem key="Menu-Item1"
-                                        onClick={handleCloseUserMenu}
+                                        onClick={handleProfile}
                                         sx={{
                                             '&:hover': {
                                                 color: '#fff',
@@ -98,17 +130,20 @@ const Header = () => {
                                     >
                                         <Typography textAlign="center"> Profile ထဲ ဝင်မည် </Typography>
                                     </MenuItem>
-                                    <MenuItem key="Menu-Item2"
-                                        onClick={handleCloseUserMenu}
-                                        sx={{
-                                            '&:hover': {
-                                                color: '#fff',
-                                                backgroundColor: '#f5ba13',
-                                            },
-                                        }}
-                                    >
-                                        <Typography textAlign="center"> User List ကြည့်မည် </Typography>
-                                    </MenuItem>
+                                    {
+                                        authType === "admin" &&
+                                        <MenuItem key="Menu-Item2"
+                                            onClick={handleUserList}
+                                            sx={{
+                                                '&:hover': {
+                                                    color: '#fff',
+                                                    backgroundColor: '#f5ba13',
+                                                },
+                                            }}
+                                        >
+                                            <Typography textAlign="center"> User List ကြည့်မည် </Typography>
+                                        </MenuItem>
+                                    }
                                     <MenuItem key="Menu-Item3"
                                         onClick={handleCloseUserMenu}
                                         sx={{

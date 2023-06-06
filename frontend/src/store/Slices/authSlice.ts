@@ -5,7 +5,8 @@ import { getItem, setItem } from "../../services/settings/dataHandleSvc";
 const authInititalState: any = {
     authData: getItem("auth")? getItem("auth") : {},
     status: "idle",
-    error: ""
+    error: "",
+    type: "user"
 }
 
 const authenticate = createAsyncThunk("auth/login", async (loginData: any) => {
@@ -14,7 +15,7 @@ const authenticate = createAsyncThunk("auth/login", async (loginData: any) => {
         return response?.data;
     } catch (error: any) {
         console.error(error); 
-        return error;
+        throw error;
     }
 })
 
@@ -28,26 +29,28 @@ const authSlice = createSlice({
         builder
             .addCase(authenticate.pending, (state, action) => {
                 state.status = "loading";
-                console.log('loading');
             })
             .addCase(authenticate.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.authData = action.payload?.data;
-                console.log("...succeed", action.payload?.data)
-                console.log('state.authData-=-> ', state.authData)
                 setItem('user', state.authData?.User)
                 setItem('token', state.authData?.Token)
                 setItem('auth', state.authData)
+
+                if (action.payload?.data.User.Type === "1") {
+                    state.type = "admin"
+                }
             })
             .addCase(authenticate.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error?.message;
-                console.log("...fail", action.error)
             })
     }
 })
 const getAuthUser = (state: any) => state.authData;
 const getAuthError = (state: any) => state.error;
 const getAuthStatus = (state: any) => state.status;
-export { authenticate, getAuthUser, getAuthError, getAuthStatus }
+const getAuthType = (state: any) => state.auth.type;
+
+export { authenticate, getAuthUser, getAuthError, getAuthStatus, getAuthType }
 export default authSlice.reducer

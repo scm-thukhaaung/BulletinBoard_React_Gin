@@ -12,8 +12,8 @@ import classes from "./CreatePostArea.module.css";
 import { createPost, selectTempPost, postsAction, isNewPost, updatePost } from "../../store/Slices/postsSlice";
 import { GoldenSwitch } from '../common/custom_mui/CustomMUI';
 
-const CreatePostArea = (props) => {
-    const dispatch = useDispatch();
+const CreatePostArea = () => {
+    const dispatch: any = useDispatch();
 
     const [isExpanded, setExpanded] = useState(false);
 
@@ -33,34 +33,35 @@ const CreatePostArea = (props) => {
         setExpanded(true);
     };
 
-    const handleDescriptionChange = (event) => {
+    const handleDescriptionChange = (event: any) => {
         let value = event.target.value;
         dispatch(postsAction.setInputTempPost({
             description: value,
         }));
     };
 
-    const handleStatusChange = (event) => {
+    const handleStatusChange = (event: any) => {
         let value = event.target.checked;
-        const status = value ? 1 : 0;
+        const status = value ? "1" : "0";
         dispatch(postsAction.setInputTempPost({
             status: status,
         }));
     };
 
-    const handleTitleChange = (event) => {
+    const handleTitleChange = (event: any) => {
         let value = event.target.value;
         dispatch(postsAction.setInputTempPost({
             title: value,
         }));
     };
 
-    const submitPost = (event) => {
+    const submitPost = (event: any) => {
         if (!tempPost.Title || !tempPost.Description) return;
 
         if (isNewPostItem) {
             dispatch(createPost(tempPost)).unwrap();
         } else {
+            console.log(tempPost, "--tempPost");
             dispatch(updatePost(tempPost)).unwrap();
         }
 
@@ -88,17 +89,15 @@ const CreatePostArea = (props) => {
                     placeholder="ရင်ဖွင့်လိုက်ပါ..."
                     rows={isExpanded ? 3 : 1}
                 />
-                <p>{tempPost.Status?.toString()} Hello</p>
-                {(tempPost.Title ? true : isExpanded) && (<FormControlLabel control={<GoldenSwitch onChange={handleStatusChange} checked={tempPost.Status === 1 ? true : false} />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မျှဝေမည်...</Typography>} />)}
+                {(tempPost.Title ? true : isExpanded) && (<FormControlLabel control={<GoldenSwitch onChange={handleStatusChange} checked={tempPost.Status === "1" ? true : false} />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မျှဝေမည်...</Typography>} />)}
 
                 {(tempPost.Title ? true : isExpanded) && (<Zoom in={(tempPost.Title ? true : isExpanded)}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+
                         <Fab onClick={submitPost}>
                             <AddIcon />
                         </Fab>
-                        <Fab >
-                            <EditIcon />
-                        </Fab>
+
                         <Fab onClick={closeExpand}>
                             <CloseIcon />
                         </Fab>

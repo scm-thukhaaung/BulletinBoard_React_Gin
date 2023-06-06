@@ -1,11 +1,10 @@
 import axios from "axios";
 import { Post } from "../../interfaces/PostInterface";
-// import { User } from "../../interfaces/UserInterface";
-// import { removeItem } from "../settings/dataHandleSvc";
+import { getItem } from "../settings/dataHandleSvc";
 const CSVPOST_API = "http://localhost:8080/api" + "/posts/csv-posts";
 const options = {
     headers: {
-        // 'authorization': getItem('token')
+        'authorization': getItem('token')
     }
 }
 

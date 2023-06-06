@@ -8,35 +8,52 @@ import ClearIcon from '@mui/icons-material/Clear';
 import CsvPostList from '../../components/csvPostList/CsvPostList';
 import { useSelector, useDispatch } from "react-redux";
 import { CsvPostItem } from '../../interfaces/PostInterface';
-import { CheckTableUtilSvc } from '../../utils/utilSvc';
+import { CheckPostUtilSvc } from '../../utils/utilSvc';
 import { createCsvPost, csvPostAction, getCsvPosts } from '../../store/Slices/csvPostSlice';
+import CommonDialog from '../../components/common/CommonDialog/CommonDialog';
+import { useNavigate } from 'react-router-dom';
+import { Message } from '../../consts/Message';
+import Loading from '../../components/Loading/Loading';
 
 const PostCsvPage = () => {
+    const navigate = useNavigate();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [csvData, setCsvData] = useState<CsvPostItem[]>([]);
     const storedData = useSelector(getCsvPosts);
     const [filename, setFilename] = useState("");
     const dispatch: any = useDispatch();
+    const [CsvError, setCsvError] = useState('');
+    const [isLoading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
+        setLoading(true);
         try {
             const result = await dispatch(createCsvPost(storedData));
-        
+            setLoading(false);
+            if (!result.payload.data.length) {
+                navigate('/');
+            } else {
+                setCsvError(Message.csvAlreadyTaken);
+            }
         } catch (error) {
-            console.error('Error at postCsv page: ', error);
+            setLoading(false);
+            setCsvError(Message.csvError);
         }
     }
 
     // Read csv and set csvData 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+        setLoading(true);
         resetData();
         if (!e.target.files) {
+            setLoading(false);
             return;
         }
         let file = e.target.files[0];
         const { name } = file;
         if (!name.endsWith(".csv")) {
-            console.error("Not a csv file.");
+            setLoading(false);
+            setCsvError(Message.notCsvFile);
             return;
         }
         setFilename(name);
@@ -44,6 +61,7 @@ const PostCsvPage = () => {
         const reader = new FileReader();
         reader.onload = (evt) => {
             if (!evt?.target?.result) {
+                setLoading(false);
                 return;
             }
             const { result } = evt.target;
@@ -54,10 +72,11 @@ const PostCsvPage = () => {
                 skip_empty_lines: true
             });
             const dataRecords = records.slice(1);
-            const updatedList = CheckTableUtilSvc(dataRecords);
+            const updatedList = CheckPostUtilSvc(dataRecords);
             dispatch(csvPostAction.addCsvList(updatedList));
             setCsvData(updatedList);
         };
+        setLoading(false);
         reader.readAsBinaryString(file);
         e.target.value = "";
     };
@@ -83,10 +102,15 @@ const PostCsvPage = () => {
         return true;
     }
 
+    const handleCloseDialog = () => {
+        setCsvError('');
+    }
+
     return (
         <div className={!csvData.length ? classes["wrapper-csv"] : ''}>
+            {isLoading && <Loading />}
+            {CsvError && <CommonDialog message={CsvError} onClick={handleCloseDialog} />}
             {
-
                 !csvData.length ?
 
                     // Csv upload bottom section

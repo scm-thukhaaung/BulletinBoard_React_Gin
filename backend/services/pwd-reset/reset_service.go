@@ -10,11 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	constants "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/consts"
-	models "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
 	resetPwdDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/pwd-reset"
 	userDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/user"
 	helper "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/helpers"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
+	models "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
 	utilSvc "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/utils"
 
 	// "github.com/go-mail/mail"
@@ -55,8 +55,7 @@ func (service *ResetPwdService) SendResetMail(email request.MailRequest, ctx *gi
 			Url   string
 			Token string
 		}{
-			Url:   "http://localhost:8080/api/reset?token=" + tokenString,
-			Token: tokenString,
+			Url: "http://localhost:3000/forget-password?token=" + tokenString,
 		})
 
 		// Sending email.
@@ -70,7 +69,7 @@ func (service *ResetPwdService) SendResetMail(email request.MailRequest, ctx *gi
 func (service *ResetPwdService) ResetPwd(password string, ctx *gin.Context) {
 	tokenString := ctx.GetHeader("Authorization")
 	jwtToken := utilSvc.ParseToken(tokenString, ctx)
-	
+
 	if claims, ok := jwtToken.Claims.(jwt.MapClaims); ok && jwtToken.Valid {
 		// Extract the userId from the claims
 		userId := claims["id"].(string)
@@ -78,7 +77,7 @@ func (service *ResetPwdService) ResetPwd(password string, ctx *gin.Context) {
 		userDao := userDao.NewUserDao(initializers.DB)
 		var user models.User
 		user.Password = password
-		userDao.Update(user, userId, ctx )
+		userDao.Update(user, userId, ctx)
 		return
 
 	} else {
