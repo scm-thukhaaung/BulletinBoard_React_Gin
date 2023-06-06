@@ -42,7 +42,7 @@ const CreatePostArea = () => {
 
     const handleStatusChange = (event: any) => {
         let value = event.target.checked;
-        const status = value ? 1 : 0;
+        const status = value ? "1" : "0";
         dispatch(postsAction.setInputTempPost({
             status: status,
         }));
@@ -61,6 +61,7 @@ const CreatePostArea = () => {
         if (isNewPostItem) {
             dispatch(createPost(tempPost)).unwrap();
         } else {
+            console.log(tempPost, "--tempPost");
             dispatch(updatePost(tempPost)).unwrap();
         }
 
@@ -88,22 +89,15 @@ const CreatePostArea = () => {
                     placeholder="ရင်ဖွင့်လိုက်ပါ..."
                     rows={isExpanded ? 3 : 1}
                 />
-                {(tempPost.Title ? true : isExpanded) && (<FormControlLabel control={<GoldenSwitch onChange={handleStatusChange} checked={tempPost.Status === 1 ? true : false} />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မျှဝေမည်...</Typography>} />)}
+                {(tempPost.Title ? true : isExpanded) && (<FormControlLabel control={<GoldenSwitch onChange={handleStatusChange} checked={tempPost.Status === "1" ? true : false} />} label={<Typography sx={{ fontFamily: "UMoe", fontSize: "1.2em" }}>မျှဝေမည်...</Typography>} />)}
 
                 {(tempPost.Title ? true : isExpanded) && (<Zoom in={(tempPost.Title ? true : isExpanded)}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        {
-                            !tempPost.Title &&
-                            <Fab onClick={submitPost}>
-                                <AddIcon />
-                            </Fab>
-                        }
-                        {
-                            tempPost.Title &&
-                            <Fab >
-                                <EditIcon />
-                            </Fab>
-                        }
+
+                        <Fab onClick={submitPost}>
+                            <AddIcon />
+                        </Fab>
+
                         <Fab onClick={closeExpand}>
                             <CloseIcon />
                         </Fab>

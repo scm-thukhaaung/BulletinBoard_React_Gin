@@ -54,11 +54,12 @@ const createPost = createAsyncThunk("posts/createPost", async (initialPost: any)
 });
 
 const updatePost = createAsyncThunk("posts/updatePost", async (initialPost: any) => {
+    console.log(initialPost.Status, "Status ----");
     const body = {
-        Title: initialPost.Title,
-        Description: initialPost.Description,
-        Status: initialPost.Status,
-        Updated_User_ID: 2
+        title: initialPost.Title,
+        description: initialPost.Description,
+        status: initialPost.Status.toString(),
+        updated_user_id: 2
     };
 
     try {
@@ -91,7 +92,7 @@ const postsSlice = createSlice({
             if (action.payload.description) {
                 state.tempPostState.post.Description = action.payload.description;
             }
-            if (action.payload.status === 0 || action.payload.status === 1) {
+            if (action.payload.status === "0" || action.payload.status === "1") {
                 state.tempPostState.post.Status = action.payload.status;
             }
         },
@@ -139,7 +140,10 @@ const postsSlice = createSlice({
                     return;
                 }
 
+
                 state.postInititalState.posts = state.postInititalState.posts.map((post: any) => {
+                    console.log(action.payload.data.ID, "---action.payload.data.ID")
+                    console.log(post.ID, "---post.ID")
                     if (post.ID === action.payload.data.ID) {
                         return action.payload.data
                     }
