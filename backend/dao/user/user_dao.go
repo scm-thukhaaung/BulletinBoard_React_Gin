@@ -40,23 +40,6 @@ func (userDao *UserDao) FindAll(ctx *gin.Context) []models.User {
 
 	return users
 
-	// // Get userId and userType from session
-	// session := sessions.Default(ctx)
-	// userId := session.Get("userId")
-	// userType := session.Get("userType")
-
-	// // Admin will see all users and member only see its created users
-	// if userType == constants.ADMIN_TYPE_VAL {
-
-	// 	result := initializers.DB.Model(&users).Preload("Posts").Find(&users)
-	// 	helper.ErrorPanic(result.Error, ctx)
-	// } else {
-
-	// 	result := initializers.DB.Model(&users).Where("created_user_id = ?", userId).Preload("Posts").Find(&users)
-	// 	helper.ErrorPanic(result.Error, ctx)
-	// }
-
-	// return users
 }
 
 // FindOne implements UserDaoInterface.

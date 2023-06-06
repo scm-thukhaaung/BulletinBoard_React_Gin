@@ -8,6 +8,7 @@ import (
 	resetPwdDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/pwd-reset"
 	userDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/user"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/initializers"
+	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/middlewares"
 	loginServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/login"
 	postServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/post"
 	resetPwdServices "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/services/pwd-reset"
@@ -35,12 +36,12 @@ func ApiRouter(router *gin.Engine) *gin.RouterGroup {
 	// User
 	userRouter := apiRouter.Group("/users")
 	{
-		userRouter.POST("", userController.Create)
-		userRouter.POST("/csv-users", userController.HandleCsvUsers)
-		userRouter.GET("", userController.FindAll)
-		userRouter.GET("/:userId", userController.FindOne)
-		userRouter.PUT("/:userId", userController.Update)
-		userRouter.DELETE("/:userId", userController.Delete)
+		userRouter.POST("", middlewares.AuthMiddleware(), userController.Create)
+		userRouter.POST("/csv-users", middlewares.AuthMiddleware(), userController.HandleCsvUsers)
+		userRouter.GET("", middlewares.AuthMiddleware(), userController.FindAll)
+		userRouter.GET("/:userId", middlewares.AuthMiddleware(), userController.FindOne)
+		userRouter.PUT("/:userId", middlewares.AuthMiddleware(), userController.Update)
+		userRouter.DELETE("/:userId", middlewares.AuthMiddleware(), userController.Delete)
 	}
 
 	postDao := postDao.NewPostDao(initializers.DB)
@@ -50,12 +51,12 @@ func ApiRouter(router *gin.Engine) *gin.RouterGroup {
 	// Post
 	postRouter := apiRouter.Group("/posts")
 	{
-		postRouter.POST("", postController.Create)
-		postRouter.POST("/csv-posts", postController.HandleCsvPosts)
+		postRouter.POST("", middlewares.AuthMiddleware(), postController.Create)
+		postRouter.POST("/csv-posts", middlewares.AuthMiddleware(), postController.HandleCsvPosts)
 		postRouter.GET("", postController.FindAll)
-		postRouter.GET("/:postId", postController.FindOne)
-		postRouter.PUT("/:postId", postController.Update)
-		postRouter.DELETE("/:postId", postController.Delete)
+		postRouter.GET("/:postId", middlewares.AuthMiddleware(), postController.FindOne)
+		postRouter.PUT("/:postId", middlewares.AuthMiddleware(), postController.Update)
+		postRouter.DELETE("/:postId", middlewares.AuthMiddleware(), postController.Delete)
 	}
 
 	resetPwdDao := resetPwdDao.NewResetPwdDao(initializers.DB)
@@ -64,7 +65,7 @@ func ApiRouter(router *gin.Engine) *gin.RouterGroup {
 
 	// Reset password
 	apiRouter.POST("/forget-password", resetPwdController.RequestEmail)
-	apiRouter.POST("/reset-password", resetPwdController.HandleResetPwd)
+	apiRouter.POST("/reset-password", middlewares.AuthMiddleware(), resetPwdController.HandleResetPwd)
 
 	return &router.RouterGroup
 }

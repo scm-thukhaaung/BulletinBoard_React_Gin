@@ -51,8 +51,6 @@ func (controller *UserController) FindAll(ctx *gin.Context) {
 // @Security 		ApiKeyAuth
 func (controller *UserController) FindOne(ctx *gin.Context) {
 	userId := ctx.Param("userId")
-	// id, err := strconv.Atoi(userId)
-	// helper.ErrorPanic(err, ctx)
 
 	data := controller.UserServiceInterface.FindOne(userId, ctx)
 	response := response.Response{

@@ -1,7 +1,6 @@
 package loginServices
 
 import (
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	loginDao "github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/dao/login"
 	"github.com/scm-thukhaaung/BulletinBoard_React_Gin/backend/models"
@@ -20,12 +19,6 @@ func (service *LoginService) Authenticate(user request.LoginRequest, ctx *gin.Co
 	userData := service.LoginDaoInterface.Login(email, password, ctx)
 
 	if userData.ID != 0 {
-
-		// Prepare and save in session
-		session := sessions.Default(ctx)
-		session.Set("userId", userData.ID)
-		session.Set("userType", userData.Type)
-		session.Save()
 
 		token, _ := utilSvc.GenerateToken(userData.ID, ctx)
 		retData := models.LoginUser{

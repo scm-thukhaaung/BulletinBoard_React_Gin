@@ -1,11 +1,10 @@
 import axios from "axios";
 import { UserInterface } from "../../interfaces/UserInterface";
-// import { User } from "../../interfaces/UserInterface";
-// import { removeItem } from "../settings/dataHandleSvc";
+import { getItem } from "../settings/dataHandleSvc";
 const CSVUSER_API = "http://localhost:8080/api" + "/users/csv-users";
 const options = {
     headers: {
-        // 'authorization': getItem('token')
+        'authorization': getItem('token')
     }
 }
 
