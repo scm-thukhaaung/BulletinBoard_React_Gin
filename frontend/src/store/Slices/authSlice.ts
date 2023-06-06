@@ -37,7 +37,7 @@ const authSlice = createSlice({
                 setItem('token', state.authData?.Token)
                 setItem('auth', state.authData)
 
-                if (action.payload?.data.User.Type === "1") {
+                if (action.payload?.data.User.Type === "0") {
                     state.type = "admin"
                 }
             })
